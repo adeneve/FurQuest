@@ -1,10 +1,9 @@
 .title {
-	font-size: 5em;
+	font-size: 10em;
 	text-align: center;
 	font-family: "Comic Sans MS", cursive, sans-serif;
 	font-weight: bold;
 	color: #a600ff;
-	padding-bottom: 1em;
 }
 
 .accountIcon {
@@ -19,7 +18,11 @@
 }
 
 .aboutText {
-  font-size: 4em;	
+  font-size: 3em;	
+  color: white;
+  float: center;
+  padding: 2em;
+  
 }
 
 .modalText {
@@ -34,4 +37,13 @@ input {
 	width: 200px;
 	height: 30px;
 	font-size:15px;
+}
+
+body {
+
+  background-image: url("../assets/background.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;  
 }

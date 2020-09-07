@@ -18,7 +18,7 @@
 <body>
 
   <div class="dropdown accountIcon">
-    <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown" >
+    <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown" style="background-color:white">
     <img src="../assets/accountIcon.png" width="60em" height="60em" alt="submit" onmouseover="chgImg(this)" onmouseout="chgImgBack(this)"/></button>
     <ul class="dropdown-menu">
 	  <li><a href="#"  id="logOutMenu">Log Out</a></li>
@@ -26,11 +26,9 @@
       <li><a href="#" data-toggle="modal" data-target="#createAccModal" id="createAccMenu">Create an account</a></li>
     </ul>
   </div>
+  <p id="username" style="font-size:14px; padding-left:1em; color:white"> </p>
 
 <h2 class="title">FurQuest</h2>  
-<a href="http://www.google.com" target="_blank">
-  <img src="../assets/play3.png" style="float:right; width:20%; height:30%;" onmouseover="chgImgPlay(this)" onmouseout="chgImgPlayBack(this)">
-</a>
 
 <div class="modal" id="createAccModal">
   <div class="modal-dialog">
@@ -60,7 +58,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnCloseSignUp">Close</button>
       </div>
 	  
     </div>
@@ -93,18 +91,28 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnCloseLogIn">Close</button>
       </div>
 
     </div>
   </div>
 </div>
 
-<div class="container" style="float:center;">
+
+    <div style="float:center">
+		<p class="aboutText">
+		Welcome to FurQuest! FurQuest is a simple & lightweight mmorpg. Create a character, and explore the vast
+		world of FurQuest alongside others. Play minigames, go shopping, or depart on challenging adventures
+		with your friends!</p>
+	</div> 
+
+
+
+<div class="container" style="float:left; height:45%; width:45%; padding-left: 4em">
   <div class="card">
-    <div class="card-header">
+    
 	
-	  <div class="container" style="width: 60%; height:60%">
+	  
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
@@ -138,19 +146,15 @@
 			  <span class="sr-only">Next</span>
 			</a>
 		  </div>
-		</div>
 		
-	</div>
-	
-    <div class="card-body">
-		<p class="aboutText">
-		Welcome to FurQuest! FurQuest is a simple & lightweight mmorpg. Create a character, and explore the vast
-		world of FurQuest alongside others. Play minigames, go shopping, or depart on challenging adventures
-		with your friends!</p>
-	</div> 
+		
 
   </div>
 </div>
+
+<a href="#" target="_blank">
+  <img src="../assets/play3.png" style="float:up; width:20%; height:30%; background-color: white" onmouseover="chgImgPlay(this)" onmouseout="chgImgPlayBack(this)">
+</a>
 
 
 
@@ -176,6 +180,9 @@ var btnLogIn = document.getElementById('btnLogIn');
 const createAcc = document.getElementById('createAccMenu');
 const LogInMenu = document.getElementById('logInMenu');
 const logOutMenu = document.getElementById('logOutMenu');
+const username = document.getElementById('username');
+const btnCloseLogin = document.getElementById('btnCloseLogIn');
+const btnCloseSignUp = document.getElementById('btnCloseSignUp')
 
 btnSignUp.addEventListener('click', e => { 
   const email = document.getElementById('emailCreate').value;
@@ -188,7 +195,7 @@ btnSignUp.addEventListener('click', e => {
   
   const auth = firebase.auth();
   const promise = auth.createUserWithEmailAndPassword(email, pass1);
-  promise.catch(e => alert(e.message));
+  promise.then(btnCloseSignUp.click()).catch(e => alert(e.message));
   
 })
 
@@ -199,17 +206,22 @@ btnLogIn.addEventListener('click', e => {
   
   const auth = firebase.auth();
   const promise = auth.signInWithEmailAndPassword(email, pass1);
-  promise.catch(e => alert(e.message));
+  promise.then(btnCloseLogIn.click()).catch(e => alert(e.message));
   
 })
 
 logOutMenu.addEventListener('click', e => {
     firebase.auth().signOut().then(function() {
-	
+	  alert("log out successful")
     }, function(error) {
       alert(error.message)
     });
 })
+
+function promptEmailVerification(firebaseUser){
+alert("please verify your email by clicking on the link sent to it")
+firebaseUser.sendEmailVerification().catch( e => console.log(e.message))
+}
 
 
 // Your web app's Firebase configuration
@@ -236,12 +248,15 @@ logOutMenu.addEventListener('click', e => {
 	createAccMenu.style.visibility = "hidden"
 	logInMenu.style.visibility = "hidden"
 	logOutMenu.style.visibility = "visible"
+	username.innerText = firebaseUser.email
+	if(firebaseUser.emailVerified == false) promptEmailVerification(firebaseUser)
   }
   else{
     console.log("not logged in");
 	createAccMenu.style.visibility = "visible"
 	logInMenu.style.visibility = "visible"
 	logOutMenu.style.visibility = "hidden"
+	username.innerText = "not logged in"
   }
 })
 
