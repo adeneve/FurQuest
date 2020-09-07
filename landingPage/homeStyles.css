@@ -22,6 +22,16 @@
   font-size: 4em;	
 }
 
+.modalText {
+	font-size: 2em;	
+}
+
 ul > li > a {
 	font-size: 3em;
+}
+
+input {
+	width: 200px;
+	height: 30px;
+	font-size:15px;
 }

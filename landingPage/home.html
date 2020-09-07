@@ -9,6 +9,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
   <link rel="stylesheet" href="homeStyles.css">
 </head>
 <body>
@@ -17,8 +21,9 @@
     <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown" >
     <img src="../assets/accountIcon.png" width="60em" height="60em" alt="submit" onmouseover="chgImg(this)" onmouseout="chgImgBack(this)"/></button>
     <ul class="dropdown-menu">
-      <li><a href="#">Log In</a></li>
-      <li><a href="#">Create an account</a></li>
+	  <li><a href="#"  id="logOutMenu">Log Out</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#loginModal" id="logInMenu">Log In</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#createAccModal" id="createAccMenu">Create an account</a></li>
     </ul>
   </div>
 
@@ -27,6 +32,73 @@
   <img src="../assets/play3.png" style="float:right; width:20%; height:30%;" onmouseover="chgImgPlay(this)" onmouseout="chgImgPlayBack(this)">
 </a>
 
+<div class="modal" id="createAccModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title title">Create An Account</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <label for="email" class="modalText">Enter your email:</label>
+		<input type="email" id="emailCreate" name="email">
+		
+		<label for="password1" class="modalText">Enter your password:</label>
+		<input type="password" id="passwordCreate" name="password1">
+		
+		<label for="password2" class="modalText">Enter your password again:</label>
+		<input type="password" id="password2" name="password2">
+      </div>
+	  
+	  <div class="modal-footer">
+        <button type="button" class="btn btn-primary"  id="btnSignUp">Create Account</button>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+	  
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="loginModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title title">Log In</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <label for="email" class="modalText">Enter your email:</label>
+		<input type="email" id="emailLogin" name="email">
+		
+		<label for="password1" class="modalText">Enter your password:</label>
+		<input type="password" id="passwordLogin" name="password1">
+
+      </div>
+	  
+	  <div class="modal-footer">
+        <button type="button" class="btn btn-primary"  id="btnLogIn">Log In</button>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <div class="container" style="float:center;">
   <div class="card">
@@ -97,5 +169,82 @@ function chgImgPlay(x){
 function chgImgPlayBack(x){
   x.src = "../assets/play3.png"
 }
+
+var btnSignUp = document.getElementById('btnSignUp');
+var btnLogIn = document.getElementById('btnLogIn');
+
+const createAcc = document.getElementById('createAccMenu');
+const LogInMenu = document.getElementById('logInMenu');
+const logOutMenu = document.getElementById('logOutMenu');
+
+btnSignUp.addEventListener('click', e => { 
+  const email = document.getElementById('emailCreate').value;
+  const pass1 = document.getElementById('passwordCreate').value;
+  const pass2 = document.getElementById('password2').value;
+  if(pass1 != pass2){
+    alert('passwords do not match'); 
+	return;
+  }  
+  
+  const auth = firebase.auth();
+  const promise = auth.createUserWithEmailAndPassword(email, pass1);
+  promise.catch(e => alert(e.message));
+  
+})
+
+btnLogIn.addEventListener('click', e => { 
+  const email = document.getElementById('emailLogin').value;
+  const pass1 = document.getElementById('passwordLogin').value;
+  const pass2 = document.getElementById('password2').value;
+  
+  const auth = firebase.auth();
+  const promise = auth.signInWithEmailAndPassword(email, pass1);
+  promise.catch(e => alert(e.message));
+  
+})
+
+logOutMenu.addEventListener('click', e => {
+    firebase.auth().signOut().then(function() {
+	
+    }, function(error) {
+      alert(error.message)
+    });
+})
+
+
+// Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
+    authDomain: "furquest-1c939.firebaseapp.com",
+    databaseURL: "https://furquest-1c939.firebaseio.com",
+    projectId: "furquest-1c939",
+    storageBucket: "furquest-1c939.appspot.com",
+    messagingSenderId: "178770843812",
+    appId: "1:178770843812:web:f8bf303167b573f41c6e31",
+    measurementId: "G-D1DXBJLC06"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  
+  const dbRefObj = firebase.database().ref().child('object');
+  dbRefObj.on('value', snap => console.log(snap.val() ));
+  
+  firebase.auth().onAuthStateChanged(firebaseUser => {
+  if(firebaseUser){
+    console.log(firebaseUser);
+	createAccMenu.style.visibility = "hidden"
+	logInMenu.style.visibility = "hidden"
+	logOutMenu.style.visibility = "visible"
+  }
+  else{
+    console.log("not logged in");
+	createAccMenu.style.visibility = "visible"
+	logInMenu.style.visibility = "visible"
+	logOutMenu.style.visibility = "hidden"
+  }
+})
+
 </script>
+
 </html>
