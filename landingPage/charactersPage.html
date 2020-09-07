@@ -108,7 +108,16 @@
   </div>
 
 
+  <div class="card" id="charCard" style=" width: 500px; height: 430px; left: 700px; position:relative; float:left;display:none">
+    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <div class="card-body">
+      <h4 class="card-title menuItem" id="charName"> </h4>
+	  <br> <br>
 
+		
+      <a href="./play.html" class="btn btn-primary" style="font-size:2em" id="selectChar">Select</a>
+    </div>
+  </div>
 
 
 </body>
@@ -123,6 +132,7 @@ function chgImgBack(x) {
 }
 
 const logOutMenu = document.getElementById('logOutMenu');
+const selectChar = document.getElementById('selectChar');
 const createBear = document.getElementById('createB');
 const createFrog = document.getElementById('createF');
 const createCat = document.getElementById('createC');
@@ -136,6 +146,7 @@ var firebaseUID = 0;
 logOutMenu.addEventListener('click', e => {
     firebase.auth().signOut().then(function() {
 	  alert("log out successful")
+	  window.location.href = "./home.html"
     }, function(error) {
       alert(error.message)
     });
@@ -192,6 +203,7 @@ createCat.addEventListener('click', e => {
 })
 
 
+
 // Your web app's Firebase configuration
   var firebaseConfig = {
     apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
@@ -208,6 +220,12 @@ createCat.addEventListener('click', e => {
   firebase.analytics();
   const db = firebase.database().ref();
   
+  function displayCharacter(charData){
+    var charDataObj = charData.val();
+    document.getElementById('charCard').style.display = "initial";
+	document.getElementById('charName').innerText = charDataObj.name + " (" + charDataObj.type + ")";
+	
+  }
   
   function updateCharacters(uid){
   console.log(uid)
@@ -215,10 +233,10 @@ createCat.addEventListener('click', e => {
   const events = db.child('users');
   const query = events
                   .orderByChild('uid')
-				  .equalTo(uid);
+				  .equalTo(uid)
+				  .limitToFirst(1);
   query.on('value', updateCharactersNext, err => console.log("error"));
 
-  
   }
   
   function updateCharactersNext(data){
@@ -235,6 +253,16 @@ createCat.addEventListener('click', e => {
 	  document.getElementById('bearCard').style.display = "none"
 	  document.getElementById('frogCard').style.display = "none"
 	  document.getElementById('catCard').style.display = "none"
+	  console.log(Object.keys(data.val())[0])
+	  var key = Object.keys(data.val())[0]
+	  console.log(data.val()[key]["characters"])
+	  var characterIDs = data.val()[key]["characters"]
+	  for(var i = 0; i < characterIDs.length; i++){
+	    var charID = characterIDs[i]
+		const events = db.child('characters');
+		events.child(charID).once('value').then( displayCharacter)
+	  
+	  }
 	}
   }
   //dbRefObj.on('value', snap => console.log(snap.val() ));
