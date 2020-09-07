@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>FurQuest</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
+  <link rel="stylesheet" href="homeStyles.css">
+</head>
+<body>
+
+  <div class="dropdown accountIcon">
+    <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown" style="background-color:white">
+    <img src="../assets/accountIcon.png" width="60em" height="60em" alt="submit" onmouseover="chgImg(this)" onmouseout="chgImgBack(this)"/></button>
+    <ul class="dropdown-menu">
+	  <li><a href="#"  id="logOutMenu">Log Out</a></li>
+    </ul>
+  </div>
+  <p id="username" style="font-size:14px; padding-left:1em; color:white"> </p>
+
+<h2 class="title">Character Selection</h2>  
+
+
+
+
+
+
+    <div style="float:center">
+		<p class="aboutText">
+		Please create a character</p>
+	</div> 
+
+
+
+
+
+
+</body>
+
+
+<script>
+
+
+const logOutMenu = document.getElementById('logOutMenu');
+
+
+var isLoggedIn = false;
+var isVerrified = false;
+
+
+
+logOutMenu.addEventListener('click', e => {
+    firebase.auth().signOut().then(function() {
+	  alert("log out successful")
+    }, function(error) {
+      alert(error.message)
+    });
+})
+
+
+
+
+
+// Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
+    authDomain: "furquest-1c939.firebaseapp.com",
+    databaseURL: "https://furquest-1c939.firebaseio.com",
+    projectId: "furquest-1c939",
+    storageBucket: "furquest-1c939.appspot.com",
+    messagingSenderId: "178770843812",
+    appId: "1:178770843812:web:f8bf303167b573f41c6e31",
+    measurementId: "G-D1DXBJLC06"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  
+  
+  firebase.auth().onAuthStateChanged(firebaseUser => {
+  if(firebaseUser){
+    console.log(firebaseUser);
+	isLoggedIn = true;
+	isVerrified = true;
+	logOutMenu.style.visibility = "visible"
+	username.innerText = firebaseUser.email
+	if(firebaseUser.emailVerified == false) promptEmailVerification(firebaseUser)
+  }
+  else{
+    console.log("not logged in");
+	isLoggedIn = false;
+	isVerrified = false;
+	logOutMenu.style.visibility = "hidden"
+	username.innerText = "not logged in"
+  }
+})
+
+</script>
+
+</html>

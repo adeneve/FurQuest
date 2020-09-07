@@ -153,7 +153,7 @@
 </div>
 
 <a href="#" target="_blank">
-  <img src="../assets/play3.png" style="float:up; width:20%; height:30%; background-color: white" onmouseover="chgImgPlay(this)" onmouseout="chgImgPlayBack(this)">
+  <img src="../assets/play3.png" style="float:up; width:20%; height:30%; background-color: white" id="btnPlay" onmouseover="chgImgPlay(this)" onmouseout="chgImgPlayBack(this)">
 </a>
 
 
@@ -183,6 +183,10 @@ const logOutMenu = document.getElementById('logOutMenu');
 const username = document.getElementById('username');
 const btnCloseLogin = document.getElementById('btnCloseLogIn');
 const btnCloseSignUp = document.getElementById('btnCloseSignUp')
+const btnPlay = document.getElementById('btnPlay');
+
+var isLoggedIn = false;
+var isVerrified = false;
 
 btnSignUp.addEventListener('click', e => { 
   const email = document.getElementById('emailCreate').value;
@@ -218,6 +222,12 @@ logOutMenu.addEventListener('click', e => {
     });
 })
 
+btnPlay.addEventListener('click', e => {
+  if(isLoggedIn == false) {alert("please log in first"); return}
+  if(isVerrified == false) {alert("please verify your email first"); return}
+  window.location.href = "./charactersPage.html"
+})
+
 function promptEmailVerification(firebaseUser){
 alert("please verify your email by clicking on the link sent to it")
 firebaseUser.sendEmailVerification().catch( e => console.log(e.message))
@@ -245,6 +255,8 @@ firebaseUser.sendEmailVerification().catch( e => console.log(e.message))
   firebase.auth().onAuthStateChanged(firebaseUser => {
   if(firebaseUser){
     console.log(firebaseUser);
+	isLoggedIn = true;
+	isVerrified = true;
 	createAccMenu.style.visibility = "hidden"
 	logInMenu.style.visibility = "hidden"
 	logOutMenu.style.visibility = "visible"
@@ -253,6 +265,8 @@ firebaseUser.sendEmailVerification().catch( e => console.log(e.message))
   }
   else{
     console.log("not logged in");
+	isLoggedIn = false;
+	isVerrified = false;
 	createAccMenu.style.visibility = "visible"
 	logInMenu.style.visibility = "visible"
 	logOutMenu.style.visibility = "hidden"
