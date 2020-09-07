@@ -1,0 +1,27 @@
+.title {
+	font-size: 5em;
+	text-align: center;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-weight: bold;
+	color: #a600ff;
+	padding-bottom: 1em;
+}
+
+.accountIcon {
+  width: 30%;
+  height: 80%;
+  position: relative;
+  padding-left: 1em;
+}
+
+.menuItem {
+	font-size:3em;
+}
+
+.aboutText {
+  font-size: 4em;	
+}
+
+ul > li > a {
+	font-size: 3em;
+}
