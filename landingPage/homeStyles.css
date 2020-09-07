@@ -29,6 +29,11 @@
 	font-size: 2em;	
 }
 
+.characterText {
+	font-size: 2em;
+	
+}
+
 ul > li > a {
 	font-size: 3em;
 }

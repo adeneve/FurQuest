@@ -152,7 +152,7 @@
   </div>
 </div>
 
-<a href="#" target="_blank">
+<a href="#" target="_self">
   <img src="../assets/play3.png" style="float:up; width:20%; height:30%; background-color: white" id="btnPlay" onmouseover="chgImgPlay(this)" onmouseout="chgImgPlayBack(this)">
 </a>
 
@@ -256,7 +256,7 @@ firebaseUser.sendEmailVerification().catch( e => console.log(e.message))
   if(firebaseUser){
     console.log(firebaseUser);
 	isLoggedIn = true;
-	isVerrified = true;
+	isVerrified = firebaseUser.emailVerified;
 	createAccMenu.style.visibility = "hidden"
 	logInMenu.style.visibility = "hidden"
 	logOutMenu.style.visibility = "visible"

@@ -26,18 +26,86 @@
   </div>
   <p id="username" style="font-size:14px; padding-left:1em; color:white"> </p>
 
-<h2 class="title">Character Selection</h2>  
+<h2 class="title" id="characterTitle" style="visibility:hidden; padding-bottom:0.5em">Character Selection</h2>  
 
 
-
-
-
-
-    <div style="float:center">
-		<p class="aboutText">
-		Please create a character</p>
-	</div> 
-
+    <div class="card" style="width:400px; left:100px; float:left; visibility:hidden" id="bearCard">
+    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <div class="card-body">
+      <h4 class="card-title menuItem">Bear</h4>
+      <p class="card-text characterText">The Bear has enormous strength and health, but tends to be slow and clumsy.</p>
+	  
+		<form>
+    <div class="form-group">
+	  <label for="name" style="font-size:1.5em">Give your character a name:</label>
+		<input  id="nameCreate" name="name" style="padding:0.2em"> <br>
+		
+      <label for="selColor" style="font-size:1.5em">Select A Color (select one):</label>
+      <select class="form-control" id="selColor" style="font-size:1.5em">
+        <option>Brown</option>
+        <option>Grey</option>
+        <option>Red</option>
+        <option>Black</option>
+      </select>
+      <br>
+    </div>
+  </form>
+		
+      <a class="btn btn-primary" style="font-size:2em" id="createB">Create</a>
+    </div>
+  </div>
+  
+  <div class="card" id="frogCard" style="width:400px; left:250px; down:100px; position:relative; float:left;visibility:hidden">
+    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <div class="card-body">
+      <h4 class="card-title menuItem">Frog</h4>
+      <p class="card-text characterText">The Frog can jump high distances. hippity hoppity.</p>
+	  <br> <br>
+		<form>
+    <div class="form-group">
+	  <label for="name" style="font-size:1.5em">Give your character a name:</label>
+		<input  id="nameCreate2" name="name" style="padding:0.2em"> <br>
+		
+      <label for="selColor" style="font-size:1.5em">Select A Color (select one):</label>
+      <select class="form-control" id="selColor2" style="font-size:1.5em">
+        <option>Brown</option>
+        <option>Grey</option>
+        <option>Red</option>
+        <option>Black</option>
+      </select>
+      <br>
+    </div>
+  </form>
+		
+      <a href="#" class="btn btn-primary" style="font-size:2em" id="createF">Create</a>
+    </div>
+  </div>
+  
+  <div class="card" id="catCard" style="width:400px; left:-300px; down:100px; position:relative; float:right;visibility:hidden">
+    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <div class="card-body">
+      <h4 class="card-title menuItem">Cat</h4>
+      <p class="card-text characterText">The Cat is nimble and quick</p>
+	  <br> <br>
+		<form>
+    <div class="form-group">
+	  <label for="name" style="font-size:1.5em">Give your character a name:</label>
+		<input  id="nameCreate3" name="name" style="padding:0.2em"> <br>
+		
+      <label for="selColor" style="font-size:1.5em">Select A Color (select one):</label>
+      <select class="form-control" id="selColor3" style="font-size:1.5em">
+        <option>Brown</option>
+        <option>Grey</option>
+        <option>Red</option>
+        <option>Black</option>
+      </select>
+      <br>
+    </div>
+  </form>
+		
+      <a href="#" class="btn btn-primary" style="font-size:2em" id="createC">Create</a>
+    </div>
+  </div>
 
 
 
@@ -47,14 +115,22 @@
 
 
 <script>
-
+function chgImg(x){
+  x.src = "../assets/accountIconPressed.jpg"
+}
+function chgImgBack(x) {
+  x.src = "../assets/accountIcon.png"
+}
 
 const logOutMenu = document.getElementById('logOutMenu');
+const createBear = document.getElementById('createB');
+const createFrog = document.getElementById('createF');
+const createCat = document.getElementById('createC');
 
-
+var charTitle = document.getElementById('characterTitle')
 var isLoggedIn = false;
 var isVerrified = false;
-
+var firebaseUID = 0;
 
 
 logOutMenu.addEventListener('click', e => {
@@ -65,8 +141,55 @@ logOutMenu.addEventListener('click', e => {
     });
 })
 
+function linkUser(data)
+{
+console.log(data.key)
+var usersRef = db.child('users');
+	var newUserData = {
+	  "uid" : firebaseUID,
+	  "characters" : [data.key]
+	}
+	usersRef.push(newUserData).catch( e => console.log(e.message))
 
 
+}
+
+function createCharacter(name, color, type){
+  var charactersRef = db.child('characters');
+	console.log(charactersRef);
+	
+    var data = {
+	  "name": name,
+	  "color": color,
+	  "type" : type
+	}	
+	var newCharKey = 0
+	charactersRef.push(data).then( linkUser).catch( e => console.log(e.message))
+
+}
+createBear.addEventListener('click', e => {
+  var charName = document.getElementById('nameCreate')
+  var charColor = document.getElementById('selColor')
+  if(charName.value.length == 0) {alert("name must be at least 1 character long"); return}
+  createCharacter(charName.value, charColor.value, "Bear")
+  alert("your character was successfully created!")
+})
+
+createFrog.addEventListener('click', e => {
+  var charName = document.getElementById('nameCreate2')
+  var charColor = document.getElementById('selColor2')
+  if(charName.value.length == 0) {alert("name must be at least 1 character long"); return}
+  createCharacter(charName.value, charColor.value, "Frog")
+  alert("your character was successfully created!")
+})
+
+createCat.addEventListener('click', e => {
+  var charName = document.getElementById('nameCreate3')
+  var charColor = document.getElementById('selColor3')
+  if(charName.value.length == 0) {alert("name must be at least 1 character long"); return}
+  createCharacter(charName.value, charColor.value, "Cat")
+  alert("your character was successfully created!")
+})
 
 
 // Your web app's Firebase configuration
@@ -83,7 +206,38 @@ logOutMenu.addEventListener('click', e => {
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
+  const db = firebase.database().ref();
   
+  
+  function updateCharacters(uid){
+  console.log(uid)
+  const db = firebase.database().ref();
+  const events = db.child('users');
+  const query = events
+                  .orderByChild('uid')
+				  .equalTo(uid);
+  query.on('value', updateCharactersNext, err => console.log("error"));
+
+  
+  }
+  
+  function updateCharactersNext(data){
+    if(data.val() == null) {
+	  charTitle.innerText = "Create a character!"
+	  charTitle.style.visibility = "visible"
+	  document.getElementById('bearCard').style.visibility = "visible"
+	  document.getElementById('frogCard').style.visibility = "visible"
+	  document.getElementById('catCard').style.visibility = "visible"
+	}
+	else{
+	  charTitle.innerText = "Select your character!"
+	  charTitle.style.visibility = "visible"
+	  document.getElementById('bearCard').style.display = "none"
+	  document.getElementById('frogCard').style.display = "none"
+	  document.getElementById('catCard').style.display = "none"
+	}
+  }
+  //dbRefObj.on('value', snap => console.log(snap.val() ));
   
   firebase.auth().onAuthStateChanged(firebaseUser => {
   if(firebaseUser){
@@ -92,7 +246,9 @@ logOutMenu.addEventListener('click', e => {
 	isVerrified = true;
 	logOutMenu.style.visibility = "visible"
 	username.innerText = firebaseUser.email
-	if(firebaseUser.emailVerified == false) promptEmailVerification(firebaseUser)
+	firebaseUID = firebaseUser.uid
+	if(firebaseUser.emailVerified == false) promptEmailVerification(firebaseUser);
+	updateCharacters(firebaseUser.uid)
   }
   else{
     console.log("not logged in");
