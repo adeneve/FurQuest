@@ -47,16 +47,19 @@ playerImg.onload = function(e) {
 
 ctx.drawImage(playerImg, 30, 30, 0.2 ,2)
 // x: 453, y: 0, top point , basically just subtract 453
+enteringCoffeShop = false
 function modifyScene(x, y){
 
   if(x > -.49 && x < -.40 && y > 0.015 && y < 0.177){
+     enteringCoffeShop = true
      console.log("entering coffee shop");
      ctx.drawImage(img2, 5, 5)
 	 movePlayerCof(playerX, playerY)
   }
   else{
-     //ctx.drawImage(img, 5, 5)
-
+     ctx.drawImage(img, 5, 5)
+	 ctx.drawImage(playerImg, playerX - 453, playerY, 80, 80)
+     enteringCoffeShop = false
   }
 
 }
@@ -81,6 +84,8 @@ function render(time) {
   var t1x =(playerSpeed * (destX - playerX));
   var t1y = (playerSpeed * (destY - playerY));
   ctx.drawImage(img, 5, 5)
+  if(enteringCoffeShop) ctx.drawImage(img2, 5, 5)
+  //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.drawImage(playerImg, playerX + t1x - 453, playerY + t1y, 80, 80);
   playerX = playerX + t1x 
   playerY = playerY + t1y
