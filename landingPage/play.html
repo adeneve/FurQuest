@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>FurQuest</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
+  <link rel="stylesheet" href="homeStyles.css">
+</head>
+<body>
+
+<canvas id="gameCanvas"  style="border:2px solid #FFFFFF;  position:fixed; z-index:-1; left: 450px">
+</canvas>
+
+<img id="town" src="../assets/town.png" alt="The town" style="display:none; z-index:-1">
+<img id="town2" src="../assets/town2.png" alt="The town" style="display:none; z-index: -1">
+</body>
+
+<script>
+
+var gameCanvas = document.getElementById("gameCanvas") 
+gameCanvas.width = 1010
+gameCanvas.height = 630
+var ctx = gameCanvas.getContext("2d");
+var img = document.getElementById("town");
+var img2 = document.getElementById("town2");
+
+var playerImg = new Image();
+playerImg.src = "../assets/bear.png"
+var playerX = 950
+var playerY = 400
+
+ctx.globalCompositeOperation='source-over';
+ctx.drawImage(img, 5, 5)
+
+playerImg.onload = function(e) {
+   ctx.drawImage(e.target, 500, 400, 80, 80)
+}
+//ctx.drawImage(playerImg, 30, 30, 0.2 ,2)
+// x: 453, y: 0, top point , basically just subtract 453
+function modifyScene(x, y){
+
+  if(x > -.49 && x < -.40 && y > 0.015 && y < 0.177){
+     console.log("entering coffee shop");
+     ctx.drawImage(img2, 5, 5)
+	 movePlayerCof(playerX, playerY)
+  }
+  else{
+     //ctx.drawImage(img, 5, 5)
+
+  }
+
+}
+
+function movePlayer(x, y){
+  console.log('beep')
+  ctx.drawImage(img, 5, 5)
+  ctx.drawImage(playerImg, x - 453, y, 80, 80)
+  playerX = x
+  playerY = y
+}
+
+function movePlayerCof(x, y){
+  console.log('beep')
+  ctx.drawImage(img2, 5, 5)
+  ctx.drawImage(playerImg, x - 453, y, 80, 80)
+  playerX = x
+  playerY = y
+}
+
+gameCanvas.addEventListener("mousedown", e => { 
+  console.log("moving character")
+  var x = e.clientX
+  var y = e.clientY
+  console.log("X: "+ e.clientX)
+  console.log("Y: "+ e.clientY)
+  var rectangle = e.target.getBoundingClientRect(); 
+	
+  var x = ((x - rectangle.left)-(gameCanvas.width/2))/(gameCanvas.width/2);
+  var y = ((gameCanvas.height/2)-(y-rectangle.top))/(gameCanvas.height/2);
+  console.log("x: "+ x)
+  console.log("y: "+ y)
+  
+  modifyScene(x, y)
+  movePlayer(e.clientX, e.clientY)
+})
+
+gameCanvas.addEventListener("mousemove", e => { 
+  var x = e.clientX
+  var y = e.clientY
+  console.log("X: "+ e.clientX)
+  console.log("Y: "+ e.clientY)
+  var rectangle = e.target.getBoundingClientRect(); 
+	
+  var x = ((x - rectangle.left)-(gameCanvas.width/2))/(gameCanvas.width/2);
+  var y = ((gameCanvas.height/2)-(y-rectangle.top))/(gameCanvas.height/2);
+  console.log("x: "+ x)
+  console.log("y: "+ y)
+  
+  modifyScene(x, y)
+})
+
+</script>
+</html>
