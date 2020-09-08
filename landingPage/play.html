@@ -44,7 +44,8 @@ ctx.drawImage(img, 5, 5)
 playerImg.onload = function(e) {
    ctx.drawImage(e.target, 500, 400, 80, 80)
 }
-//ctx.drawImage(playerImg, 30, 30, 0.2 ,2)
+
+ctx.drawImage(playerImg, 30, 30, 0.2 ,2)
 // x: 453, y: 0, top point , basically just subtract 453
 function modifyScene(x, y){
 
@@ -60,12 +61,55 @@ function modifyScene(x, y){
 
 }
 
-function movePlayer(x, y){
-  console.log('beep')
+var destX = 500
+var destY = 500
+
+let start = -1;
+var playerSpeed = .01 // 10px/s
+var isRight = true;
+var isUp = true;
+function render(time) {
+  var timeS = time * 0.001;  // seconds
+  if (start == -1){
+    start = time
+  }
+  const elapsed = time - start;
+  console.log("elapsed:" + elapsed)
+  
+  //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  
+  var t1x =(playerSpeed * (destX - playerX));
+  var t1y = (playerSpeed * (destY - playerY));
   ctx.drawImage(img, 5, 5)
-  ctx.drawImage(playerImg, x - 453, y, 80, 80)
-  playerX = x
-  playerY = y
+  ctx.drawImage(playerImg, playerX + t1x - 453, playerY + t1y, 80, 80);
+  playerX = playerX + t1x 
+  playerY = playerY + t1y
+  console.log(playerX)
+  console.log(playerY)
+  
+  if (elapsed < 5000) { // Stop the animation after 2 seconds
+    requestAnimationFrame(render);
+  }
+  
+}
+
+function movePlayer(x, y){
+  start = -1
+  console.log('beep')
+  destX = x 
+  destY = y
+  ctx.drawImage(img, 5, 5)
+  if(destX > playerX){
+    isRight = true
+  }else{
+    isRight = false
+  }
+  if(destY > playerY){
+    isUp = true
+  }else{
+    isUp =false 
+  }
+  requestAnimationFrame(render);
 }
 
 function movePlayerCof(x, y){
@@ -106,6 +150,32 @@ gameCanvas.addEventListener("mousemove", e => {
   console.log("y: "+ y)
   
   modifyScene(x, y)
+})
+
+var firebaseConfig = {
+    apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
+    authDomain: "furquest-1c939.firebaseapp.com",
+    databaseURL: "https://furquest-1c939.firebaseio.com",
+    projectId: "furquest-1c939",
+    storageBucket: "furquest-1c939.appspot.com",
+    messagingSenderId: "178770843812",
+    appId: "1:178770843812:web:f8bf303167b573f41c6e31",
+    measurementId: "G-D1DXBJLC06"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  const db = firebase.database().ref();
+  
+firebase.auth().onAuthStateChanged(firebaseUser => {
+  if(firebaseUser){
+    console.log(firebaseUser);
+
+  }
+  else{
+    console.log("not logged in");
+	alert("please log in")
+  }
 })
 
 </script>
