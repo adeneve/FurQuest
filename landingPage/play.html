@@ -67,14 +67,16 @@ function modifyScene(x, y){
 var destX = 500
 var destY = 500
 
+var isUp = false;
+
 let start = -1;
-var playerSpeed = .3 // .001 px per ms
+var playerSpeed = .15 // .001 px per ms
 var playerSpeedx = 1 // 10px/s
 var playerSpeedy = 1
 var oldt1x = 1;
 var oldt1y = 1;
-var diffX = destX - playerX;
-var diffY = destY - playerY;
+var diffX = Math.abs(destX - playerX);
+var diffY = Math.abs(destY - playerY);
 var diffTot = diffX + diffY 
 var percentX = diffX / diffTot
 var percentY = diffY / diffTot 
@@ -90,7 +92,6 @@ function render(time) {
     start = time
   }
   const elapsed = time - start;
-  console.log("elapsed:" + elapsed)
   
   
   var t1x =(playerSpeedx * elapsed);
@@ -103,8 +104,6 @@ function render(time) {
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.drawImage(playerImg, playerX + t1x - 453, playerY + t1y, 80, 80);
   
-  console.log(playerX)
-  console.log(playerY)
   
   if (elapsed < animationTimeReq) { // Stop the animation after 2 seconds
     requestAnimationFrame(render);
@@ -122,8 +121,8 @@ function movePlayer(x, y){
   destX = x 
   destY = y
   ctx.drawImage(img, 5, 5)
-  diffX = destX - playerX;
-	diffY = destY - playerY;
+  diffX = Math.abs(destX - playerX);
+	diffY = Math.abs(destY - playerY);
 	diffTot = diffX + diffY 
 	percentX = diffX / diffTot
 	percentY = diffY / diffTot 
@@ -133,6 +132,8 @@ function movePlayer(x, y){
 	diffSqY = diffY * diffY 
 	totalDistancePx = Math.sqrt( diffSqX + diffSqY)
 	animationTimeReq = totalDistancePx / playerSpeed
+  if(destY < playerY) playerSpeedy *= -1
+  if(destX < playerX) playerSpeedx *= -1
   requestAnimationFrame(render);
 }
 
