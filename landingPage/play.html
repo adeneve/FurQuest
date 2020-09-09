@@ -68,9 +68,22 @@ var destX = 500
 var destY = 500
 
 let start = -1;
-var playerSpeed = .018 // 10px/s
-var isRight = true;
-var isUp = true;
+var playerSpeed = .3 // .001 px per ms
+var playerSpeedx = 1 // 10px/s
+var playerSpeedy = 1
+var oldt1x = 1;
+var oldt1y = 1;
+var diffX = destX - playerX;
+var diffY = destY - playerY;
+var diffTot = diffX + diffY 
+var percentX = diffX / diffTot
+var percentY = diffY / diffTot 
+var playerSpeedx = playerSpeed * percentX
+var playerSpeedy = playerSpeed * percentY
+var diffSqX = diffX * diffX 
+var diffSqY = diffY * diffY 
+var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
+var animationTimeReq = totalDistancePx / playerSpeed
 function render(time) {
   var timeS = time * 0.001;  // seconds
   if (start == -1){
@@ -79,41 +92,47 @@ function render(time) {
   const elapsed = time - start;
   console.log("elapsed:" + elapsed)
   
+  
+  var t1x =(playerSpeedx * elapsed);
+  var t1y = (playerSpeedy * elapsed);
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   
-  var t1x =(playerSpeed * (destX - playerX));
-  var t1y = (playerSpeed * (destY - playerY));
+  
   ctx.drawImage(img, 5, 5)
   if(enteringCoffeShop) ctx.drawImage(img2, 5, 5)
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.drawImage(playerImg, playerX + t1x - 453, playerY + t1y, 80, 80);
-  playerX = playerX + t1x 
-  playerY = playerY + t1y
+  
   console.log(playerX)
   console.log(playerY)
   
-  if (elapsed < 5000) { // Stop the animation after 2 seconds
+  if (elapsed < animationTimeReq) { // Stop the animation after 2 seconds
     requestAnimationFrame(render);
+  }else{
+    playerX = playerX + t1x 
+	playerY = playerY + t1y
   }
   
 }
 
 function movePlayer(x, y){
+  //updateServer(x, y) store generalized coordinates here
   start = -1
   console.log('beep')
   destX = x 
   destY = y
   ctx.drawImage(img, 5, 5)
-  if(destX > playerX){
-    isRight = true
-  }else{
-    isRight = false
-  }
-  if(destY > playerY){
-    isUp = true
-  }else{
-    isUp =false 
-  }
+  diffX = destX - playerX;
+	diffY = destY - playerY;
+	diffTot = diffX + diffY 
+	percentX = diffX / diffTot
+	percentY = diffY / diffTot 
+	playerSpeedx = playerSpeed * percentX
+	playerSpeedy = playerSpeed * percentY
+	diffSqX = diffX * diffX 
+	diffSqY = diffY * diffY 
+	totalDistancePx = Math.sqrt( diffSqX + diffSqY)
+	animationTimeReq = totalDistancePx / playerSpeed
   requestAnimationFrame(render);
 }
 
@@ -121,8 +140,6 @@ function movePlayerCof(x, y){
   console.log('beep')
   ctx.drawImage(img2, 5, 5)
   ctx.drawImage(playerImg, x - 453, y, 80, 80)
-  playerX = x
-  playerY = y
 }
 
 gameCanvas.addEventListener("mousedown", e => { 
