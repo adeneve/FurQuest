@@ -58,7 +58,7 @@ function modifyScene(x, y){
   }
   else{
      ctx.drawImage(img, 5, 5)
-	 ctx.drawImage(playerImg, playerX - 453, playerY, 200, 150)
+	 ctx.drawImage(playerImg, playerX - 453 - 85, playerY - 85, 200, 150)
      enteringCoffeShop = false
   }
 
@@ -103,10 +103,11 @@ function render(time) {
   ctx.drawImage(img, 5, 5)
   if(enteringCoffeShop) ctx.drawImage(img2, 5, 5)
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.drawImage(playerImg, playerX + t1x - 453, playerY + t1y, 200, 150);
+  ctx.drawImage(playerImg, playerX + t1x - 453 - 85, playerY + t1y - 85, 200, 150);
   
   
-  if (Math.round(playerX + t1x,2) != Math.round(destX,2) && Math.round(playerY + t1y, 2) != Math.round(destY, 2)) { // Stop the animation after 2 seconds
+  if (Math.abs(Math.round(playerX + t1x,2) - Math.round(destX,2)) > 1 || 
+       Math.abs(Math.round(playerY + t1y, 2) - Math.round(destY, 2)) > 1) { // Stop the animation 
     oldt1x = t1x
 	oldt1y = t1y
     requestAnimationFrame(render);
