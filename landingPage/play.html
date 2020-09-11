@@ -34,7 +34,7 @@ var img = document.getElementById("town");
 var img2 = document.getElementById("town2");
 
 var playerImg = new Image();
-playerImg.src = "../assets/bear.png"
+playerImg.src = "../assets/panda.png"
 var playerX = 950
 var playerY = 400
 
@@ -42,10 +42,10 @@ ctx.globalCompositeOperation='source-over';
 ctx.drawImage(img, 5, 5)
 
 playerImg.onload = function(e) {
-   ctx.drawImage(e.target, 500, 400, 80, 80)
+   ctx.drawImage(e.target, 500, 400, 200, 150)
 }
 
-ctx.drawImage(playerImg, 30, 30, 0.2 ,2)
+//ctx.drawImage(playerImg, 30, 30, 0.2 ,2)
 // x: 453, y: 0, top point , basically just subtract 453
 enteringCoffeShop = false
 function modifyScene(x, y){
@@ -58,7 +58,7 @@ function modifyScene(x, y){
   }
   else{
      ctx.drawImage(img, 5, 5)
-	 ctx.drawImage(playerImg, playerX - 453, playerY, 80, 80)
+	 ctx.drawImage(playerImg, playerX - 453, playerY, 200, 150)
      enteringCoffeShop = false
   }
 
@@ -88,6 +88,7 @@ var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
 var animationTimeReq = totalDistancePx / playerSpeed
 function render(time) {
   var timeS = time * 0.001;  // seconds
+
   if (start == -1){
     start = time
   }
@@ -102,15 +103,19 @@ function render(time) {
   ctx.drawImage(img, 5, 5)
   if(enteringCoffeShop) ctx.drawImage(img2, 5, 5)
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.drawImage(playerImg, playerX + t1x - 453, playerY + t1y, 80, 80);
+  ctx.drawImage(playerImg, playerX + t1x - 453, playerY + t1y, 200, 150);
   
   
-  if (elapsed < animationTimeReq) { // Stop the animation after 2 seconds
+  if (Math.round(playerX + t1x,2) != Math.round(destX,2) && Math.round(playerY + t1y, 2) != Math.round(destY, 2)) { // Stop the animation after 2 seconds
+    oldt1x = t1x
+	oldt1y = t1y
     requestAnimationFrame(render);
   }else{
-    playerX = playerX + t1x 
+    console.log(elapsed)
+    playerX = playerX + t1x
 	playerY = playerY + t1y
   }
+  
   
 }
 
@@ -120,6 +125,8 @@ function movePlayer(x, y){
   console.log('beep')
   destX = x 
   destY = y
+  console.log("destX:"+destX +" , destY:"+destY + "playerX:" + playerX + "playerY:" + playerY)
+  if(destX == playerX && destY == playerY) return;
   ctx.drawImage(img, 5, 5)
   diffX = Math.abs(destX - playerX);
 	diffY = Math.abs(destY - playerY);
@@ -132,6 +139,10 @@ function movePlayer(x, y){
 	diffSqY = diffY * diffY 
 	totalDistancePx = Math.sqrt( diffSqX + diffSqY)
 	animationTimeReq = totalDistancePx / playerSpeed
+	console.log("speedX: " + playerSpeedx)
+	console.log("speedY: " + playerSpeedy)
+	console.log("animationTimeReq:" + animationTimeReq)
+	console.log("totalDistancePx:" + totalDistancePx)
   if(destY < playerY) playerSpeedy *= -1
   if(destX < playerX) playerSpeedx *= -1
   requestAnimationFrame(render);
@@ -163,14 +174,14 @@ gameCanvas.addEventListener("mousedown", e => {
 gameCanvas.addEventListener("mousemove", e => { 
   var x = e.clientX
   var y = e.clientY
-  console.log("X: "+ e.clientX)
-  console.log("Y: "+ e.clientY)
+ // console.log("X: "+ e.clientX)
+ // console.log("Y: "+ e.clientY)
   var rectangle = e.target.getBoundingClientRect(); 
 	
   var x = ((x - rectangle.left)-(gameCanvas.width/2))/(gameCanvas.width/2);
   var y = ((gameCanvas.height/2)-(y-rectangle.top))/(gameCanvas.height/2);
-  console.log("x: "+ x)
-  console.log("y: "+ y)
+  //console.log("x: "+ x)
+ // console.log("y: "+ y)
   
   modifyScene(x, y)
 })
