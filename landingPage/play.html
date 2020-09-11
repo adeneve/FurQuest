@@ -68,7 +68,8 @@ var destX = 500
 var destY = 500
 
 var isUp = false;
-
+var isMoving = false
+var clickCount = 0
 let start = -1;
 var playerSpeed = .15 // .001 px per ms
 var playerSpeedx = 1 // 10px/s
@@ -105,30 +106,47 @@ function render(time) {
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.drawImage(playerImg, playerX + t1x - 453 - 85, playerY + t1y - 85, 200, 150);
   
+  if(clickCount > 1){
+    playerX = playerX + t1x
+	playerY = playerY + t1y
+    clickCount = 0
+	movePlayer(destX, destY)
+	return;
+  }
   
   if (Math.abs(Math.round(playerX + t1x,2) - Math.round(destX,2)) > 1 || 
        Math.abs(Math.round(playerY + t1y, 2) - Math.round(destY, 2)) > 1) { // Stop the animation 
-    oldt1x = t1x
-	oldt1y = t1y
     requestAnimationFrame(render);
   }else{
     console.log(elapsed)
     playerX = playerX + t1x
 	playerY = playerY + t1y
+	isMoving = false;
+	clickCount = 0
   }
   
   
 }
-
+var wasMoving = false;
+console.log(playerX)
 function movePlayer(x, y){
+   isMoving = true;
+   destX = x 
+   destY = y
+   clickCount += 1;
+   if(clickCount > 1) {
+	 return;
+   }
+
+   console.log(clickCount)
+   console.log("ll: playerX:" + playerX)
   //updateServer(x, y) store generalized coordinates here
-  start = -1
+   start = -1
+  isMoving = true
   console.log('beep')
-  destX = x 
-  destY = y
   console.log("destX:"+destX +" , destY:"+destY + "playerX:" + playerX + "playerY:" + playerY)
   if(destX == playerX && destY == playerY) return;
-  ctx.drawImage(img, 5, 5)
+  //ctx.drawImage(img, 5, 5)
   diffX = Math.abs(destX - playerX);
 	diffY = Math.abs(destY - playerY);
 	diffTot = diffX + diffY 
