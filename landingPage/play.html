@@ -35,6 +35,8 @@ var img2 = document.getElementById("town2");
 
 var playerImg = new Image();
 playerImg.src = "../assets/panda.png"
+var playerWalkImg = new Image();
+playerWalkImg.src = "../assets/pandaWalk.png"
 var playerX = 950
 var playerY = 400
 
@@ -63,6 +65,8 @@ function modifyScene(x, y){
   }
 
 }
+
+var animationTick = 0;
 
 var destX = 500
 var destY = 500
@@ -94,6 +98,7 @@ function render(time) {
     start = time
   }
   const elapsed = time - start;
+  animationTick += 1
   
   
   var t1x =(playerSpeedx * elapsed);
@@ -104,7 +109,11 @@ function render(time) {
   ctx.drawImage(img, 5, 5)
   if(enteringCoffeShop) ctx.drawImage(img2, 5, 5)
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.drawImage(playerImg, playerX + t1x - 453 - 85, playerY + t1y - 85, 200, 150);
+  if(animationTick <= 15) ctx.drawImage(playerImg, playerX + t1x - 453 - 85, playerY + t1y - 85, 200, 150);
+  if(animationTick > 15) {
+    ctx.drawImage(playerWalkImg, playerX + t1x - 453 - 85, playerY + t1y - 85, 200, 150);
+	if(animationTick == 30) animationTick = 0
+  }
   
   if(clickCount > 1){
     playerX = playerX + t1x
@@ -170,7 +179,7 @@ function movePlayer(x, y){
 function movePlayerCof(x, y){
   console.log('beep')
   ctx.drawImage(img2, 5, 5)
-  ctx.drawImage(playerImg, x - 453, y, 80, 80)
+  ctx.drawImage(playerImg, x - 453 - 85, y - 85, 200, 150)
 }
 
 gameCanvas.addEventListener("mousedown", e => { 
