@@ -63,6 +63,8 @@ function modifyScene(x, y){
   else{
      ctx.drawImage(img, 5, 5)
 	 ctx.drawImage(playerImg, playerX - 453 - 85, playerY - 85, 200, 150)
+	 console.log(otherPlayerX)
+	 ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
      enteringCoffeShop = false
   }
 
@@ -274,8 +276,39 @@ function playMusic(){
     audio.play();
 }
 */
+var otherPlayerX = 0;
+var otherPlayerY = 0;
+function analyzeChange(data){
+console.log(data.val())
+console.log("charID:" + charID)
+   for(var key in data.val()){
+      if(key != charID){
+	    console.log(data.val()[key])
+		otherPlayerX = data.val()[key].x;
+		otherPlayerY = data.val()[key].y;
+		otherPlayerX = 528*otherPlayerX + 981
+		otherPlayerY = -322*otherPlayerY + 322
+		ctx.drawImage(img, 5, 5);
+		ctx.drawImage(playerImg, playerX  - 453 - 85, playerY - 85, 200, 150)
+		ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
+		
+	  }
+   
+   }
+
+}
 
 var fbUser = null;
+var charID = null;
+
+function loadPlayerData(data){
+console.log(data.val())
+console.log(Object.keys(data.val())[0])
+	  var key = Object.keys(data.val())[0]
+	  charID = data.val()[key]["characters"][0]
+	  
+}
+   
 
 var firebaseConfig = {
     apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
@@ -292,10 +325,22 @@ var firebaseConfig = {
   firebase.analytics();
   const db = firebase.database().ref();
   
+ 
+  
 firebase.auth().onAuthStateChanged(firebaseUser => {
   if(firebaseUser){
     console.log(firebaseUser);
 	fbUser = firebaseUser;
+	
+	const charEvents = db.child('users')
+  const query = charEvents
+                  .orderByChild('uid')
+				  .equalTo(firebaseUser.uid)
+				  .limitToFirst(1);
+  query.on('value', loadPlayerData, err => console.log("error"));
+  
+  const otherPlayersEvent = db.child('characters');
+   otherPlayersEvent.on('value', analyzeChange)
 
   }
   else{

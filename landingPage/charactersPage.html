@@ -275,7 +275,7 @@ createCat.addEventListener('click', e => {
 	logOutMenu.style.visibility = "visible"
 	username.innerText = firebaseUser.email
 	firebaseUID = firebaseUser.uid
-	if(firebaseUser.emailVerified == false) promptEmailVerification(firebaseUser);
+	//if(firebaseUser.emailVerified == false) promptEmailVerification(firebaseUser);
 	updateCharacters(firebaseUser.uid)
   }
   else{
