@@ -63,7 +63,6 @@ function modifyScene(x, y){
   else{
      ctx.drawImage(img, 5, 5)
 	 ctx.drawImage(playerImg, playerX - 453 - 85, playerY - 85, 200, 150)
-	 console.log(otherPlayerX)
 	 ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
      enteringCoffeShop = false
   }
@@ -276,6 +275,8 @@ function playMusic(){
     audio.play();
 }
 */
+
+//inorder to animate, try using requestAnimationFrame but with a new callback function for other plyers
 var otherPlayerX = 0;
 var otherPlayerY = 0;
 function analyzeChange(data){
