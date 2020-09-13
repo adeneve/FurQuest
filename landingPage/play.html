@@ -22,6 +22,8 @@
 
 <img id="town" src="../assets/town.png" alt="The town" style="display:none; z-index:-1">
 <img id="town2" src="../assets/town2.png" alt="The town" style="display:none; z-index: -1">
+
+<audio id="happy" src="../assets/music/happy.mp3" muted></audio>
 </body>
 
 <script>
@@ -104,6 +106,15 @@ function render(time) {
   var t1x =(playerSpeedx * elapsed);
   var t1y = (playerSpeedy * elapsed);
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  if( elapsed > animationTimeReq + 2000 ) {
+	isMoving = false;
+	clickCount = 0
+	return;
+  
+  }
+  
+  oldt1x = t1x;
+  oldt1y = t1y;
   
   
   ctx.drawImage(img, 5, 5)
@@ -123,7 +134,7 @@ function render(time) {
 	return;
   }
   
-  if (Math.abs(Math.round(playerX + t1x,2) - Math.round(destX,2)) > 1 || 
+  if (Math.abs(Math.round(playerX + t1x,2) - Math.round(destX,2)) > 1 ||
        Math.abs(Math.round(playerY + t1y, 2) - Math.round(destY, 2)) > 1) { // Stop the animation 
     requestAnimationFrame(render);
   }else{
@@ -197,7 +208,49 @@ gameCanvas.addEventListener("mousedown", e => {
   
   modifyScene(x, y)
   movePlayer(e.clientX, e.clientY)
+  savePlayerLocationDB(x, y)
 })
+
+var tempX = 0;
+var tempY = 0;
+function savePlayerLocationDB(x, y){
+   tempX = x;
+   tempY = y;
+   const events = db.child('users');
+  const query = events
+                  .orderByChild('uid')
+				  .equalTo(fbUser.uid)
+				  .limitToFirst(1);
+  query.on('value', getChar, err => console.log("error"));
+
+}
+
+var charID = 0;
+function getChar(userData){
+   console.log(userData.val())
+   console.log(Object.keys(userData.val())[0])
+   var key = Object.keys(userData.val())[0]
+   console.log(userData.val()[key]["characters"])
+   var characterID = userData.val()[key]["characters"][0]
+   console.log(characterID)
+   charID = characterID
+   const events = db.child('characters');
+   events.child(characterID).once('value').then( updateChar)
+}
+
+function updateChar( data){
+console.log("here")
+  var charDataObj = {
+    color : data.val().color,
+	name : data.val().name,
+	type : data.val().type,
+	x : tempX,
+	y : tempY
+  }
+  const events = db.child('characters');
+  events.child(charID).update(charDataObj).catch( e => console.log(e.message))
+
+}
 
 gameCanvas.addEventListener("mousemove", e => { 
   var x = e.clientX
@@ -213,6 +266,16 @@ gameCanvas.addEventListener("mousemove", e => {
   
   modifyScene(x, y)
 })
+
+/*
+var audio = new Audio("../assets/music/happy.mp3");
+function playMusic(){
+    audio.loop = true;
+    audio.play();
+}
+*/
+
+var fbUser = null;
 
 var firebaseConfig = {
     apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
@@ -232,11 +295,13 @@ var firebaseConfig = {
 firebase.auth().onAuthStateChanged(firebaseUser => {
   if(firebaseUser){
     console.log(firebaseUser);
+	fbUser = firebaseUser;
 
   }
   else{
     console.log("not logged in");
 	alert("please log in")
+	fbUser = null;
   }
 })
 
