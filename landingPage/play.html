@@ -42,6 +42,8 @@ playerWalkImg.src = "../assets/pandaWalk.png"
 var playerX = 950
 var playerY = 400
 
+var otherPlayerLocations = new Map();
+
 ctx.globalCompositeOperation='source-over';
 ctx.drawImage(img, 5, 5)
 
@@ -119,6 +121,7 @@ function render(time) {
   
   
   ctx.drawImage(img, 5, 5)
+  ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
   if(enteringCoffeShop) ctx.drawImage(img2, 5, 5)
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   if(animationTick <= 15) ctx.drawImage(playerImg, playerX + t1x - 453 - 85, playerY + t1y - 85, 200, 150);
@@ -246,7 +249,7 @@ console.log("here")
 	name : data.val().name,
 	type : data.val().type,
 	x : tempX,
-	y : tempY
+	y : tempY,
   }
   const events = db.child('characters');
   events.child(charID).update(charDataObj).catch( e => console.log(e.message))
@@ -277,6 +280,8 @@ function playMusic(){
 */
 
 //inorder to animate, try using requestAnimationFrame but with a new callback function for other plyers
+var otherPlayerGlobalX = 0;
+var otherPlayerGlobalY = 0;
 var otherPlayerX = 0;
 var otherPlayerY = 0;
 function analyzeChange(data){
@@ -285,19 +290,38 @@ console.log("charID:" + charID)
    for(var key in data.val()){
       if(key != charID){
 	    console.log(data.val()[key])
-		otherPlayerX = data.val()[key].x;
-		otherPlayerY = data.val()[key].y;
-		otherPlayerX = 528*otherPlayerX + 981
-		otherPlayerY = -322*otherPlayerY + 322
+		otherPlayerGlobalX = data.val()[key].x;
+		otherPlayerGlobalY = data.val()[key].y;
+		otherPlayerX = 502*otherPlayerGlobalX + 956
+		otherPlayerY = -314*otherPlayerGlobalY + 314
+		if( otherPlayerLocations.get(key) == undefined){
+		console.log("no key")
 		ctx.drawImage(img, 5, 5);
 		ctx.drawImage(playerImg, playerX  - 453 - 85, playerY - 85, 200, 150)
 		ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
+		otherPlayerLocations.set(key, { "x" : otherPlayerGlobalX, "y": otherPlayerGlobalY});
+		console.log(otherPlayerLocations);
+		console.log(key)
+		console.log(otherPlayerLocations.get(key))
+		
+		}else{
+		  var otherPlyerPos = otherPlayerLocations.get(key)
+		  if(otherPlyerPos.x != otherPlayerGlobalX || otherPlyerPos.y != otherPlayerGlobalY){
+		     console.log("old other Player X: " + otherPlyerPos.x + " old other player Y: " + otherPlyerPos.y)
+		     ctx.drawImage(img, 5, 5);
+		     ctx.drawImage(playerImg, playerX  - 453 - 85, playerY - 85, 200, 150)
+		     ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
+		     otherPlayerLocations.set(key, { "x" : otherPlayerGlobalX, "y": otherPlayerGlobalY});
+		  }
+		
+		}
 		
 	  }
    
    }
 
 }
+
 
 var fbUser = null;
 var charID = null;
