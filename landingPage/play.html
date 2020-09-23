@@ -20,7 +20,7 @@
 <canvas id="gameCanvas"  style="border:2px solid #FFFFFF;  position:fixed; z-index:-1; left: 450px">
 </canvas>
 
-<img id="town" src="../assets/town.png" alt="The town" style="display:none; z-index:-1">
+<img id="town" src="../assets/library.png" alt="The town" style="display:none; z-index:-1">
 <img id="town2" src="../assets/town2.png" alt="The town" style="display:none; z-index: -1">
 
 <audio id="happy" src="../assets/music/happy.mp3" muted></audio>
@@ -29,8 +29,8 @@
 <script>
 
 var gameCanvas = document.getElementById("gameCanvas") 
-gameCanvas.width = 1010
-gameCanvas.height = 630
+gameCanvas.width = 1024
+gameCanvas.height = 800
 var ctx = gameCanvas.getContext("2d");
 var img = document.getElementById("town");
 var img2 = document.getElementById("town2");
@@ -45,7 +45,7 @@ var playerY = 400
 var otherPlayerLocations = new Map();
 
 ctx.globalCompositeOperation='source-over';
-ctx.drawImage(img, 5, 5)
+ctx.drawImage(img, 0, 0)
 
 playerImg.onload = function(e) {
    ctx.drawImage(e.target, 500, 400, 200, 150)
@@ -63,7 +63,7 @@ function modifyScene(x, y){
 	 movePlayerCof(playerX, playerY)
   }
   else{
-     ctx.drawImage(img, 5, 5)
+     ctx.drawImage(img, 0, 0)
 	 ctx.drawImage(playerImg, playerX - 453 - 85, playerY - 85, 200, 150)
 	 ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
      enteringCoffeShop = false
@@ -120,7 +120,7 @@ function render(time) {
   oldt1y = t1y;
   
   
-  ctx.drawImage(img, 5, 5)
+  ctx.drawImage(img, 0, 0)
   ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
   if(enteringCoffeShop) ctx.drawImage(img2, 5, 5)
   //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -151,6 +151,52 @@ function render(time) {
   
   
 }
+var startOtherPlayer = -1
+function renderPlayers(time){
+	
+	if (startOtherPlayer == -1){
+    startOtherPlayer = time
+  }
+  const elapsed = time - startOtherPlayer;
+  
+  var t1x =(playerSpeedOtherx * elapsed);
+  var t1y = (playerSpeedOthery * elapsed);
+  //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  if( elapsed > animationTimeReq + 2000 ) {
+	isMoving = false;
+	clickCount = 0
+	return;
+  
+  }
+  
+  oldt1Otherx = t1x;
+  oldt1Othery = t1y;
+  
+  
+  ctx.drawImage(img, 0, 0)
+  ctx.drawImage(playerImg, playerX  - 453 - 85, playerY - 85, 200, 150)
+
+  if(animationTick <= 15) ctx.drawImage(playerImg, localOtherPlayerOldX + t1x - 453 - 85, localOtherPlayerOldY + t1y - 85, 200, 150);
+  if(animationTick > 15) {
+    ctx.drawImage(playerWalkImg, localOtherPlayerOldX + t1x - 453 - 85, localOtherPlayerOldY + t1y - 85, 200, 150);
+	if(animationTick == 30) animationTick = 0
+  }
+  
+
+  
+  if (Math.abs(Math.round(localOtherPlayerOldX + t1x,2) - Math.round(otherPlayerGlobalX,2)) > 1 ||
+       Math.abs(Math.round(localOtherPlayerOldY + t1y, 2) - Math.round(otherPlayerGlobalY, 2)) > 1) { // Stop the animation 
+    requestAnimationFrame(renderPlayers);
+  }else{
+    console.log(elapsed)
+	otherPlayerLocations.set(key, { "x" : otherPlayerGlobalX, "y": otherPlayerGlobalY});
+	isMoving = false;
+	clickCount = 0
+  }
+
+}
+
+
 var wasMoving = false;
 console.log(playerX)
 function movePlayer(x, y){
@@ -189,6 +235,61 @@ function movePlayer(x, y){
   if(destY < playerY) playerSpeedy *= -1
   if(destX < playerX) playerSpeedx *= -1
   requestAnimationFrame(render);
+}
+
+
+    var localOtherPlayerOldX = 0
+	var localOtherPlayerOldY = 0
+	var playerSpeedOtherx = 1 // 10px/s
+	var playerSpeedOthery = 1
+	var oldt1Otherx = 1;
+	var oldt1Othery = 1;
+	var diffOtherX = 0
+	var diffOtherY = 0
+	var diffOtherTot = diffX + diffY 
+	var percentOtherX = diffX / diffTot
+	var percentOtherY = diffY / diffTot 
+	var playerSpeedOtherx = playerSpeed * percentX
+	var playerSpeedOthery = playerSpeed * percentY
+	var diffSqOtherX = diffX * diffX 
+	var diffSqOtherY = diffY * diffY 
+	var totalDistanceOtherPx = Math.sqrt( diffSqX + diffSqY)
+	
+var animationTimeReqOtherPlayer = -1;
+function moveOtherPlayer(otherPlayerPos){
+
+console.log("hello?")
+	console.log(otherPlayerPos)
+	localOtherPlayerOldX = 502*otherPlayerPos.x + 956
+	localOtherPlayerOldY = -314*otherPlayerPos.y + 375
+	
+	console.log("old other p loc X: "+ localOtherPlayerOldX)
+	console.log("localOtherPlayerOldY: " + localOtherPlayerOldY)
+	console.log("otherPly dest:" + otherPlayerX);
+	console.log("otherPly desty: " + otherPlayerY)
+	
+	playerSpeedOtherx = 1 // 10px/s
+	playerSpeedOthery = 1
+	oldt1Otherx = 1;
+	oldt1Othery = 1;
+	diffOtherX = Math.abs(otherPlayerX - localOtherPlayerOldX);
+	diffOtherY = Math.abs(otherPlayerX - localOtherPlayerOldY);
+	diffOtherTot = diffOtherX + diffOtherY 
+	percentOtherX = diffOtherX / diffOtherTot
+	percentOtherY = diffOtherY / diffOtherTot 
+	playerSpeedOtherx = playerSpeed * percentOtherX
+	playerSpeedOthery = playerSpeed * percentOtherY
+	diffSqOtherX = diffOtherX * diffOtherX 
+	diffSqOtherY = diffOtherY * diffOtherY 
+	totalDistanceOtherPx = Math.sqrt( diffSqOtherX + diffSqOtherY)
+	
+	animationTimeReqOtherPlayer = totalDistanceOtherPx / playerSpeed
+	if(otherPlayerY < localOtherPlayerOldY) playerSpeedOthery *= -1
+   if(otherPlayerX < localOtherPlayerOldX) playerSpeedOtherx *= -1
+	
+requestAnimationFrame(renderPlayers);
+
+
 }
 
 function movePlayerCof(x, y){
@@ -284,6 +385,7 @@ var otherPlayerGlobalX = 0;
 var otherPlayerGlobalY = 0;
 var otherPlayerX = 0;
 var otherPlayerY = 0;
+var dumbCounter = 0;
 function analyzeChange(data){
 console.log(data.val())
 console.log("charID:" + charID)
@@ -293,11 +395,13 @@ console.log("charID:" + charID)
 		otherPlayerGlobalX = data.val()[key].x;
 		otherPlayerGlobalY = data.val()[key].y;
 		otherPlayerX = 502*otherPlayerGlobalX + 956
-		otherPlayerY = -314*otherPlayerGlobalY + 314
+		otherPlayerY = -400*otherPlayerGlobalY + 400
 		if( otherPlayerLocations.get(key) == undefined){
 		console.log("no key")
-		ctx.drawImage(img, 5, 5);
+		ctx.drawImage(img, 0, 0);
 		ctx.drawImage(playerImg, playerX  - 453 - 85, playerY - 85, 200, 150)
+		console.log("playerX: " + playerX)
+		console.log("playerY: " + playerY)
 		ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
 		otherPlayerLocations.set(key, { "x" : otherPlayerGlobalX, "y": otherPlayerGlobalY});
 		console.log(otherPlayerLocations);
@@ -308,14 +412,28 @@ console.log("charID:" + charID)
 		  var otherPlyerPos = otherPlayerLocations.get(key)
 		  if(otherPlyerPos.x != otherPlayerGlobalX || otherPlyerPos.y != otherPlayerGlobalY){
 		     console.log("old other Player X: " + otherPlyerPos.x + " old other player Y: " + otherPlyerPos.y)
-		     ctx.drawImage(img, 5, 5);
+		     ctx.drawImage(img, 0, 0);
 		     ctx.drawImage(playerImg, playerX  - 453 - 85, playerY - 85, 200, 150)
 		     ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
-		     otherPlayerLocations.set(key, { "x" : otherPlayerGlobalX, "y": otherPlayerGlobalY});
+			 //moveOtherPlayer(otherPlyerPos)
+			 otherPlayerLocations.set(key, { "x" : otherPlayerGlobalX, "y": otherPlayerGlobalY});
+		     
 		  }
 		
 		}
 		
+	  }
+	  else{
+	  dumbCounter += 1;
+	   if(dumbCounter > 1) continue;
+	    console.log(data.val()[key])
+		plyX = data.val()[key].x;
+		plyY = data.val()[key].y;
+		playerX = 502*plyX + 956
+		playerY = -314*plyY + 375
+		ctx.drawImage(playerImg, playerX  - 453 - 85, playerY - 85, 200, 150)
+		ctx.drawImage(playerImg, otherPlayerX  - 453 - 85, otherPlayerY - 85, 200, 150)
+	  
 	  }
    
    }
