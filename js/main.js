@@ -8,13 +8,11 @@ const dbc = new DatabaseController();
 var gameCanvas = document.getElementById("gameCanvas") 
 const display = new Display(gameCanvas, 1024, 800) 
 const controller = new Controller(gameCanvas)
-console.log("hello?")
 display.loadScene()
 
 
 loadImage('../assets/tiles.png')
 .then(image => {
-    console.log('wut')
     const sprites = new SpriteSheet(image);
     sprites.define('ground', 0, 0);
     sprites.define('sky', 3, 23);
