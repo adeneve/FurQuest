@@ -13,6 +13,11 @@ export default class Animator{
         this.animating = false
         this.lastUpdateTime = -1
         this.timeElapsed = -1
+        this.posX = 16
+        this.posY = 16
+        this.isMoving = false
+        this.speedX = .01
+        this.speedY = .01
     }
 
     getNextSprite(){
