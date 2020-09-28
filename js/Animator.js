@@ -12,6 +12,7 @@ export default class Animator{
         this.frameNames = spriteSheet.tiles.keys()
         this.animating = false
         this.lastUpdateTime = -1
+        this.timeElapsed = -1
     }
 
     getNextSprite(){
