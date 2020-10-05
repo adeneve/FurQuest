@@ -6,8 +6,9 @@ import GameObject from './GameObject.js'
 import Engine from './engine.js'
 import {loadImage} from './loaders.js'
 
-const dbc = new DatabaseController();
+
 var gameCanvas = document.getElementById("gameCanvas") 
+const dbc = new DatabaseController(gameCanvas);
 const display = new Display(gameCanvas, 1024, 800) 
 var controller = 0;
 var engine = 0;

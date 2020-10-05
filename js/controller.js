@@ -7,7 +7,7 @@ class Controller{
 
 		canvas.addEventListener("mousedown", e => { 
 
-			var gameScreen = e.target.getBoundingClientRect(); 
+			var gameScreen = canvas.getBoundingClientRect(); 
 			  
 			var normalized_x = ((e.clientX - gameScreen.left)-(canvas.width/2))/(canvas.width/2);
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
