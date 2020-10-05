@@ -1,4 +1,4 @@
-export default class Animator{
+export default class GameObject{
 
     animating = false
     lastUpdateTime = -1
@@ -22,9 +22,10 @@ export default class Animator{
         this.speedY = 0
         this.destX = -123456789
         this.destY = -123456789
-        this.oldX = -1
-        this.oldY = -1
+        this.oldX = 512
+        this.oldY = 400
         this.isMoving = false
+        this.nextFrame = 0
     }
 
     getNextSprite(){

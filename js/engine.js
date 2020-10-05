@@ -19,6 +19,15 @@ class Engine{
 		var percentY = diffY / diffTot 
 		player.speedX = playerSpeed * percentX
 		player.speedY = playerSpeed * percentY
+		console.log("---------")
+		console.log(player.oldX);
+		console.log(player.destX);
+		console.log(player.oldY);
+		console.log(player.destY);
+		if(destX < player.oldX) player.speedX *= -1
+		if(destY < player.oldY) player.speedY *= -1
+		console.log(player.speedX);
+		console.log(player.speedY)
 		var diffSqX = diffX * diffX 
 		var diffSqY = diffY * diffY 
 		var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
@@ -34,12 +43,24 @@ class Engine{
 	
 		this.player.posX = this.player.oldX + this.player.speedX * timeElapsed
 		this.player.posY = this.player.oldY + this.player.speedY * timeElapsed
+		
+
+		/*console.log("++++++++")
+		console.log(this.player.posX);
+		console.log(this.player.destX);
+		console.log(this.player.posY);
+		console.log(this.player.destY)*/
 	
-		if (Math.abs(Math.round(this.player.posX, 2) - Math.round(this.player.destX, 2) > 1 || Math.abs(Math.round(this.player.posY, 2) - Math.round(this.player.destY, 2))) > 1) {
-			this.player.spriteSheet.draw('ground', this.canvas.getContext('2d'), this.player.posX, this.player.posY)
+		if (Math.abs(Math.round(this.player.posX, 2) - Math.round(this.player.destX, 2)) > 1 || Math.abs(Math.round(this.player.posY, 2) - Math.round(this.player.destY, 2)) > 1) {
+			//this.player.spriteSheet.draw(this.player.nextFrame, this.canvas.getContext('2d'), this.player.posX, this.player.posY)
 			const mvplayer = this.movePlayer.bind(this)
 			requestAnimationFrame(mvplayer)
-		}else return
+		}else {
+			this.player.oldX = this.player.posX
+			this.player.oldY = this.player.posY
+			this.player.start = -1
+			return
+		}
 	}
 	
 	prepMovePlayer(){

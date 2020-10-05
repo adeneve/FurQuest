@@ -2,7 +2,7 @@ import DatabaseController from './database.js'
 import Controller from './controller.js'
 import Display from './display.js'
 import SpriteSheet from './SpriteSheet.js'
-import Animator from './Animator.js'
+import GameObject from './GameObject.js'
 import Engine from './engine.js'
 import {loadImage} from './loaders.js'
 
@@ -12,7 +12,7 @@ const display = new Display(gameCanvas, 1024, 800)
 var controller = 0;
 var engine = 0;
 display.loadScene()
-var animators = []
+var gameObjects = []
 var sprites = -1
 var scene = new Image();
 scene.src = '../assets/library.png'
@@ -22,43 +22,44 @@ scene.src = '../assets/library.png'
 loadImage('../assets/tiles.png')
 .then(image => {
     sprites = new SpriteSheet(image);
-    sprites.define('ground', 0, 0);
+    sprites.define('default', 0, 0);
     sprites.define('sky', 3, 23);
-    sprites.draw('ground', gameCanvas.getContext('2d'), 512, 400)
-    var animator = new Animator(sprites, 2, 500)
-    engine = new Engine(gameCanvas, animator);
-    controller = new Controller(gameCanvas, engine, animator)
-    animators.push(animator)
+    sprites.draw('default', gameCanvas.getContext('2d'), 512, 400)
+    var gameObject = new GameObject(sprites, 2, 500)
+    engine = new Engine(gameCanvas, gameObject);
+    controller = new Controller(gameCanvas, engine, gameObject)
+    gameObjects.push(gameObject)
     requestAnimationFrame(update)
 });
 
-var next = 'ground'
+var next = 'default'
 function update(time){
         
-    animators.forEach( animator => 
+    gameObjects.forEach( gameObject => 
         {
-            if(animator.tempStart == -1) animator.tempStart = time
+            if(gameObject.tempStart == -1) gameObject.tempStart = time
 
-        animator.tempTimeElapsed = time - animator.tempStart
+        gameObject.tempTimeElapsed = time - gameObject.tempStart
         
         
-        if(animator.tempTimeElapsed >= animator.speed){
-            animator.currentStep += 1
-            next = animator.frameNames.next().value
+        if(gameObject.tempTimeElapsed >= gameObject.speed){
+            gameObject.currentStep += 1
+            next = gameObject.frameNames.next().value
 
             if(next == undefined) {
-                animator.frameNames = animator.spriteSheet.tiles.keys()
-                next = 'ground'
+                gameObject.frameNames = gameObject.spriteSheet.tiles.keys()
+                next = 'default'
 
             }else{
+                gameObject.nextFrame = next
                 //console.log(next)
-                animator.tempStart = time
+                gameObject.tempStart = time
             }
             
         }
 
         gameCanvas.getContext('2d').drawImage(scene, 0, 0);
-        sprites.draw(next, gameCanvas.getContext('2d'), animator.posX, animator.posY)
+        sprites.draw(next, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY)
     }
     )
 
