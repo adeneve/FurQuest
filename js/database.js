@@ -27,6 +27,8 @@ import SpriteSheet from './SpriteSheet.js'
         this.otherPlayers = otherPlayers
         this.gameObjects = gameObjects
         this.sprites = sprites
+        this.fbUser = -1
+        this.playerCharID = -1
 
         const loadPlayerDat = this.loadPlayerData.bind(this)
         
@@ -59,6 +61,7 @@ import SpriteSheet from './SpriteSheet.js'
     loadPlayerData(data){
       var key = Object.keys(data.val())[0]
       var charID = data.val()[key]["characters"][0]
+      this.playerCharID = charID
       
       console.log("charID: " + charID)
       const events = this.dbRef.child('characters');
@@ -71,8 +74,10 @@ import SpriteSheet from './SpriteSheet.js'
         this.playerDat.y = translatedXY.transY
         this.player.posX = translatedXY.transX
         this.player.posY = translatedXY.transY
-        console.log(this.playerDat.x)
-        console.log(this.playerDat.y)
+        this.player.oldX = translatedXY.transX
+        this.player.oldY = translatedXY.transY
+        console.log("player x: " + this.playerDat.x)
+        console.log("player y: " + this.playerDat.y)
       })
 
       events.once('value').then(data => {
@@ -86,13 +91,15 @@ import SpriteSheet from './SpriteSheet.js'
             var translatedXY = transCoord(false, otherPlyerNormX, otherPlayerNormY);
             otherPlayer.posX = translatedXY.transX;
             otherPlayer.posY = translatedXY.transY;
+            otherPlayer.oldX = translatedXY.transX;
+            otherPlayer.oldY = translatedXY.transY;
             console.log(otherPlayer.posX)
             console.log(otherPlayer.posY)
             this.gameObjects.push(otherPlayer);
-            debugger;
           }
         })
       })
+
     }
 
     analyzeChange(data){
@@ -117,6 +124,16 @@ import SpriteSheet from './SpriteSheet.js'
     }
 
     savePlayerLocationDB(normX, normY){
-      console.log("saving location...")
+      console.log("saving location...");
+      var charDataObj = {
+        color : this.playerDat.color,
+      name : this.playerDat.name,
+      type : this.playerDat.type,
+      x : normX,
+      y : normY,
+      }
+      const events = this.dbRef.child('characters');
+      events.child(this.playerCharID).update(charDataObj).catch( e => console.log(e.message))
     }
+
 }

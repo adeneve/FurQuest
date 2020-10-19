@@ -26,6 +26,7 @@ export default class GameObject{
         this.oldY = 400
         this.isMoving = false
         this.nextFrame = 0
+        this.totalDistanceReq = 0
     }
 
     getNextSprite(){

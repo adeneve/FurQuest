@@ -32,6 +32,7 @@ class Engine{
 		var diffSqX = diffX * diffX 
 		var diffSqY = diffY * diffY 
 		var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
+		player.totalDistanceReq = totalDistancePx
 	}
 
 	movePlayer(time){
@@ -40,7 +41,24 @@ class Engine{
 			this.player.tempStart = time
 		}
 
+		
 		var timeElapsed = time - this.player.start
+
+		var tempX = this.player.oldX + this.player.speedX * timeElapsed
+		var tempY = this.player.oldY + this.player.speedY * timeElapsed
+
+		var diffX = Math.abs(tempX - this.player.oldX);
+		var diffY = Math.abs(tempY - this.player.oldY);
+		var diffSqX = diffX * diffX 
+		var diffSqY = diffY * diffY 
+		var totDist =  Math.sqrt( diffSqX + diffSqY)
+
+		if(totDist >= this.player.totalDistanceReq) {
+			this.player.oldX = this.player.posX
+			this.player.oldY = this.player.posY
+			this.player.start = -1
+			return
+		}
 	
 		this.player.posX = this.player.oldX + this.player.speedX * timeElapsed
 		this.player.posY = this.player.oldY + this.player.speedY * timeElapsed
