@@ -1,10 +1,13 @@
+import GameObject from "./GameObject.js";
+import SpriteSheet from './SpriteSheet.js'
+
  export default 
  class DatabaseController {
     dbRef = 0
     playerDat = {}
     gameScreen = 0
 
-    constructor(gameScreen, player, otherPlayers, gameObjects){
+    constructor(gameScreen, player, otherPlayers, gameObjects, sprites){
         var firebaseConfig = {
             apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
             authDomain: "furquest-1c939.firebaseapp.com",
@@ -23,6 +26,7 @@
         this.player = player
         this.otherPlayers = otherPlayers
         this.gameObjects = gameObjects
+        this.sprites = sprites
 
         const loadPlayerDat = this.loadPlayerData.bind(this)
         
@@ -69,7 +73,25 @@
         this.player.posY = translatedXY.transY
         console.log(this.playerDat.x)
         console.log(this.playerDat.y)
+      })
 
+      events.once('value').then(data => {
+        var charData = data.val();
+        var keys = Object.keys(data.val())
+        keys.forEach(key => {
+          if(key != charID){
+            var otherPlayer = new GameObject(this.sprites, 2, 500)
+            var otherPlyerNormX = charData[key].x;
+            var otherPlayerNormY = charData[key].y;
+            var translatedXY = transCoord(false, otherPlyerNormX, otherPlayerNormY);
+            otherPlayer.posX = translatedXY.transX;
+            otherPlayer.posY = translatedXY.transY;
+            console.log(otherPlayer.posX)
+            console.log(otherPlayer.posY)
+            this.gameObjects.push(otherPlayer);
+            debugger;
+          }
+        })
       })
     }
 
@@ -78,14 +100,14 @@
     }
 
     translateCoordinates(toGlobal, x, y){
-      var viewport = this.gameScreen.getBoundingClientRect();
+      var boundingRect = this.gameScreen.getBoundingClientRect();
       console.log(x);
       console.log(y);
       var transX = 0
       var transY = 0
       if(toGlobal){
-        transX = ((x - this.gameScreen.left)-(this.canvas.width/2))/(this.canvas.width/2);
-			  transY = ((this.canvas.height/2)-(y-this.gameScreen.top))/(this.canvas.height/2);
+        transX = ((x - boundingRect.left)-(this.gameScreen.width/2))/(this.gameScreen.width/2);
+			  transY = ((this.gameScreen.height/2)-(y - boundingRect.top))/(this.gameScreen.height/2);
       }
       else{
         transX = ((this.gameScreen.width/2) * (x)) + (this.gameScreen.width/2) 
