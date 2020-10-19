@@ -1,9 +1,10 @@
 export default
 class Engine{
 
-	constructor(canvas, player){
+	constructor(database, canvas, player){
 		this.canvas = canvas
 		this.player = player
+		this.db = database
 	}
 
 	// returns the speedX and speedY
@@ -44,15 +45,8 @@ class Engine{
 		this.player.posX = this.player.oldX + this.player.speedX * timeElapsed
 		this.player.posY = this.player.oldY + this.player.speedY * timeElapsed
 		
-
-		/*console.log("++++++++")
-		console.log(this.player.posX);
-		console.log(this.player.destX);
-		console.log(this.player.posY);
-		console.log(this.player.destY)*/
 	
 		if (Math.abs(Math.round(this.player.posX, 2) - Math.round(this.player.destX, 2)) > 1 || Math.abs(Math.round(this.player.posY, 2) - Math.round(this.player.destY, 2)) > 1) {
-			//this.player.spriteSheet.draw(this.player.nextFrame, this.canvas.getContext('2d'), this.player.posX, this.player.posY)
 			const mvplayer = this.movePlayer.bind(this)
 			requestAnimationFrame(mvplayer)
 		}else {
@@ -63,9 +57,10 @@ class Engine{
 		}
 	}
 	
-	prepMovePlayer(){
+	prepMovePlayer(normX, normY){
 		this.player.oldX = this.player.posX
 		this.player.oldY = this.player.posY
+		this.db.savePlayerLocationDB(normX, normY); 
 		const mvplayer = this.movePlayer.bind(this)
 		requestAnimationFrame(mvplayer)
 	}

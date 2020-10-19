@@ -8,12 +8,12 @@ import {loadImage} from './loaders.js'
 
 
 var gameCanvas = document.getElementById("gameCanvas") 
-const dbc = new DatabaseController(gameCanvas);
 const display = new Display(gameCanvas, 1024, 800) 
 var controller = 0;
 var engine = 0;
 display.loadScene()
 var gameObjects = []
+var otherPlayers = []
 var sprites = -1
 var scene = new Image();
 scene.src = '../assets/library.png'
@@ -25,11 +25,10 @@ loadImage('../assets/tiles.png')
     sprites = new SpriteSheet(image);
     sprites.define('default', 0, 0);
     sprites.define('sky', 3, 23);
-    sprites.draw('default', gameCanvas.getContext('2d'), 512, 400)
-    var gameObject = new GameObject(sprites, 2, 500)
-    engine = new Engine(gameCanvas, gameObject);
-    controller = new Controller(gameCanvas, engine, gameObject)
-    gameObjects.push(gameObject)
+    var player = new GameObject(sprites, 2, 500)
+    const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects);
+    engine = new Engine(dbc, gameCanvas, player);
+    controller = new Controller(gameCanvas, engine, player)
     requestAnimationFrame(update)
 });
 

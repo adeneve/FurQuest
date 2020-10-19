@@ -4,7 +4,7 @@
     playerDat = {}
     gameScreen = 0
 
-    constructor(gameScreen){
+    constructor(gameScreen, player, otherPlayers, gameObjects){
         var firebaseConfig = {
             apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
             authDomain: "furquest-1c939.firebaseapp.com",
@@ -20,6 +20,9 @@
         firebase.analytics();
         this.dbRef = firebase.database().ref();
         this.gameScreen = gameScreen
+        this.player = player
+        this.otherPlayers = otherPlayers
+        this.gameObjects = gameObjects
 
         const loadPlayerDat = this.loadPlayerData.bind(this)
         
@@ -56,11 +59,14 @@
       console.log("charID: " + charID)
       const events = this.dbRef.child('characters');
       const transCoord = this.translateCoordinates.bind(this)
+      this.gameObjects.push(this.player)
       events.child(charID).once('value').then( charData => {
         this.playerDat = charData.val()
         var translatedXY = transCoord(false, this.playerDat.x, this.playerDat.y)
         this.playerDat.x = translatedXY.transX
         this.playerDat.y = translatedXY.transY
+        this.player.posX = translatedXY.transX
+        this.player.posY = translatedXY.transY
         console.log(this.playerDat.x)
         console.log(this.playerDat.y)
 
@@ -73,15 +79,22 @@
 
     translateCoordinates(toGlobal, x, y){
       var viewport = this.gameScreen.getBoundingClientRect();
+      console.log(x);
+      console.log(y);
       var transX = 0
       var transY = 0
       if(toGlobal){
-
+        transX = ((x - this.gameScreen.left)-(this.canvas.width/2))/(this.canvas.width/2);
+			  transY = ((this.canvas.height/2)-(y-this.gameScreen.top))/(this.canvas.height/2);
       }
       else{
-        transX = 512*x + 512
-        transY = 400*y + 400
+        transX = ((this.gameScreen.width/2) * (x)) + (this.gameScreen.width/2) 
+        transY = (this.gameScreen.height/2) - ((this.gameScreen.height/2) * (y))
       }
       return {transX, transY}
+    }
+
+    savePlayerLocationDB(normX, normY){
+      console.log("saving location...")
     }
 }
