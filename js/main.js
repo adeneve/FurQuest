@@ -13,7 +13,7 @@ var controller = 0;
 var engine = 0;
 display.loadScene()
 var gameObjects = []
-var otherPlayers = []
+var otherPlayers = new Map()
 var sprites = -1
 var scene = new Image();
 scene.src = '../assets/library.png'
