@@ -185,8 +185,10 @@ import SpriteSheet from './SpriteSheet.js'
             
             console.log("other player old x: " + otherPlyer.posX)
             console.log("other player old y: " + otherPlyer.posY)
-            if(transXY.transX != otherPlyer.posX) otherPlyer.isMoving = true;
-            this.calcMovement(transXY.transX, transXY.transY, otherPlyer)
+            if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY) {
+              otherPlyer.isMoving = true;
+              this.calcMovement(transXY.transX, transXY.transY, otherPlyer)
+            }
 
           }
         })
