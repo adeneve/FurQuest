@@ -57,6 +57,7 @@ class Engine{
 			this.player.oldX = this.player.posX
 			this.player.oldY = this.player.posY
 			this.player.start = -1
+			this.player.isMoving = false
 			return
 		}
 	
@@ -71,6 +72,7 @@ class Engine{
 			this.player.oldX = this.player.posX
 			this.player.oldY = this.player.posY
 			this.player.start = -1
+			this.player.isMoving = false
 			return
 		}
 	}
@@ -79,6 +81,7 @@ class Engine{
 		this.player.oldX = this.player.posX
 		this.player.oldY = this.player.posY
 		this.db.savePlayerLocationDB(normX, normY); 
+		this.player.isMoving = true
 		const mvplayer = this.movePlayer.bind(this)
 		requestAnimationFrame(mvplayer)
 	}

@@ -15,8 +15,11 @@ class Controller{
 			console.log(e.clientX - gameScreen.left);
 			console.log(e.clientY - gameScreen.top);
 			
-			engine.calcMovement(e.clientX -gameScreen.left, e.clientY - gameScreen.top, player)
-			engine.prepMovePlayer(normalized_x, normalized_y)
+			if(!player.isMoving){
+				engine.calcMovement(e.clientX -gameScreen.left, e.clientY - gameScreen.top, player)
+				engine.prepMovePlayer(normalized_x, normalized_y)
+			}
+			
 			//savePlayerLocationDB(x, y)           game engine -> database
 		  })
 	}
