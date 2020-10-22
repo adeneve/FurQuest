@@ -20,8 +20,8 @@ export default class GameObject{
         this.isMoving = false
         this.speedX = 0
         this.speedY = 0
-        this.destX = -123456789
-        this.destY = -123456789
+        this.destX = 512
+        this.destY = 400
         this.oldX = 512
         this.oldY = 400
         this.isMoving = false
@@ -29,6 +29,7 @@ export default class GameObject{
         this.totalDistanceReq = 0
         this.charID = -1
         this.message = ""
+        this.name = ""
     }
 
     getNextSprite(){

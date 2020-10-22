@@ -8,6 +8,8 @@ import {loadImage} from './loaders.js'
 
 
 var gameCanvas = document.getElementById("gameCanvas") 
+var msgBox = document.getElementById("comment")
+var sendBtn = document.getElementById("sendMsg")
 const display = new Display(gameCanvas, 1024, 800) 
 var controller = 0;
 var engine = 0;
@@ -28,7 +30,7 @@ loadImage('../assets/tiles.png')
     var player = new GameObject(sprites, 2, 500)
     const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites);
     engine = new Engine(dbc, gameCanvas, player);
-    controller = new Controller(gameCanvas, engine, player)
+    controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
     requestAnimationFrame(update)
 });
 

@@ -20,15 +20,8 @@ class Engine{
 		var percentY = diffY / diffTot 
 		player.speedX = playerSpeed * percentX
 		player.speedY = playerSpeed * percentY
-		console.log("---------")
-		console.log(player.oldX);
-		console.log(player.destX);
-		console.log(player.oldY);
-		console.log(player.destY);
 		if(destX < player.oldX) player.speedX *= -1
 		if(destY < player.oldY) player.speedY *= -1
-		console.log(player.speedX);
-		console.log(player.speedY)
 		var diffSqX = diffX * diffX 
 		var diffSqY = diffY * diffY 
 		var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
@@ -84,6 +77,10 @@ class Engine{
 		this.player.isMoving = true
 		const mvplayer = this.movePlayer.bind(this)
 		requestAnimationFrame(mvplayer)
+	}
+
+	saveMessage(msg){
+		this.db.saveMessage(msg)
 	}
 	
 }

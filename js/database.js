@@ -77,6 +77,8 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.posY = translatedXY.transY
         this.player.oldX = translatedXY.transX
         this.player.oldY = translatedXY.transY
+        this.player.destX = translatedXY.transX
+        this.player.destY = translatedXY.transY
         console.log("player x: " + this.playerDat.x)
         console.log("player y: " + this.playerDat.y)
       })
@@ -94,6 +96,9 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.posY = translatedXY.transY;
             otherPlayer.oldX = translatedXY.transX;
             otherPlayer.oldY = translatedXY.transY;
+            otherPlayer.destX = translatedXY.transX;
+            otherPlayer.destY = translatedXY.transY;
+            otherPlayer.name = charData[key].name;
             otherPlayer.charID = key;
             console.log(otherPlayer.posX)
             console.log(otherPlayer.posY)
@@ -107,12 +112,9 @@ import SpriteSheet from './SpriteSheet.js'
 
     // iterate through each other player and increment their position if posX != oldX
     moveOtherPlayers(time){
-      console.log("here1")
       var keys = this.otherPlayers.keys();
       for(let [key, otherPlayer] of this.otherPlayers){
-        console.log('boop');
         if(otherPlayer.charID != this.playerCharID){
-          console.log("here1")
           if(otherPlayer.isMoving){
             
             if(otherPlayer.start == -1) {
@@ -120,7 +122,6 @@ import SpriteSheet from './SpriteSheet.js'
               otherPlayer.tempStart = time
             }
 
-            console.log("here2")
           
           
             var timeElapsed = time - otherPlayer.start
@@ -165,29 +166,23 @@ import SpriteSheet from './SpriteSheet.js'
 
     analyzeChange(data){
         
-        console.log(data.val());
         var obj = data.val();
         var keys = Object.keys(data.val())
         keys.forEach(key => {
           if(key != this.playerCharID){
-            console.log(key)
             var otherPlyer = this.otherPlayers.get(String(key))
             if(otherPlyer == undefined) return;
             var transXY = this.translateCoordinates(false, obj[key].x, obj[key].y);
-            //otherPlyer.posX = transXY.transX;
-            //otherPlyer.posY = transXY.transY;
-            console.log("other player new x: " + transXY.transX);
-            console.log("other player new y: " + transXY.transY);
-            
-            console.log(this.otherPlayers )
-            
-            console.log(otherPlyer)
-            
-            console.log("other player old x: " + otherPlyer.posX)
-            console.log("other player old y: " + otherPlyer.posY)
+
             if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY) {
               otherPlyer.isMoving = true;
               this.calcMovement(transXY.transX, transXY.transY, otherPlyer)
+            }
+
+            if(obj[key].message != otherPlyer.message){
+              console.log(otherPlyer.name + " : " + obj[key].message)
+                otherPlyer.message = obj[key].message
+              
             }
 
           }
@@ -226,16 +221,14 @@ import SpriteSheet from './SpriteSheet.js'
 
     translateCoordinates(toGlobal, x, y){
       var boundingRect = this.gameScreen.getBoundingClientRect();
-      console.log(x);
-      console.log(y);
       var transX = 0
       var transY = 0
       if(toGlobal){
-        transX = ((x - boundingRect.left)-(this.gameScreen.width/2))/(this.gameScreen.width/2);
+        transX = ((x )-(this.gameScreen.width/2))/(this.gameScreen.width/2); 
 			  transY = ((this.gameScreen.height/2)-(y - boundingRect.top))/(this.gameScreen.height/2);
       }
       else{
-        transX = ((this.gameScreen.width/2) * (x)) + (this.gameScreen.width/2) 
+        transX = ((this.gameScreen.width/2) * (x)) + (this.gameScreen.width/2)   
         transY = (this.gameScreen.height/2) - ((this.gameScreen.height/2) * (y))
       }
       return {transX, transY}
@@ -249,6 +242,22 @@ import SpriteSheet from './SpriteSheet.js'
       type : this.playerDat.type,
       x : normX,
       y : normY,
+      }
+      const events = this.dbRef.child('characters');
+      events.child(this.playerCharID).update(charDataObj).catch( e => console.log(e.message))
+    }
+
+    saveMessage(msg){
+      console.log("saving message...");
+      console.log(msg)
+      var transXY = this.translateCoordinates(true, this.player.destX, this.player.destY);
+      var charDataObj = {
+        color : this.playerDat.color,
+        name : this.playerDat.name,
+        type : this.playerDat.type,
+        x : transXY.transX,
+        y : transXY.transY,
+        message : msg
       }
       const events = this.dbRef.child('characters');
       events.child(this.playerCharID).update(charDataObj).catch( e => console.log(e.message))

@@ -1,9 +1,11 @@
 export default
 class Controller{
 
-	constructor(canvas, engine, player){
+	constructor(canvas, engine, player, msgBox, sendBtn){
 		this.canvas = canvas
 		this.engine = engine
+		this.msgBox = msgBox
+		this.sendBtn = sendBtn
 
 		canvas.addEventListener("mousedown", e => { 
 
@@ -21,6 +23,10 @@ class Controller{
 			}
 			
 			//savePlayerLocationDB(x, y)           game engine -> database
+		  })
+
+		  sendBtn.addEventListener("click", e => {
+			  engine.saveMessage(msgBox.value)
 		  })
 	}
 }
