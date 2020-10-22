@@ -30,10 +30,10 @@
 
 
     <div class="card" style="width:400px; left:100px; float:left; visibility:hidden" id="bearCard">
-    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <img class="card-img-top" src="../assets/panda.png" alt="Card image" style="width:100%">
     <div class="card-body">
       <h4 class="card-title menuItem">Bear</h4>
-      <p class="card-text characterText">The Bear has enormous strength and health, but tends to be slow and clumsy.</p>
+      <p class="card-text characterText">thats a big strong boi.</p>
 	  
 		<form>
     <div class="form-group">
@@ -56,10 +56,10 @@
   </div>
   
   <div class="card" id="frogCard" style="width:400px; left:250px; down:100px; position:relative; float:left;visibility:hidden">
-    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <img class="card-img-top" src="../assets/panda.png" alt="Card image" style="width:100%">
     <div class="card-body">
       <h4 class="card-title menuItem">Frog</h4>
-      <p class="card-text characterText">The Frog can jump high distances. hippity hoppity.</p>
+      <p class="card-text characterText">hippity hoppity.</p>
 	  <br> <br>
 		<form>
     <div class="form-group">
@@ -82,10 +82,10 @@
   </div>
   
   <div class="card" id="catCard" style="width:400px; left:-300px; down:100px; position:relative; float:right;visibility:hidden">
-    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <img class="card-img-top" src="../assets/panda.png" alt="Card image" style="width:100%">
     <div class="card-body">
       <h4 class="card-title menuItem">Cat</h4>
-      <p class="card-text characterText">The Cat is nimble and quick</p>
+      <p class="card-text characterText">meow.</p>
 	  <br> <br>
 		<form>
     <div class="form-group">
@@ -109,7 +109,7 @@
 
 
   <div class="card" id="charCard" style=" width: 500px; height: 430px; left: 700px; position:relative; float:left;display:none">
-    <img class="card-img-top" src="../assets/img02.jpg" alt="Card image" style="width:100%">
+    <img class="card-img-top" src="../assets/panda.png" alt="Card image" style="width:100%">
     <div class="card-body">
       <h4 class="card-title menuItem" id="charName"> </h4>
 	  <br> <br>
@@ -172,7 +172,9 @@ function createCharacter(name, color, type){
     var data = {
 	  "name": name,
 	  "color": color,
-	  "type" : type
+    "type" : type,
+    "x": 0,
+    "y": 0
 	}	
 	var newCharKey = 0
 	charactersRef.push(data).then( linkUser).catch( e => console.log(e.message))

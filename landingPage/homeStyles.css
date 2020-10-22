@@ -46,9 +46,15 @@ input {
 
 body {
 
-  background-image: url("../assets/background.jpg");
+  background-image: url("../assets/homeScreen.jpg");
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;  
+}
+
+.carousel img {
+  width: auto;
+  height: 400px;
+  max-height: 400px;
 }
