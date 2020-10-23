@@ -79,6 +79,7 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.oldY = translatedXY.transY
         this.player.destX = translatedXY.transX
         this.player.destY = translatedXY.transY
+        this.player.message = this.playerDat.message
       })
 
       events.once('value').then(data => {
@@ -97,6 +98,7 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.destX = translatedXY.transX;
             otherPlayer.destY = translatedXY.transY;
             otherPlayer.name = charData[key].name;
+            otherPlayer.message = charData[key].message;
             otherPlayer.charID = key;
             this.gameObjects.push(otherPlayer);
             this.otherPlayers.set(String(key), otherPlayer);
@@ -248,6 +250,7 @@ import SpriteSheet from './SpriteSheet.js'
         y : transXY.transY,
         message : msg
       }
+      this.player.message = msg
       const events = this.dbRef.child('characters');
       events.child(this.playerCharID).update(charDataObj).catch( e => console.log(e.message))
     }

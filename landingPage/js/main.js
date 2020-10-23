@@ -10,7 +10,9 @@ import {loadImage} from './loaders.js'
 var gameCanvas = document.getElementById("gameCanvas") 
 var msgBox = document.getElementById("comment")
 var sendBtn = document.getElementById("sendMsg")
-const display = new Display(gameCanvas, '1024', '800') 
+var currentWidth = window.innerWidth * .75;
+var currentHeight = window.innerHeight * .85
+var display = new Display(gameCanvas, currentWidth, currentHeight) 
 var controller = 0;
 var engine = 0;
 display.loadScene()
@@ -18,7 +20,7 @@ var gameObjects = []
 var otherPlayers = new Map()
 var sprites = -1
 var scene = new Image();
-scene.src = '../assets/library.png'
+scene.src = '../assets/town.png'
 
 
 
@@ -37,7 +39,9 @@ loadImage('../assets/tiles.png')
 var next = 'default'
 function update(time){
 
-    gameCanvas.getContext('2d').drawImage(scene, 0, 0);
+    //gameCanvas.getContext('2d').drawImage(scene, 0, 0);
+    gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
+        0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
         
     gameObjects.forEach( gameObject => 
         {
@@ -62,7 +66,7 @@ function update(time){
         }
 
         
-        sprites.draw(next, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY)
+        sprites.draw(next, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message)
     }
     )
 
