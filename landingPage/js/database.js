@@ -79,8 +79,6 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.oldY = translatedXY.transY
         this.player.destX = translatedXY.transX
         this.player.destY = translatedXY.transY
-        console.log("player x: " + this.playerDat.x)
-        console.log("player y: " + this.playerDat.y)
       })
 
       events.once('value').then(data => {
@@ -100,8 +98,6 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.destY = translatedXY.transY;
             otherPlayer.name = charData[key].name;
             otherPlayer.charID = key;
-            console.log(otherPlayer.posX)
-            console.log(otherPlayer.posY)
             this.gameObjects.push(otherPlayer);
             this.otherPlayers.set(String(key), otherPlayer);
           }
@@ -204,15 +200,8 @@ import SpriteSheet from './SpriteSheet.js'
       var percentY = diffY / diffTot 
       player.speedX = playerSpeed * percentX
       player.speedY = playerSpeed * percentY
-      console.log("---------")
-      console.log(player.oldX);
-      console.log(player.destX);
-      console.log(player.oldY);
-      console.log(player.destY);
       if(destX < player.oldX) player.speedX *= -1
       if(destY < player.oldY) player.speedY *= -1
-      console.log(player.speedX);
-      console.log(player.speedY)
       var diffSqX = diffX * diffX 
       var diffSqY = diffY * diffY 
       var totalDistancePx = Math.sqrt( diffSqX + diffSqY)

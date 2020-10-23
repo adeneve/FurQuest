@@ -10,7 +10,7 @@ import {loadImage} from './loaders.js'
 var gameCanvas = document.getElementById("gameCanvas") 
 var msgBox = document.getElementById("comment")
 var sendBtn = document.getElementById("sendMsg")
-const display = new Display(gameCanvas, 1024, 800) 
+const display = new Display(gameCanvas, '1024', '800') 
 var controller = 0;
 var engine = 0;
 display.loadScene()
