@@ -10,6 +10,7 @@ export default class GameObject{
         this.speed = speed
         this.start = -1
         this.frameNames = spriteSheet.tiles.keys()
+        this.currentFrame = ""
         this.animating = false
         this.lastUpdateTime = -1
         this.timeElapsed = -1
@@ -25,7 +26,7 @@ export default class GameObject{
         this.oldX = 512
         this.oldY = 400
         this.isMoving = false
-        this.nextFrame = 0
+        this.nextFrame = "default"
         this.totalDistanceReq = 0
         this.charID = -1
         this.message = ""

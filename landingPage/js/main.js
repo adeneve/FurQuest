@@ -24,11 +24,11 @@ scene.src = '../assets/town.png'
 
 
 
-loadImage('../assets/tiles.png')
+loadImage('../assets/character_sheet.png')
 .then(image => {
     sprites = new SpriteSheet(image);
     sprites.define('default', 0, 0);
-    sprites.define('sky', 3, 23);
+    sprites.define('walk', 1, 0);
     var player = new GameObject(sprites, 2, 500)
     const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites);
     engine = new Engine(dbc, gameCanvas, player);
@@ -45,6 +45,7 @@ function update(time){
         
     gameObjects.forEach( gameObject => 
         {
+            if(gameObject.isMoving == true){
             if(gameObject.tempStart == -1) gameObject.tempStart = time
 
         gameObject.tempTimeElapsed = time - gameObject.tempStart
@@ -52,21 +53,28 @@ function update(time){
         
         if(gameObject.tempTimeElapsed >= gameObject.speed){
             gameObject.currentStep += 1
+            
             next = gameObject.frameNames.next().value
+            
 
             if(next == undefined) {
                 gameObject.frameNames = gameObject.spriteSheet.tiles.keys()
                 next = 'default'
+                gameObject.nextFrame = next
 
             }else{
-                gameObject.nextFrame = next
-                gameObject.tempStart = time
+                    gameObject.nextFrame = next
+                    gameObject.tempStart = time
             }
+        
             
         }
+    }
+    
 
         
-        sprites.draw(next, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message)
+        sprites.draw(gameObject.nextFrame, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message)
+        
     }
     )
 

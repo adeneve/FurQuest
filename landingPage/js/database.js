@@ -100,6 +100,7 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.name = charData[key].name;
             otherPlayer.message = charData[key].message;
             otherPlayer.charID = key;
+            otherPlayer.isMoving = false;
             this.gameObjects.push(otherPlayer);
             this.otherPlayers.set(String(key), otherPlayer);
           }
