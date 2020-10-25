@@ -38,13 +38,9 @@ import SpriteSheet from './SpriteSheet.js'
               console.log(firebaseUser);
               this.fbUser = firebaseUser;
               
-              const charEvents = this.dbRef.child('users')
-              const query = charEvents
-                            .orderByChild('uid')
-                            .equalTo(firebaseUser.uid)
-                            .limitToFirst(1);
+              const charEvents = this.dbRef.child('characters').child(firebaseUser.uid);
               
-              query.on('value', loadPlayerDat, err => console.log("error"));
+              charEvents.once('value', loadPlayerDat, err => console.log("error"));
             
               const otherPlayersEvent = this.dbRef.child('characters');
               const analyzeChng = this.analyzeChange.bind(this)
@@ -60,16 +56,9 @@ import SpriteSheet from './SpriteSheet.js'
     }
 
     loadPlayerData(data){
-      var key = Object.keys(data.val())[0]
-      var charID = data.val()[key]["characters"][0]
-      this.playerCharID = charID
-      
-      console.log("charID: " + charID)
-      const events = this.dbRef.child('characters');
       const transCoord = this.translateCoordinates.bind(this)
-      this.gameObjects.push(this.player)
-      events.child(charID).once('value').then( charData => {
-        this.playerDat = charData.val()
+      
+        this.playerDat = data.val()
         var translatedXY = transCoord(false, this.playerDat.x, this.playerDat.y)
         this.playerDat.x = translatedXY.transX
         this.playerDat.y = translatedXY.transY
@@ -80,13 +69,15 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.destX = translatedXY.transX
         this.player.destY = translatedXY.transY
         this.player.message = this.playerDat.message
-      })
 
-      events.once('value').then(data => {
+        this.gameObjects.push(this.player)
+      
+      var otherPlayersEvent = this.dbRef.child('characters');
+      otherPlayersEvent.once('value').then(data => {
         var charData = data.val();
         var keys = Object.keys(data.val())
         keys.forEach(key => {
-          if(key != charID){
+          if(key != this.fbUser.uid){
             var otherPlayer = new GameObject(this.sprites, 2, 500)
             var otherPlyerNormX = charData[key].x;
             var otherPlayerNormY = charData[key].y;
@@ -113,7 +104,7 @@ import SpriteSheet from './SpriteSheet.js'
     moveOtherPlayers(time){
       var keys = this.otherPlayers.keys();
       for(let [key, otherPlayer] of this.otherPlayers){
-        if(otherPlayer.charID != this.playerCharID){
+        if(otherPlayer.charID != this.fbUser.uid){
           if(otherPlayer.isMoving){
             
             if(otherPlayer.start == -1) {
@@ -166,9 +157,9 @@ import SpriteSheet from './SpriteSheet.js'
     analyzeChange(data){
         
         var obj = data.val();
-        var keys = Object.keys(data.val())
+        var keys = Object.keys(data.val());
         keys.forEach(key => {
-          if(key != this.playerCharID){
+          if(key != this.fbUser.uid){
             var otherPlyer = this.otherPlayers.get(String(key))
             if(otherPlyer == undefined) return;
             var transXY = this.translateCoordinates(false, obj[key].x, obj[key].y);
@@ -236,7 +227,7 @@ import SpriteSheet from './SpriteSheet.js'
       y : normY,
       }
       const events = this.dbRef.child('characters');
-      events.child(this.playerCharID).update(charDataObj).catch( e => console.log(e.message))
+      events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
     }
 
     saveMessage(msg){
@@ -253,7 +244,7 @@ import SpriteSheet from './SpriteSheet.js'
       }
       this.player.message = msg
       const events = this.dbRef.child('characters');
-      events.child(this.playerCharID).update(charDataObj).catch( e => console.log(e.message))
+      events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
     }
 
 }

@@ -154,13 +154,6 @@ logOutMenu.addEventListener('click', e => {
 
 function linkUser(data)
 {
-console.log(data.key)
-var usersRef = db.child('users');
-	var newUserData = {
-	  "uid" : firebaseUID,
-	  "characters" : [data.key]
-	}
-	usersRef.push(newUserData).catch( e => console.log(e.message))
 
 
 }
@@ -176,8 +169,8 @@ function createCharacter(name, color, type){
     "x": 0,
     "y": 0
 	}	
-	var newCharKey = 0
-	charactersRef.push(data).then( linkUser).catch( e => console.log(e.message))
+  var newCharKey = 0
+	charactersRef.child(firebaseUID).set(data)
 
 }
 createBear.addEventListener('click', e => {
@@ -232,12 +225,8 @@ createCat.addEventListener('click', e => {
   function updateCharacters(uid){
   console.log(uid)
   const db = firebase.database().ref();
-  const events = db.child('users');
-  const query = events
-                  .orderByChild('uid')
-				  .equalTo(uid)
-				  .limitToFirst(1);
-  query.on('value', updateCharactersNext, err => console.log("error"));
+  const events = db.child('characters').child(firebaseUID);
+  events.on('value', updateCharactersNext, err => console.log("error"));
 
   }
   
@@ -254,17 +243,11 @@ createCat.addEventListener('click', e => {
 	  charTitle.style.visibility = "visible"
 	  document.getElementById('bearCard').style.display = "none"
 	  document.getElementById('frogCard').style.display = "none"
-	  document.getElementById('catCard').style.display = "none"
-	  console.log(Object.keys(data.val())[0])
-	  var key = Object.keys(data.val())[0]
-	  console.log(data.val()[key]["characters"])
-	  var characterIDs = data.val()[key]["characters"]
-	  for(var i = 0; i < characterIDs.length; i++){
-	    var charID = characterIDs[i]
-		const events = db.child('characters');
-		events.child(charID).once('value').then( displayCharacter)
-	  
-	  }
+    document.getElementById('catCard').style.display = "none"
+    console.log(data.val())
+    var charDataObj = data.val();
+    document.getElementById('charCard').style.display = "initial";
+	  document.getElementById('charName').innerText = charDataObj.name + " (" + charDataObj.type + ")";
 	}
   }
   //dbRefObj.on('value', snap => console.log(snap.val() ));
