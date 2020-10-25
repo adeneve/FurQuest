@@ -232,6 +232,12 @@ import SpriteSheet from './SpriteSheet.js'
               this.otherPlayers.set(String(key), otherPlayer);
             }
 
+            if(this.otherPlayers.has(String(key)) && !obj[key].active){
+              var otherPlyer = this.otherPlayers.get(String(key))
+              otherPlyer.active = obj[key].active
+              this.otherPlayers.delete(String(key))
+            }
+          
             if(!obj[key].active) return;
 
             var otherPlyer = this.otherPlayers.get(String(key))
@@ -251,9 +257,7 @@ import SpriteSheet from './SpriteSheet.js'
                 otherPlyer.message = obj[key].message
             }
 
-            if(obj[key].active != otherPlyer.active){
-                otherPlyer.active = obj[key].active
-            }
+            
 
           }
         })

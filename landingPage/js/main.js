@@ -50,7 +50,7 @@ loadImage('../assets/character_sheet.png')
     engine = new Engine(dbc, gameCanvas, player);
     controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
     window.onbeforeunload = function() {
-        dbc.loguserOut
+        dbc.loguserOut()
         return false;
      }
     requestAnimationFrame(update)
