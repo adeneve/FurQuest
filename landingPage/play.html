@@ -18,12 +18,92 @@
 </head>
 <body>
 
+  <div class="dropdown accountIcon">
+    <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown" style="background-color:white">
+    <img src="./assets/accountIcon.png" width="60em" height="60em" alt="submit" onmouseover="chgImg(this)" onmouseout="chgImgBack(this)"/></button>
+    <ul class="dropdown-menu">
+	  <li><a href="#"  id="logOutMenu">Log Out</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#loginModal" id="logInMenu">Log In</a></li>
+    </ul>
+  </div>
+  <p id="username" style="font-size:14px; padding-left:1em; color:white"> </p>
+
+  <div class="modal" id="createAccModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title title">Create An Account</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <label for="email" class="modalText">Enter your email:</label>
+      <input type="email" id="emailCreate" name="email">
+      
+      <label for="password1" class="modalText">Enter your password:</label>
+      <input type="password" id="passwordCreate" name="password1">
+      
+      <label for="password2" class="modalText">Enter your password again:</label>
+      <input type="password" id="password2" name="password2">
+        </div>
+      
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary"  id="btnSignUp">Create Account</button>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnCloseSignUp">Close</button>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal" id="loginModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title title">Log In</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <label for="email" class="modalText">Enter your email:</label>
+      <input type="email" id="emailLogin" name="email">
+      
+      <label for="password1" class="modalText">Enter your password:</label>
+      <input type="password" id="passwordLogin" name="password1">
+  
+        </div>
+      
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary"  id="btnLogIn">Log In</button>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnCloseLogIn">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
 <canvas id="gameCanvas"  style="border:2px solid #FFFFFF;"></canvas>
+
+
 
 <div class="container" style="float: left; max-width: 300px;">
   <form>
     <div class="form-group" style="font-size:20px; max-width: 300px;">
-      <label for="comment">Comment:</label>
+      <label for="comment">Write A Message:</label>
       <textarea class="form-control" rows="5" id="comment" style="font-size: 20px;"></textarea>
     </div>
   </form>
@@ -34,4 +114,19 @@
 <audio id="happy" src="../assets/music/happy.mp3" muted></audio>
 </body>
 
+<script>
+  function chgImg(x){
+    x.src = "./assets/accountIconPressed.jpg"
+  }
+  function chgImgBack(x) {
+    x.src = "./assets/accountIcon.png"
+  }
+  function chgImgPlay(x){
+    x.src = "./assets/play4.png"
+  }
+  function chgImgPlayBack(x){
+    x.src = "./assets/play3.png"
+  }
+
+</script>
 </html>

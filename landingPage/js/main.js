@@ -10,6 +10,22 @@ import {loadImage} from './loaders.js'
 var gameCanvas = document.getElementById("gameCanvas") 
 var msgBox = document.getElementById("comment")
 var sendBtn = document.getElementById("sendMsg")
+
+var accountControlModule = {
+    "btnSignUp" : document.getElementById('btnSignUp'),
+    "btnLogIn" : document.getElementById('btnLogIn'),
+    "createAcc" : document.getElementById('createAccMenu'),
+    "logInMenu" : document.getElementById('logInMenu'),
+    "logOutMenu" : document.getElementById('logOutMenu'),
+    "username" : document.getElementById('username'),
+    "btnCloseLogin" : document.getElementById('btnCloseLogIn'),
+    "btnCloseSignUp" : document.getElementById('btnCloseSignUp'),
+    "btnPlay" : document.getElementById('btnPlay')
+}
+
+
+
+
 var currentWidth = window.innerWidth * .75;
 var currentHeight = window.innerHeight * .85
 var display = new Display(gameCanvas, currentWidth, currentHeight) 
@@ -30,7 +46,7 @@ loadImage('../assets/character_sheet.png')
     sprites.define('default', 0, 0);
     sprites.define('walk', 1, 0);
     var player = new GameObject(sprites, 2, 500)
-    const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites);
+    const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
     engine = new Engine(dbc, gameCanvas, player);
     controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
     requestAnimationFrame(update)
@@ -80,6 +96,5 @@ function update(time){
 
 requestAnimationFrame(update)
 }
-
 
 

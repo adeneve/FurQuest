@@ -7,7 +7,7 @@ import SpriteSheet from './SpriteSheet.js'
     playerDat = {}
     gameScreen = 0
 
-    constructor(gameScreen, player, otherPlayers, gameObjects, sprites){
+    constructor(gameScreen, player, otherPlayers, gameObjects, sprites, accountControlModule){
         var firebaseConfig = {
             apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
             authDomain: "furquest-1c939.firebaseapp.com",
@@ -29,8 +29,28 @@ import SpriteSheet from './SpriteSheet.js'
         this.sprites = sprites
         this.fbUser = -1
         this.playerCharID = -1
+        this.document = document,
+        this.accountControlModule = accountControlModule
+        this.isLoggedIn = true
+        this.isVerrified = false
+
+        this.accountControlModule.logOutMenu.addEventListener('click', e => {
+          var charDataObj = {
+            active : false
+          }
+          this.chartactersDbRef.child(this.fbUser.uid).update(charDataObj).then(e => {
+            firebase.auth().signOut().then(function() {
+              alert("log out successful")
+              }, function(error) {
+                alert(error.message)
+              });
+
+          }).catch( e => console.log(e.message))
+          
+      })
 
         const loadPlayerDat = this.loadPlayerData.bind(this)
+        this.chartactersDbRef = this.dbRef.child('characters');
         
 
         firebase.auth().onAuthStateChanged(firebaseUser => {
@@ -45,6 +65,12 @@ import SpriteSheet from './SpriteSheet.js'
               const otherPlayersEvent = this.dbRef.child('characters');
               const analyzeChng = this.analyzeChange.bind(this)
               otherPlayersEvent.on('value', analyzeChng)
+
+              this.isLoggedIn = true;
+              this.isVerrified = firebaseUser.emailVerified;
+              this.accountControlModule.logInMenu.style.visibility = "hidden"
+              this.accountControlModule.logOutMenu.style.visibility = "visible"
+              this.accountControlModule.username.innerText = firebaseUser.email
             }
             else{
               console.log("not logged in");
@@ -59,6 +85,16 @@ import SpriteSheet from './SpriteSheet.js'
       const transCoord = this.translateCoordinates.bind(this)
       
         this.playerDat = data.val()
+        var charDataObj = {
+          color : this.playerDat.color,
+          name : this.playerDat.name,
+          type : this.playerDat.type,
+          x : this.playerDat.x,
+          y : this.playerDat.y,
+          message : this.playerDat.message,
+          active : true
+        }
+        this.chartactersDbRef.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
         var translatedXY = transCoord(false, this.playerDat.x, this.playerDat.y)
         this.playerDat.x = translatedXY.transX
         this.playerDat.y = translatedXY.transY
@@ -69,6 +105,8 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.destX = translatedXY.transX
         this.player.destY = translatedXY.transY
         this.player.message = this.playerDat.message
+
+
 
         this.gameObjects.push(this.player)
       
@@ -220,9 +258,6 @@ import SpriteSheet from './SpriteSheet.js'
     savePlayerLocationDB(normX, normY){
       console.log("saving location...");
       var charDataObj = {
-        color : this.playerDat.color,
-      name : this.playerDat.name,
-      type : this.playerDat.type,
       x : normX,
       y : normY,
       }

@@ -9,7 +9,7 @@ class Display{
     
     loadScene(){
         var scene = new Image();
-        scene.src = '../assets/library.png'
+        scene.src = '../assets/town.png'
 
         //drawing of the test image - img1
         scene.onload = function () {
