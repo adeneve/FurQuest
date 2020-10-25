@@ -19,6 +19,7 @@ export default class GameObject{
         this.posX = 512
         this.posY = 400
         this.isMoving = false
+        this.active = false
         this.speedX = 0
         this.speedY = 0
         this.destX = 512

@@ -88,6 +88,7 @@ import SpriteSheet from './SpriteSheet.js'
       const transCoord = this.translateCoordinates.bind(this)
       
         this.playerDat = data.val()
+        if(this.playerDat.message == undefined) this.playerDat.message = "";
         var charDataObj = {
           color : this.playerDat.color,
           name : this.playerDat.name,
@@ -108,6 +109,7 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.destX = translatedXY.transX
         this.player.destY = translatedXY.transY
         this.player.message = this.playerDat.message
+        this.player.active = true
 
 
 
@@ -131,10 +133,17 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.destY = translatedXY.transY;
             otherPlayer.name = charData[key].name;
             otherPlayer.message = charData[key].message;
+            otherPlayer.active = charData[key].active;
             otherPlayer.charID = key;
             otherPlayer.isMoving = false;
-            this.gameObjects.push(otherPlayer);
-            this.otherPlayers.set(String(key), otherPlayer);
+            if(otherPlayer.active){
+              if(!this.otherPlayers.has(String(key))){
+                this.gameObjects.push(otherPlayer);
+                this.otherPlayers.set(String(key), otherPlayer);
+              }
+              
+            }
+            
           }
         })
       })
@@ -147,6 +156,8 @@ import SpriteSheet from './SpriteSheet.js'
       for(let [key, otherPlayer] of this.otherPlayers){
         if(otherPlayer.charID != this.fbUser.uid){
           if(otherPlayer.isMoving){
+
+          
             
             if(otherPlayer.start == -1) {
               otherPlayer.start = time;
@@ -201,19 +212,47 @@ import SpriteSheet from './SpriteSheet.js'
         var keys = Object.keys(data.val());
         keys.forEach(key => {
           if(key != this.fbUser.uid){
+            if(!this.otherPlayers.has(String(key)) && obj[key].active){
+              var otherPlayer = new GameObject(this.sprites, 2, 500)
+              var otherPlyerNormX = obj[key].x;
+              var otherPlayerNormY = obj[key].y;
+              var translatedXY = this.translateCoordinates(false, otherPlyerNormX, otherPlayerNormY);
+              otherPlayer.posX = translatedXY.transX;
+              otherPlayer.posY = translatedXY.transY;
+              otherPlayer.oldX = translatedXY.transX;
+              otherPlayer.oldY = translatedXY.transY;
+              otherPlayer.destX = translatedXY.transX;
+              otherPlayer.destY = translatedXY.transY;
+              otherPlayer.name = obj[key].name;
+              otherPlayer.message = obj[key].message;
+              otherPlayer.active = true;
+              otherPlayer.charID = key;
+              otherPlayer.isMoving = false;
+              this.gameObjects.push(otherPlayer);
+              this.otherPlayers.set(String(key), otherPlayer);
+            }
+
+            if(!obj[key].active) return;
+
             var otherPlyer = this.otherPlayers.get(String(key))
             if(otherPlyer == undefined) return;
             var transXY = this.translateCoordinates(false, obj[key].x, obj[key].y);
 
-            if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY) {
-              otherPlyer.isMoving = true;
-              this.calcMovement(transXY.transX, transXY.transY, otherPlyer)
+            if(!otherPlyer.isMoving){
+              if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY) {
+                otherPlyer.isMoving = true;
+                this.calcMovement(transXY.transX, transXY.transY, otherPlyer)
+              }
             }
+            
 
             if(obj[key].message != otherPlyer.message){
               console.log(otherPlyer.name + " : " + obj[key].message)
                 otherPlyer.message = obj[key].message
-              
+            }
+
+            if(obj[key].active != otherPlyer.active){
+                otherPlyer.active = obj[key].active
             }
 
           }

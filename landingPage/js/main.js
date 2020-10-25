@@ -50,7 +50,7 @@ loadImage('../assets/character_sheet.png')
     engine = new Engine(dbc, gameCanvas, player);
     controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
     window.onbeforeunload = function() {
-        dbc.loguserOut();
+        dbc.loguserOut
         return false;
      }
     requestAnimationFrame(update)
@@ -67,6 +67,10 @@ function update(time){
         {
             if(gameObject.isMoving == true){
             if(gameObject.tempStart == -1) gameObject.tempStart = time
+            if(gameObject.start == -1) {
+                gameObject.start = time;
+                gameObject.tempStart = time
+            }
 
         gameObject.tempTimeElapsed = time - gameObject.tempStart
         
@@ -92,8 +96,10 @@ function update(time){
     }
     
 
+        if(gameObject.active){
+            sprites.draw(gameObject.nextFrame, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message)
+        }
         
-        sprites.draw(gameObject.nextFrame, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message)
         
     }
     )
