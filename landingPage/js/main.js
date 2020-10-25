@@ -40,12 +40,25 @@ scene.src = '../assets/town.png'
 
 
 
-loadImage('../assets/character_sheet.png')
+loadImage('../assets/character.png')
 .then(image => {
     sprites = new SpriteSheet(image);
     sprites.define('default', 0, 0);
     sprites.define('walk', 1, 0);
-    var player = new GameObject(sprites, 2, 500)
+    var player = new GameObject(sprites, 2, 250)
+    var tutorialBroSprites = new SpriteSheet(image);
+    tutorialBroSprites.defineSixtyFourBit("default", 1,0);
+    tutorialBroSprites.defineSixtyFourBit("wave1", 2, 0);
+    tutorialBroSprites.defineSixtyFourBit("wave2", 3, 0);
+    tutorialBroSprites.defineSixtyFourBit("wave3", 4, 0);
+    tutorialBroSprites.defineSixtyFourBit("wave4", 5, 0);
+    var tutorialBro = new GameObject(tutorialBroSprites, 5, 250);
+    tutorialBro.sprites = tutorialBroSprites;
+    tutorialBro.active = true
+    tutorialBro.isMoving = true
+    tutorialBro.posX = 468
+    tutorialBro.posY = 195
+    gameObjects.push(tutorialBro);
     const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
     engine = new Engine(dbc, gameCanvas, player);
     controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
@@ -97,7 +110,7 @@ function update(time){
     
 
         if(gameObject.active){
-            sprites.draw(gameObject.nextFrame, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message)
+            gameObject.sprites.draw(gameObject.nextFrame, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message)
         }
         
         

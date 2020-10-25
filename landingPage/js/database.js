@@ -110,6 +110,7 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.destY = translatedXY.transY
         this.player.message = this.playerDat.message
         this.player.active = true
+        this.player.sprites = this.sprites
 
 
 
@@ -134,6 +135,7 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.name = charData[key].name;
             otherPlayer.message = charData[key].message;
             otherPlayer.active = charData[key].active;
+            otherPlayer.sprites = this.sprites
             otherPlayer.charID = key;
             otherPlayer.isMoving = false;
             if(otherPlayer.active){

@@ -27,8 +27,8 @@ export default class SpriteSheet {
 
     defineSixtyFourBit(name, x, y){
         const buffer = document.createElement('canvas');
-        buffer.height = this.height;
-        buffer.width = this.width;
+        buffer.height = this.height * 2;
+        buffer.width = this.width * 2;
         buffer
             .getContext('2d')
             .drawImage(

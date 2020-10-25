@@ -12,6 +12,7 @@ class Engine{
 		player.isMoving = true
 		player.destX = destX
 		player.destY = destY
+		console.log("x : " + destX + "y :" + destY)
 		var playerSpeed = .15 // .001 px per ms
 		var diffX = Math.abs(destX - player.posX);
 		var diffY = Math.abs(destY - player.posY);
