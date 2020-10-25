@@ -49,6 +49,9 @@ import SpriteSheet from './SpriteSheet.js'
           
       })
 
+         
+     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+
         const loadPlayerDat = this.loadPlayerData.bind(this)
         this.chartactersDbRef = this.dbRef.child('characters');
         
@@ -280,6 +283,22 @@ import SpriteSheet from './SpriteSheet.js'
       this.player.message = msg
       const events = this.dbRef.child('characters');
       events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
+    }
+
+    loguserOut(){
+      var charDataObj = {
+        active : false
+      }
+      this.chartactersDbRef.child(this.fbUser.uid).update(charDataObj).then(e => {
+        firebase.auth().signOut().then(function() {
+          alert("log out successful")
+          }, function(error) {
+            alert(error.message)
+          });
+
+      }).catch( e => console.log(e.message))
+      e.returnValue = ''
+      return null;
     }
 
 }

@@ -20,7 +20,7 @@ var accountControlModule = {
     "username" : document.getElementById('username'),
     "btnCloseLogin" : document.getElementById('btnCloseLogIn'),
     "btnCloseSignUp" : document.getElementById('btnCloseSignUp'),
-    "btnPlay" : document.getElementById('btnPlay')
+    "window" : window
 }
 
 
@@ -49,6 +49,10 @@ loadImage('../assets/character_sheet.png')
     const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
     engine = new Engine(dbc, gameCanvas, player);
     controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
+    window.onbeforeunload = function() {
+        dbc.loguserOut();
+        return false;
+     }
     requestAnimationFrame(update)
 });
 
