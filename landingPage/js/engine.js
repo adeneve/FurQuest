@@ -12,7 +12,6 @@ class Engine{
 		player.isMoving = true
 		player.destX = destX
 		player.destY = destY
-		console.log("x : " + destX + "y :" + destY)
 		var playerSpeed = .15 // .001 px per ms
 		var diffX = Math.abs(destX - player.posX);
 		var diffY = Math.abs(destY - player.posY);
@@ -75,6 +74,7 @@ class Engine{
 		this.player.oldX = this.player.posX
 		this.player.oldY = this.player.posY
 		this.db.savePlayerLocationDB(normX, normY); 
+		console.log("x : " + normX + "y :" + normY)
 		this.player.isMoving = true
 		const mvplayer = this.movePlayer.bind(this)
 		requestAnimationFrame(mvplayer)

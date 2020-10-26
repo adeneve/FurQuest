@@ -18,6 +18,8 @@ export default class GameObject{
         this.tempStart = -1
         this.posX = 512
         this.posY = 400
+        this.normX = 0
+        this.normY = 0
         this.isMoving = false
         this.active = false
         this.speedX = 0
@@ -32,6 +34,7 @@ export default class GameObject{
         this.charID = -1
         this.message = ""
         this.name = ""
+        this.isPlayer = false
     }
 
     getNextSprite(){

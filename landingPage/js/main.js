@@ -37,6 +37,8 @@ var otherPlayers = new Map()
 var sprites = -1
 var scene = new Image();
 scene.src = '../assets/town.png'
+var tutorialBro = -1;
+var player = -1;
 
 
 
@@ -45,19 +47,22 @@ loadImage('../assets/character.png')
     sprites = new SpriteSheet(image);
     sprites.define('default', 0, 0);
     sprites.define('walk', 1, 0);
-    var player = new GameObject(sprites, 2, 250)
+    player = new GameObject(sprites, 2, 250)
     var tutorialBroSprites = new SpriteSheet(image);
     tutorialBroSprites.defineSixtyFourBit("default", 1,0);
     tutorialBroSprites.defineSixtyFourBit("wave1", 2, 0);
     tutorialBroSprites.defineSixtyFourBit("wave2", 3, 0);
     tutorialBroSprites.defineSixtyFourBit("wave3", 4, 0);
     tutorialBroSprites.defineSixtyFourBit("wave4", 5, 0);
-    var tutorialBro = new GameObject(tutorialBroSprites, 5, 250);
+    tutorialBro = new GameObject(tutorialBroSprites, 5, 250);
     tutorialBro.sprites = tutorialBroSprites;
     tutorialBro.active = true
-    tutorialBro.isMoving = true
-    tutorialBro.posX = 468
-    tutorialBro.posY = 195
+    tutorialBro.isMoving = false
+    var transXY = translateCoordinates(false, -.34, .29, gameCanvas)
+    tutorialBro.posX = transXY.transX
+    tutorialBro.posY = transXY.transY
+    tutorialBro.normX = -.34
+    tutorialBro.normY = .29
     gameObjects.push(tutorialBro);
     const dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
     engine = new Engine(dbc, gameCanvas, player);
@@ -107,6 +112,21 @@ function update(time){
             
         }
     }
+
+        if(gameObject.isPlayer){
+            var transXY = translateCoordinates(true, gameObject.posX, gameObject.posY, gameCanvas)
+            debugger;
+            var diffX = Math.abs(tutorialBro.normX - transXY.transX)
+            var diffY = Math.abs(tutorialBro.normY - transXY.transY + .2)
+            if(diffX < .05 && diffY < .05){
+                tutorialBro.isMoving = true
+            }else{
+                tutorialBro.isMoving = false
+                tutorialBro.frameNames = tutorialBro.spriteSheet.tiles.keys()
+                tutorialBro.next = 'default'
+                tutorialBro.nextFrame = tutorialBro.next
+            }
+        }
     
 
         if(gameObject.active){
@@ -120,4 +140,19 @@ function update(time){
 requestAnimationFrame(update)
 }
 
+
+function translateCoordinates(toGlobal, x, y, gameScreen){
+    var boundingRect = gameScreen.getBoundingClientRect();
+    var transX = 0
+    var transY = 0
+    if(toGlobal){
+      transX = ((x )-(gameScreen.width/2))/(gameScreen.width/2); 
+            transY = ((gameScreen.height/2)-(y - boundingRect.top))/(gameScreen.height/2);
+    }
+    else{
+      transX = ((gameScreen.width/2) * (x)) + (gameScreen.width/2)   
+      transY = (gameScreen.height/2) - ((gameScreen.height/2) * (y))
+    }
+    return {transX, transY}
+  }
 

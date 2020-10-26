@@ -46,11 +46,11 @@ export default class SpriteSheet {
 
     draw(name, context, x, y, msg) {
         const buffer = this.tiles.get(name);
-        context.drawImage(buffer, x, y);
+        context.drawImage(buffer, x-this.width/2, y -this.height/2);
         if(msg != ""){
-            context.font = "30px Comic Sans MS";
-            context.fillStyle = "red";
-            context.fillText(msg, x, y + 5)
+            context.font = "20px Comic Sans MS";
+            context.fillStyle = "#69fff0";
+            context.fillText(msg, x - this.width/2, y - this.height/2)
         }
     }
 
