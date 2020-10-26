@@ -25,25 +25,6 @@ export default class SpriteSheet {
         this.tiles.set(name, buffer);
     }
 
-    defineSixtyFourBit(name, x, y){
-        const buffer = document.createElement('canvas');
-        buffer.height = this.height * 2;
-        buffer.width = this.width * 2;
-        buffer
-            .getContext('2d')
-            .drawImage(
-                this.image,
-                this.width * x * 2,
-                this.height * y * 2,
-                this.width * 2,
-                this.height * 2,
-                0,
-                0,
-                this.width * 2,
-                this.height * 2);
-        this.tiles.set(name, buffer);
-    }
-
     draw(name, context, x, y, msg) {
         const buffer = this.tiles.get(name);
         context.drawImage(buffer, x-this.width/2, y -this.height/2);
