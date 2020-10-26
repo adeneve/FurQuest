@@ -1,10 +1,14 @@
 export default
 class Engine{
 
-	constructor(database, canvas, player){
+	constructor(database, canvas, player, gameObjects, NPCs, dialogBox){
 		this.canvas = canvas
 		this.player = player
 		this.db = database
+		this.gameObjects = gameObjects
+		this.NPCs = NPCs
+		this.dialogBox = dialogBox
+		this.database = database
 	}
 
 	// returns the speedX and speedY
@@ -82,6 +86,57 @@ class Engine{
 
 	saveMessage(msg){
 		this.db.saveMessage(msg)
+	}
+
+	checkForInteraction(normX, normY){
+		console.log("xNorm: " + normX + ", yNorm: " + normY)
+		var clickedNPC = null
+		this.NPCs.forEach( NPC => {
+			if(NPC.interactable){ // AND the player clicked directly on the NPC
+				var diffX = Math.abs(NPC.normX - normX)
+                var diffY = Math.abs(NPC.normY - normY)
+                if(diffX < .03 && diffY < .1){
+					clickedNPC = NPC
+				}
+                
+            }
+		})
+		//did player click on that obj?
+		return clickedNPC
+	}
+
+	handleInteraction(NPC, interactionStep){
+		console.log('beep')
+		switch(NPC.name){
+			case "tBro":
+				this.dialogBox.active = true
+				debugger
+				switch(interactionStep){
+					case 1 :
+						this.dialogBox.dialogMsg = "hey there champ!"
+						break;
+					case 2 :
+						this.dialogBox.dialogMsg = "Welcome to town, theres not much to do yet, \n but stay tuned because I hear big Drewski is coming to town"
+						break;
+					case 3 :
+						this.dialogBox.dialogMsg = "Say, would you be so kind as to get me a snack from the machine over there?"
+						break;
+				} //\n I hear people drop spare change when they leave the market
+
+				if(interactionStep > 3){
+					this.player.interacting = false
+					this.dialogBox.active = false
+				}
+
+		}
+	}
+
+	drawDialog(){
+		var context = this.canvas.getContext('2d')
+		context.font = "15px Comic Sans MS";
+			context.fillStyle = "#00ff15";
+			var transXY = this.database.translateCoordinates(false, -0.40, -0.6)
+            context.fillText(this.dialogBox.dialogMsg, transXY.transX, transXY.transY)
 	}
 	
 }

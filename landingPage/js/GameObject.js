@@ -34,7 +34,10 @@ export default class GameObject{
         this.charID = -1
         this.message = ""
         this.name = ""
+        this.dialogMsg = ""
         this.isPlayer = false
+        this.interactable = false
+        this.interacting = false
     }
 
     getNextSprite(){

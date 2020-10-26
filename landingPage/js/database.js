@@ -231,6 +231,7 @@ import SpriteSheet from './SpriteSheet.js'
               otherPlayer.active = true;
               otherPlayer.charID = key;
               otherPlayer.isMoving = false;
+              otherPlayer.sprites = this.sprites;
               this.gameObjects.push(otherPlayer);
               this.otherPlayers.set(String(key), otherPlayer);
             }
