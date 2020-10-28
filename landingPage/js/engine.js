@@ -110,7 +110,6 @@ class Engine{
 		switch(NPC.name){
 			case "tBro":
 				this.dialogBox.active = true
-				debugger
 				switch(interactionStep){
 					case 1 :
 						this.dialogBox.dialogMsg = "hey there champ!"

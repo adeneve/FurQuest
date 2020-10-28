@@ -8,6 +8,10 @@ import {loadImage} from './loaders.js'
 
 
 var gameCanvas = document.getElementById("gameCanvas") 
+var context = gameCanvas.getContext('2d')
+context.webkitImageSmoothingEnabled = false;
+context.mozImageSmoothingEnabled = false;
+context.imageSmoothingEnabled = false;
 var msgBox = document.getElementById("comment")
 var sendBtn = document.getElementById("sendMsg")
 
@@ -28,6 +32,7 @@ var accountControlModule = {
 
 var currentWidth = window.innerWidth * .75;
 var currentHeight = window.innerHeight * .85
+console.log(currentWidth)
 var display = new Display(gameCanvas, currentWidth, currentHeight) 
 var controller = 0;
 var engine = 0;
@@ -39,6 +44,7 @@ var sprites = -1
 var scene = new Image();
 scene.src = '../assets/town.png'
 var tutorialBro = -1;
+var fountain = -1;
 var player = -1;
 var dialogBox = -1;
 var dbc = 0;
@@ -47,21 +53,28 @@ var dbc = 0;
 
 loadImage('../assets/character.png')
 .then(image => {
-    sprites = new SpriteSheet(image);
-    sprites.define('default', 0, 0);
-    sprites.define('walk', 1, 0);
+    sprites = new SpriteSheet(image, 64, 64);
+    sprites.define('default', 0, 1);
+    sprites.define('walk1', 1, 1);
+    sprites.define('walk2', 2, 1);
+    sprites.define('walk3', 3, 1);
+    sprites.define('walk5', 5, 1);
+    sprites.define('walk6', 6, 1);
+    sprites.define('walk5', 7, 1);
     player = new GameObject(sprites, 2, 250)
     var tutorialBroSprites = new SpriteSheet(image, 64, 64);
-    tutorialBroSprites.define("default", 1,0);
-    tutorialBroSprites.define("wave1", 2, 0);
-    tutorialBroSprites.define("wave2", 3, 0);
-    tutorialBroSprites.define("wave3", 4, 0);
-    tutorialBroSprites.define("wave4", 5, 0);
+    tutorialBroSprites.define("default", 0,0);
+    tutorialBroSprites.define("wave1", 1, 0);
+    tutorialBroSprites.define("wave2", 2, 0);
+    tutorialBroSprites.define("wave3", 3, 0);
+    tutorialBroSprites.define("wave4", 4, 0);
+    tutorialBroSprites.define("wave5", 5, 0);
     tutorialBro = new GameObject(tutorialBroSprites, 5, 250);
     tutorialBro.sprites = tutorialBroSprites;
     tutorialBro.active = true
     tutorialBro.isMoving = false
     tutorialBro.name = "tBro"
+
     
     gameObjects.push(tutorialBro);
     interactableNPCs.push(tutorialBro)
@@ -87,10 +100,31 @@ loadImage('../assets/dialogBox.png')
     dialogBox = new GameObject(dialogBoxSprites, 1, 500);
     dialogBox.sprites = dialogBoxSprites
     dialogBox.active = false
-    var transXY = dbc.translateCoordinates(false, 0, -.8, gameCanvas)
+    var transXY = translateCoordinates(false, 0, -.8, gameCanvas)
     dialogBox.posX = transXY.transX
     dialogBox.posY = transXY.transY
     engine.dialogBox = dialogBox
+})
+
+loadImage('../assets/fountain.png')
+.then(image => {
+    var fountainSprites = new SpriteSheet(image, 128, 128)
+    fountainSprites.define("default", 0, 0);
+    fountainSprites.define("splash1", 1, 0);
+    fountainSprites.define("splash2", 2, 0);
+    fountainSprites.define("splash3", 3, 0);
+    fountainSprites.define("splash4", 0, 1);
+    fountainSprites.define("splash5", 1, 1);
+    fountainSprites.define("splash6", 2, 1);
+    fountainSprites.define("splash7", 3, 1);
+    fountain = new GameObject(fountainSprites, 1, 240);
+    fountain.sprites = fountainSprites
+    fountain.active = true
+    fountain.isMoving = true
+    var transXY = translateCoordinates(false, 0, -.6, gameCanvas)
+    fountain.posX = transXY.transX
+    fountain.posY = transXY.transY
+    gameObjects.push(fountain)
 })
 
 var next = 'default'
@@ -169,3 +203,18 @@ function update(time){
 
 requestAnimationFrame(update)
 }
+
+function translateCoordinates(toGlobal, x, y){
+    var boundingRect = gameCanvas.getBoundingClientRect();
+    var transX = 0
+    var transY = 0
+    if(toGlobal){
+      transX = ((x )-(gameCanvas.width/2))/(gameCanvas.width/2); 
+            transY = ((gameCanvas.height/2)-(y - boundingRect.top))/(gameCanvas.height/2);
+    }
+    else{
+      transX = ((gameCanvas.width/2) * (x)) + (gameCanvas.width/2)   
+      transY = (gameCanvas.height/2) - ((gameCanvas.height/2) * (y))
+    }
+    return {transX, transY}
+  }
