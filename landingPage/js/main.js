@@ -86,15 +86,10 @@ loadImage('../assets/character.png')
     tutorialBro.normY = .1
     engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
     controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
-    window.onbeforeunload = function() {
-        dbc.loguserOut()
-        return false;
-     }
-    requestAnimationFrame(update)
-});
 
-loadImage('../assets/dialogBox.png')
-.then(image => {
+
+    loadImage('../assets/dialogBox.png')
+    .then(image => {
     var dialogBoxSprites = new SpriteSheet(image, 610, 260)
     dialogBoxSprites.define("default", 0, 0, 1);
     dialogBox = new GameObject(dialogBoxSprites, 1, 500);
@@ -104,7 +99,16 @@ loadImage('../assets/dialogBox.png')
     dialogBox.posX = transXY.transX
     dialogBox.posY = transXY.transY
     engine.dialogBox = dialogBox
-})
+    })
+
+    window.onbeforeunload = function() {
+        dbc.loguserOut()
+        return false;
+     }
+    requestAnimationFrame(update)
+});
+
+
 
 loadImage('../assets/fountain.png')
 .then(image => {
