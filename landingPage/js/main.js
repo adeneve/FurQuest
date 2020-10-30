@@ -44,6 +44,7 @@ var sprites = -1
 var scene = new Image();
 scene.src = '../assets/town.png'
 var tutorialBro = -1;
+var blueHairBro = -1;
 var fountain = -1;
 var player = -1;
 var dialogBox = -1;
@@ -75,8 +76,19 @@ loadImage('../assets/character.png')
     tutorialBro.isMoving = false
     tutorialBro.name = "tBro"
 
+    var blueHairBroSprites = new SpriteSheet(image, 64, 64);
+    blueHairBroSprites.define("default", 0,2);
+    blueHairBroSprites.define("idle1", 1, 2);
+    blueHairBroSprites.define("idle2", 2, 2);
+    blueHairBro = new GameObject(blueHairBroSprites, 3, 400);
+    blueHairBro.sprites = blueHairBroSprites;
+    blueHairBro.active = true
+    blueHairBro.isMoving = true
+    blueHairBro.name = "bhBro"
+
     
     gameObjects.push(tutorialBro);
+    gameObjects.push(blueHairBro);
     interactableNPCs.push(tutorialBro)
     dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
     var transXY = dbc.translateCoordinates(false, -.34, .1, gameCanvas)
@@ -84,8 +96,16 @@ loadImage('../assets/character.png')
     tutorialBro.posY = transXY.transY
     tutorialBro.normX = -.34
     tutorialBro.normY = .1
+
+    var transXY = dbc.translateCoordinates(false, .3, 0, gameCanvas)
+    blueHairBro.posX = transXY.transX
+    blueHairBro.posY = transXY.transY
+    blueHairBro.normX = .3
+    blueHairBro.normY = 0
     engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
     controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
+
+    
 
 
     loadImage('../assets/dialogBox.png')
