@@ -61,7 +61,7 @@ loadImage('../assets/character.png')
     sprites.define('walk5', 5, 1);
     sprites.define('walk6', 6, 1);
     sprites.define('walk5', 7, 1);
-    player = new GameObject(sprites, 2, 250)
+    player = new GameObject(sprites, 2, 200)
     var tutorialBroSprites = new SpriteSheet(image, 64, 64);
     tutorialBroSprites.define("default", 0,0);
     tutorialBroSprites.define("wave1", 1, 0);
@@ -104,6 +104,10 @@ loadImage('../assets/character.png')
     window.onbeforeunload = function() {
         dbc.loguserOut()
         return false;
+     }
+     window.onunload = function() {
+         dbc.loguserOut()
+         return false
      }
     requestAnimationFrame(update)
 });
