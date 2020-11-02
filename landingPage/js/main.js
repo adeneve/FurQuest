@@ -147,10 +147,10 @@ loadImage('../assets/fountain.png')
     fountainSprites.define("splash1", 1, 0);
     fountainSprites.define("splash2", 2, 0);
     fountainSprites.define("splash3", 3, 0);
-    fountainSprites.define("splash4", 0, 1);
-    fountainSprites.define("splash5", 1, 1);
-    fountainSprites.define("splash6", 2, 1);
-    fountainSprites.define("splash7", 3, 1);
+    //fountainSprites.define("splash4", 0, 1);
+    //fountainSprites.define("splash5", 1, 1);
+    //fountainSprites.define("splash6", 2, 1);
+   // fountainSprites.define("splash7", 3, 1);
     fountain = new GameObject(fountainSprites, 1, 240);
     fountain.sprites = fountainSprites
     fountain.active = true
