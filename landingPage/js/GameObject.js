@@ -1,3 +1,5 @@
+import SpriteSheet from "./SpriteSheet.js"
+
 export default class GameObject{
 
     animating = false
@@ -9,9 +11,11 @@ export default class GameObject{
         this.animationSteps = animationSteps
         this.speed = speed
         this.start = -1
+        this.moveStart = -1
         this.frameNames = spriteSheet.tiles.keys()
+        this.movementFrameNames = spriteSheet.movementTiles.keys()
         this.currentFrame = ""
-        this.animating = false
+        this.animating = true
         this.lastUpdateTime = -1
         this.timeElapsed = -1
         this.tempTimeElapsed = -1
@@ -21,6 +25,7 @@ export default class GameObject{
         this.normX = 0
         this.normY = 0
         this.isMoving = false
+        this.isRunning = false
         this.active = false
         this.speedX = 0
         this.speedY = 0
@@ -28,7 +33,6 @@ export default class GameObject{
         this.destY = 400
         this.oldX = 512
         this.oldY = 400
-        this.isMoving = false
         this.nextFrame = "default"
         this.totalDistanceReq = 0
         this.charID = -1

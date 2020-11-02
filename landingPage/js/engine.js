@@ -33,13 +33,13 @@ class Engine{
 	}
 
 	movePlayer(time){
-		if(this.player.start == -1) {
-			this.player.start = time;
+		if(this.player.moveStart == -1) {
+			this.player.moveStart = time;
 			this.player.tempStart = time
 		}
 
 		
-		var timeElapsed = time - this.player.start
+		var timeElapsed = time - this.player.moveStart
 
 		var tempX = this.player.oldX + this.player.speedX * timeElapsed
 		var tempY = this.player.oldY + this.player.speedY * timeElapsed
@@ -53,8 +53,10 @@ class Engine{
 		if(totDist >= this.player.totalDistanceReq) {
 			this.player.oldX = this.player.posX
 			this.player.oldY = this.player.posY
-			this.player.start = -1
+			this.player.moveStart = -1
+			
 			this.player.isMoving = false
+			this.player.isRunning = false
 			return
 		}
 	
@@ -68,8 +70,10 @@ class Engine{
 		}else {
 			this.player.oldX = this.player.posX
 			this.player.oldY = this.player.posY
-			this.player.start = -1
+			this.player.moveStart = -1
+			debugger
 			this.player.isMoving = false
+			this.player.isRunning = false
 			return
 		}
 	}
@@ -80,6 +84,7 @@ class Engine{
 		this.db.savePlayerLocationDB(normX, normY); 
 		console.log("x : " + normX + "y :" + normY)
 		this.player.isMoving = true
+		this.player.isRunning = true
 		const mvplayer = this.movePlayer.bind(this)
 		requestAnimationFrame(mvplayer)
 	}

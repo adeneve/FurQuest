@@ -41,6 +41,7 @@ var gameObjects = []
 var interactableNPCs = []
 var otherPlayers = new Map()
 var sprites = -1
+var movingSprites = -1
 var scene = new Image();
 scene.src = '../assets/town.png'
 var tutorialBro = -1;
@@ -55,13 +56,14 @@ var dbc = 0;
 loadImage('../assets/character.png')
 .then(image => {
     sprites = new SpriteSheet(image, 64, 64);
-    sprites.define('default', 0, 1);
-    sprites.define('walk1', 1, 1);
-    sprites.define('walk2', 2, 1);
-    sprites.define('walk3', 3, 1);
-    sprites.define('walk5', 5, 1);
-    sprites.define('walk6', 6, 1);
-    sprites.define('walk5', 7, 1);
+    movingSprites = new SpriteSheet(image, 64, 64)
+    sprites.define('default', 0, 3);
+    sprites.define('idle1', 1, 3);
+    sprites.define('idle2', 2, 3);
+    sprites.define('movingDefault', 4, 3, 1)
+    sprites.define('moving2', 5 ,3, 1)
+    sprites.define('moving3', 6 ,3, 1)
+    sprites.define('moving4', 7 ,3, 1)
     player = new GameObject(sprites, 2, 200)
     var tutorialBroSprites = new SpriteSheet(image, 64, 64);
     tutorialBroSprites.define("default", 0,0);
@@ -111,7 +113,7 @@ loadImage('../assets/character.png')
     loadImage('../assets/dialogBox.png')
     .then(image => {
     var dialogBoxSprites = new SpriteSheet(image, 610, 260)
-    dialogBoxSprites.define("default", 0, 0, 1);
+    dialogBoxSprites.define("default", 0, 0);
     dialogBox = new GameObject(dialogBoxSprites, 1, 500);
     dialogBox.sprites = dialogBoxSprites
     dialogBox.active = false
@@ -165,7 +167,7 @@ function update(time){
         
     gameObjects.forEach( gameObject => 
         {
-            if(gameObject.isMoving == true){
+            if(gameObject.animating == true){
             if(gameObject.tempStart == -1) gameObject.tempStart = time
             if(gameObject.start == -1) {
                 gameObject.start = time;
@@ -176,14 +178,26 @@ function update(time){
         
         
         if(gameObject.tempTimeElapsed >= gameObject.speed){
+            if(gameObject.isRunning){
+                next = gameObject.movementFrameNames.next().value
+            }
+            else{
+                next = gameObject.frameNames.next().value
+            }
+
             gameObject.currentStep += 1
-            
-            next = gameObject.frameNames.next().value
             
 
             if(next == undefined) {
-                gameObject.frameNames = gameObject.spriteSheet.tiles.keys()
-                next = 'default'
+                if(gameObject.isRunning){
+                    gameObject.movementFrameNames = gameObject.spriteSheet.movementTiles.keys()
+                    next = 'movingDefault'
+                }
+                else{
+                    gameObject.frameNames = gameObject.spriteSheet.tiles.keys()
+                    next = 'default'
+                }
+
                 gameObject.nextFrame = next
 
             }else{

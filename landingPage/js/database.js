@@ -112,6 +112,7 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.active = true
         this.player.sprites = this.sprites
         this.player.isPlayer = true
+        
 
 
 
