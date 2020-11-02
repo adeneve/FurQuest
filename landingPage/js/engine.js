@@ -19,7 +19,6 @@ class Engine{
 		var playerSpeed = .17 // .001 px per ms
 		var diffX = Math.abs(destX - player.posX);
 		var diffY = Math.abs(destY - player.posY);
-		debugger
 		var diffXraw = destX - player.posX
 		if(diffXraw > 0){
 			this.player.movingRight = true

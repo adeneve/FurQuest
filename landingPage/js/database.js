@@ -112,7 +112,7 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.active = true
         this.player.sprites = this.sprites
         this.player.isPlayer = true
-        
+
 
 
 
@@ -163,14 +163,14 @@ import SpriteSheet from './SpriteSheet.js'
 
           
             
-            if(otherPlayer.start == -1) {
-              otherPlayer.start = time;
+            if(otherPlayer.moveStart == -1) {
+              otherPlayer.moveStart = time;
               otherPlayer.tempStart = time
             }
 
           
           
-            var timeElapsed = time - otherPlayer.start
+            var timeElapsed = time - otherPlayer.moveStart
             
             var tempX = otherPlayer.oldX + otherPlayer.speedX * timeElapsed
             var tempY = otherPlayer.oldY + otherPlayer.speedY * timeElapsed
@@ -184,8 +184,11 @@ import SpriteSheet from './SpriteSheet.js'
             if(totDist >= otherPlayer.totalDistanceReq) {
                 otherPlayer.oldX = otherPlayer.posX
                 otherPlayer.oldY = otherPlayer.posY
-                otherPlayer.start = -1
+                otherPlayer.moveStart = -1
                 otherPlayer.isMoving = false
+                otherPlayer.isRunning = false
+                otherPlayer.movingLeft = false
+			          otherPlayer.movingRight = false
                 return
             }
             
@@ -200,7 +203,10 @@ import SpriteSheet from './SpriteSheet.js'
                 otherPlayer.oldX = otherPlayer.posX
                 otherPlayer.oldY = otherPlayer.posY
                 otherPlayer.isMoving = false
-                otherPlayer.start = -1
+                otherPlayer.isRunning = false
+                otherPlayer.movingLeft = false
+			          otherPlayer.movingRight = false
+                otherPlayer.moveStart = -1
                 return
             }
 
@@ -211,7 +217,6 @@ import SpriteSheet from './SpriteSheet.js'
     }
 
     analyzeChange(data){
-        
         var obj = data.val();
         var keys = Object.keys(data.val());
         keys.forEach(key => {
@@ -236,6 +241,11 @@ import SpriteSheet from './SpriteSheet.js'
               this.gameObjects.push(otherPlayer);
               this.otherPlayers.set(String(key), otherPlayer);
             }
+
+            if(obj[key].message == "doop"){
+              debugger
+            }
+            
 
             if(this.otherPlayers.has(String(key)) && !obj[key].active){
               var otherPlyer = this.otherPlayers.get(String(key))
@@ -273,11 +283,19 @@ import SpriteSheet from './SpriteSheet.js'
 
     calcMovement(destX, destY, player){
       player.isMoving = true
+      player.isRunning = true
       player.destX = destX
       player.destY = destY
       var playerSpeed = .15 // .001 px per ms
       var diffX = Math.abs(destX - player.posX);
       var diffY = Math.abs(destY - player.posY);
+      var diffXraw = destX - player.posX
+      if(diffXraw > 0){
+        player.movingRight = true
+      }
+      if(diffXraw < 0){
+        player.movingLeft = true
+      }
       var diffTot = diffX + diffY 
       var percentX = diffX / diffTot
       var percentY = diffY / diffTot 
