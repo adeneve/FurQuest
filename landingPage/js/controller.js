@@ -39,6 +39,20 @@ class Controller{
 			//savePlayerLocationDB(x, y)           game engine -> database
 		  })
 
+		  canvas.addEventListener("mousemove", e => {
+			var gameScreen = canvas.getBoundingClientRect(); 
+			  
+			var normalized_x = ((e.clientX - gameScreen.left)-(canvas.width/2))/(canvas.width/2);
+			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
+
+			if(normalized_x < .1555 && normalized_x > -.034722 && normalized_y < 0.3241 && normalized_y > .063518){
+				console.log("entering cafe")
+				engine.enteringCafe = 1
+			}else{
+				engine.enteringCafe = 0
+			}
+		  })
+
 		  sendBtn.addEventListener("click", e => {
 			  engine.saveMessage(msgBox.value)
 		  })

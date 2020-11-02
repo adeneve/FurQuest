@@ -44,6 +44,8 @@ var sprites = -1
 var movingSprites = -1
 var scene = new Image();
 scene.src = '../assets/town.png'
+var sceneOpenCafe = new Image();
+sceneOpenCafe.src = '../assets/townCafeOpen.png'
 var tutorialBro = -1;
 var blueHairBro = -1;
 var fountain = -1;
@@ -165,8 +167,15 @@ var next = 'default'
 function update(time){
 
     //gameCanvas.getContext('2d').drawImage(scene, 0, 0);
-    gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
-        0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
+    //var currentScene = engine.getPlayerScene()
+    if(!engine.enteringCafe){
+        gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
+            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
+    }else{
+        gameCanvas.getContext('2d').drawImage(sceneOpenCafe, 0, 0, scene.width,    scene.height,     // source rectangle
+            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
+    }
+    
         
         
     gameObjects.forEach( gameObject => 

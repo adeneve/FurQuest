@@ -9,6 +9,7 @@ class Engine{
 		this.NPCs = NPCs
 		this.dialogBox = dialogBox
 		this.database = database
+		this.enteringCafe = 0
 	}
 
 	// returns the speedX and speedY
