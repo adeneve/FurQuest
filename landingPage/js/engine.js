@@ -19,6 +19,14 @@ class Engine{
 		var playerSpeed = .17 // .001 px per ms
 		var diffX = Math.abs(destX - player.posX);
 		var diffY = Math.abs(destY - player.posY);
+		debugger
+		var diffXraw = destX - player.posX
+		if(diffXraw > 0){
+			this.player.movingRight = true
+		}
+		if(diffXraw < 0){
+			this.player.movingLeft = true
+		}
 		var diffTot = diffX + diffY 
 		var percentX = diffX / diffTot
 		var percentY = diffY / diffTot 
@@ -46,6 +54,7 @@ class Engine{
 
 		var diffX = Math.abs(tempX - this.player.oldX);
 		var diffY = Math.abs(tempY - this.player.oldY);
+		
 		var diffSqX = diffX * diffX 
 		var diffSqY = diffY * diffY 
 		var totDist =  Math.sqrt( diffSqX + diffSqY)
@@ -57,6 +66,8 @@ class Engine{
 			
 			this.player.isMoving = false
 			this.player.isRunning = false
+			this.player.movingLeft = false
+			this.player.movingRight = false
 			return
 		}
 	
@@ -74,6 +85,8 @@ class Engine{
 			debugger
 			this.player.isMoving = false
 			this.player.isRunning = false
+			this.player.movingLeft = false
+			this.player.movingRight = false
 			return
 		}
 	}

@@ -64,6 +64,10 @@ loadImage('../assets/character.png')
     sprites.define('moving2', 5 ,3, 1)
     sprites.define('moving3', 6 ,3, 1)
     sprites.define('moving4', 7 ,3, 1)
+    sprites.define('movingDefaultLeft', 0, 4, 2)
+    sprites.define('movingLeft2', 1 ,4, 2)
+    sprites.define('movingLeft3', 2 ,4, 2)
+    sprites.define('movingLeft4', 3 ,4, 2)
     player = new GameObject(sprites, 2, 200)
     var tutorialBroSprites = new SpriteSheet(image, 64, 64);
     tutorialBroSprites.define("default", 0,0);
@@ -179,7 +183,12 @@ function update(time){
         
         if(gameObject.tempTimeElapsed >= gameObject.speed){
             if(gameObject.isRunning){
-                next = gameObject.movementFrameNames.next().value
+                if(gameObject.movingRight){
+                    next = gameObject.movementFrameNames.next().value
+                }
+                if(gameObject.movingLeft){
+                    next = gameObject.movementLeftFrameNames.next().value
+                }
             }
             else{
                 next = gameObject.frameNames.next().value
@@ -190,8 +199,14 @@ function update(time){
 
             if(next == undefined) {
                 if(gameObject.isRunning){
-                    gameObject.movementFrameNames = gameObject.spriteSheet.movementTiles.keys()
-                    next = 'movingDefault'
+                    if(gameObject.movingRight){
+                        gameObject.movementFrameNames = gameObject.spriteSheet.movementTiles.keys()
+                        next = 'movingDefault'
+                    }
+                    if(gameObject.movingLeft){
+                        gameObject.movementLeftFrameNames = gameObject.spriteSheet.movementTilesLeft.keys()
+                        next = 'movingDefaultLeft'
+                    }
                 }
                 else{
                     gameObject.frameNames = gameObject.spriteSheet.tiles.keys()

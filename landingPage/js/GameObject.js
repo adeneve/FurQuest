@@ -14,6 +14,7 @@ export default class GameObject{
         this.moveStart = -1
         this.frameNames = spriteSheet.tiles.keys()
         this.movementFrameNames = spriteSheet.movementTiles.keys()
+        this.movementLeftFrameNames = spriteSheet.movementTilesLeft.keys()
         this.currentFrame = ""
         this.animating = true
         this.lastUpdateTime = -1
@@ -26,6 +27,8 @@ export default class GameObject{
         this.normY = 0
         this.isMoving = false
         this.isRunning = false
+        this.movingLeft = false
+        this.movingRight = false
         this.active = false
         this.speedX = 0
         this.speedY = 0

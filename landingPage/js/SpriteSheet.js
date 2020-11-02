@@ -5,6 +5,7 @@ export default class SpriteSheet {
         this.height = h;
         this.tiles = new Map();
         this.movementTiles = new Map();
+        this.movementTilesLeft = new Map();
     }
 
     define(name, x, y, z = 0) {
@@ -26,15 +27,22 @@ export default class SpriteSheet {
             if(z == 0){
                 this.tiles.set(name, buffer);
             }
-            else{
+            if(z == 1){
                 this.movementTiles.set(name, buffer);
+            }
+            if(z == 2){
+                this.movementTilesLeft.set(name, buffer);
             }
     }
 
     draw(name, context, x, y, msg) {
+
         var buffer = this.tiles.get(name);
         if(name.includes("moving")){
             buffer = this.movementTiles.get(name);
+        }
+        if(name.includes("Left")){
+            buffer = this.movementTilesLeft.get(name);
         }
         
         context.drawImage(buffer, x-this.width/2, y -this.height/2);
