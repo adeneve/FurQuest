@@ -166,7 +166,19 @@ class Engine{
 			}
 		}
 		if(currentScene == 1){
-			return 1
+			if(normX < .165 && normX > -.19 && normY < -0.85 && normY > -1){
+				debugger
+				var centerX = 0
+				var centerY = -.9
+				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
+				if(Math.abs(transXY.transX - centerX) < .05 && Math.abs(transXY.transY - centerY) < .2){
+					return 0
+				}else{
+					return 1
+				}
+			}else{
+				return 1
+			}
 		}
 	}
 
