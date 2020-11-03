@@ -112,6 +112,8 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.active = true
         this.player.sprites = this.sprites
         this.player.isPlayer = true
+        this.player.scene = this.playerDat.scene
+        this.player.playerLoaded = true
 
 
 
@@ -136,6 +138,7 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.destY = translatedXY.transY;
             otherPlayer.name = charData[key].name;
             otherPlayer.message = charData[key].message;
+            otherPlayer.scene = charData[key].scene
             otherPlayer.active = charData[key].active;
             otherPlayer.sprites = this.sprites
             otherPlayer.charID = key;
@@ -234,6 +237,7 @@ import SpriteSheet from './SpriteSheet.js'
               otherPlayer.destY = translatedXY.transY;
               otherPlayer.name = obj[key].name;
               otherPlayer.message = obj[key].message;
+              otherPlayer.scene = obj[key].scene;
               otherPlayer.active = true;
               otherPlayer.charID = key;
               otherPlayer.isMoving = false;
@@ -347,6 +351,22 @@ import SpriteSheet from './SpriteSheet.js'
         message : msg
       }
       this.player.message = msg
+      const events = this.dbRef.child('characters');
+      events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
+    }
+
+    saveScene(scene){
+      console.log("saving scene")
+      var transXY = this.translateCoordinates(true, this.player.destX, this.player.destY);
+      var charDataObj = {
+        color : this.playerDat.color,
+        name : this.playerDat.name,
+        type : this.playerDat.type,
+        x : transXY.transX,
+        y : transXY.transY,
+        message : this.player.message,
+        scene : scene
+      }
       const events = this.dbRef.child('characters');
       events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
     }

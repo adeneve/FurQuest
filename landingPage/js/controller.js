@@ -21,13 +21,21 @@ class Controller{
 			if(!player.isMoving && !player.interacting){
 				this.interactionStep = 0
 				this.GameObjInteraction = engine.checkForInteraction(normalized_x, normalized_y)
-				if(this.GameObjInteraction == null){
+				var sceneChange = engine.checkForSceneChange(player.scene, normalized_x, normalized_y)
+				if(this.GameObjInteraction == null && sceneChange == player.scene){
 					engine.calcMovement(e.clientX -gameScreen.left, e.clientY - gameScreen.top, player)
 					engine.prepMovePlayer(normalized_x, normalized_y)
-				}else{
+				}
+				if(this.GameObjInteraction != null)
+				{
 					engine.handleInteraction(this.GameObjInteraction, this.interactionStep)
 					this.interactionStep += 1;
 					player.interacting = true
+				}
+				if(sceneChange != player.scene){
+					console.log("entering cafe1") // push scene change to db
+					player.scene = sceneChange
+					engine.saveScene(sceneChange)
 				}
 			}
 			if(player.interacting){
@@ -46,7 +54,7 @@ class Controller{
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
 
 			if(normalized_x < .1555 && normalized_x > -.034722 && normalized_y < 0.3241 && normalized_y > .063518){
-				console.log("entering cafe")
+				//console.log("entering cafe")
 				engine.enteringCafe = 1
 			}else{
 				engine.enteringCafe = 0

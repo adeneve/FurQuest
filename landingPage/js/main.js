@@ -36,7 +36,7 @@ console.log(currentWidth)
 var display = new Display(gameCanvas, currentWidth, currentHeight) 
 var controller = 0;
 var engine = 0;
-display.loadScene()
+//display.loadScene()
 var gameObjects = []
 var interactableNPCs = []
 var otherPlayers = new Map()
@@ -46,6 +46,8 @@ var scene = new Image();
 scene.src = '../assets/town.png'
 var sceneOpenCafe = new Image();
 sceneOpenCafe.src = '../assets/townCafeOpen.png'
+var sceneCafe = new Image();
+sceneCafe.src = '../assets/store.jpg'
 var tutorialBro = -1;
 var blueHairBro = -1;
 var fountain = -1;
@@ -79,6 +81,7 @@ loadImage('../assets/character.png')
     tutorialBroSprites.define("wave4", 4, 0);
     tutorialBroSprites.define("wave5", 5, 0);
     tutorialBro = new GameObject(tutorialBroSprites, 5, 250);
+    tutorialBro.scene = 0
     tutorialBro.sprites = tutorialBroSprites;
     tutorialBro.active = true
     tutorialBro.isMoving = false
@@ -92,6 +95,7 @@ loadImage('../assets/character.png')
     blueHairBro.sprites = blueHairBroSprites;
     blueHairBro.active = true
     blueHairBro.isMoving = true
+    blueHairBro.scene = 0
     blueHairBro.name = "bhBro"
 
     
@@ -126,6 +130,7 @@ loadImage('../assets/character.png')
     var transXY = translateCoordinates(false, 0, -.8, gameCanvas)
     dialogBox.posX = transXY.transX
     dialogBox.posY = transXY.transY
+    dialogBox.name = "dialogBox"
     engine.dialogBox = dialogBox
     })
 
@@ -137,7 +142,8 @@ loadImage('../assets/character.png')
          dbc.loguserOut()
          return false
      }
-    requestAnimationFrame(update)
+
+    
 });
 
 
@@ -160,7 +166,13 @@ loadImage('../assets/fountain.png')
     var transXY = translateCoordinates(false, 0, -.6, gameCanvas)
     fountain.posX = transXY.transX
     fountain.posY = transXY.transY
+    fountain.scene = 0
     gameObjects.push(fountain)
+})
+
+loadImage('../assets/store.jpg')
+.then(image => {
+    requestAnimationFrame(update)
 })
 
 var next = 'default'
@@ -168,18 +180,31 @@ function update(time){
 
     //gameCanvas.getContext('2d').drawImage(scene, 0, 0);
     //var currentScene = engine.getPlayerScene()
-    if(!engine.enteringCafe){
-        gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
-            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
-    }else{
-        gameCanvas.getContext('2d').drawImage(sceneOpenCafe, 0, 0, scene.width,    scene.height,     // source rectangle
+    if(player.scene == 0){
+        if(!engine.enteringCafe){
+            gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
+                0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
+        }else{
+            gameCanvas.getContext('2d').drawImage(sceneOpenCafe, 0, 0, scene.width,    scene.height,     // source rectangle
+                0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
+        }
+    }
+    else if(player.scene == 1){
+        gameCanvas.getContext('2d').drawImage(sceneCafe, 0, 0, sceneCafe.width,    sceneCafe.height,     // source rectangle
             0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
     }
+    
+
+    
     
         
         
     gameObjects.forEach( gameObject => 
         {
+            if(!player.playerLoaded) return
+            if(gameObject.scene != player.scene && gameObject.name != "dialogBox"){
+                return
+            }
             if(gameObject.animating == true){
             if(gameObject.tempStart == -1) gameObject.tempStart = time
             if(gameObject.start == -1) {

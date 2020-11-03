@@ -15,7 +15,7 @@ class Display{
         scene.onload = function () {
             var canvas = document.getElementById('gameCanvas');
             //draw background image
-            gameCanvas.getContext('2d').drawImage(scene, 0, 0);
+            //gameCanvas.getContext('2d').drawImage(scene, 0, 0);
             //draw a box over the top
             //ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
             //ctx.fillRect(0, 0, 500, 500);

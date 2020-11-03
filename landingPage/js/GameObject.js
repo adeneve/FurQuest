@@ -45,7 +45,8 @@ export default class GameObject{
         this.isPlayer = false
         this.interactable = false
         this.interacting = false
-        this.scene = 0
+        this.scene = -3
+        this.playerLoaded = false
     }
 
     getNextSprite(){

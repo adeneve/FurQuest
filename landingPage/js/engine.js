@@ -10,6 +10,7 @@ class Engine{
 		this.dialogBox = dialogBox
 		this.database = database
 		this.enteringCafe = 0
+		this.gameScreen = canvas.getBoundingClientRect()
 	}
 
 	// returns the speedX and speedY
@@ -146,6 +147,31 @@ class Engine{
 				}
 
 		}
+	}
+
+	checkForSceneChange(currentScene, normX, normY){
+		if(currentScene == 0){
+			if(normX < .1555 && normX > -.034722 && normY < 0.3241 && normY > .063518){
+				debugger
+				var centerX = .07
+				var centerY = .28
+				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
+				if(Math.abs(transXY.transX - centerX) < .05 && Math.abs(transXY.transY - centerY) < .16){
+					return 1
+				}else{
+					return 0
+				}
+			}else{
+				return 0
+			}
+		}
+		if(currentScene == 1){
+			return 1
+		}
+	}
+
+	saveScene(scene){
+		this.db.saveScene(scene)
 	}
 
 	drawDialog(){
