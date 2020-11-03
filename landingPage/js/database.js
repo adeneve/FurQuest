@@ -276,6 +276,10 @@ import SpriteSheet from './SpriteSheet.js'
                 otherPlyer.message = obj[key].message
             }
 
+            if(obj[key].scene != otherPlyer.scene){
+                otherPlyer.scene = obj[key].scene
+            }
+
             
 
           }
