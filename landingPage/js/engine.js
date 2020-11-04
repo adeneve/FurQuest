@@ -171,7 +171,7 @@ class Engine{
 				var centerX = 0
 				var centerY = -.9
 				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
-				if(Math.abs(transXY.transX - centerX) < .05 && Math.abs(transXY.transY - centerY) < .2){
+				if(Math.abs(transXY.transX - centerX) < .1 && Math.abs(transXY.transY - centerY) < .2){
 					return 0
 				}else{
 					return 1

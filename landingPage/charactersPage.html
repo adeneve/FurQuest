@@ -167,7 +167,9 @@ function createCharacter(name, color, type){
 	  "color": color,
     "type" : type,
     "x": 0,
-    "y": 0
+    "y": 0,
+    "message": "",
+    "scene": 0
 	}	
   var newCharKey = 0
 	charactersRef.child(firebaseUID).set(data)
