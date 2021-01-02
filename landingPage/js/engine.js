@@ -137,7 +137,7 @@ class Engine{
 						this.dialogBox.dialogMsg = "Welcome to town, theres not much to do yet, \n but stay tuned because I hear big Drewski is coming to town"
 						break;
 					case 3 :
-						this.dialogBox.dialogMsg = "Say, would you be so kind as to get me a snack from the machine over there?"
+						this.dialogBox.dialogMsg = "See you around!"
 						break;
 				} //\n I hear people drop spare change when they leave the market
 
@@ -151,10 +151,10 @@ class Engine{
 
 	checkForSceneChange(currentScene, normX, normY){
 		if(currentScene == 0){
-			if(normX < .1555 && normX > -.034722 && normY < 0.3241 && normY > .063518){
+			if(normX < .71 && normX > .6125 && normY < 0.238 && normY > .0638){
 				debugger
-				var centerX = .07
-				var centerY = .28
+				var centerX = .658
+				var centerY = .16
 				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
 				if(Math.abs(transXY.transX - centerX) < .05 && Math.abs(transXY.transY - centerY) < .16){
 					return 1

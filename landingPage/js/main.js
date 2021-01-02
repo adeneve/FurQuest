@@ -103,11 +103,11 @@ loadImage('../assets/character.png')
     gameObjects.push(blueHairBro);
     interactableNPCs.push(tutorialBro)
     dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
-    var transXY = dbc.translateCoordinates(false, -.34, .1, gameCanvas)
+    var transXY = dbc.translateCoordinates(false, -.5, 0, gameCanvas)
     tutorialBro.posX = transXY.transX
     tutorialBro.posY = transXY.transY
-    tutorialBro.normX = -.34
-    tutorialBro.normY = .1
+    tutorialBro.normX = -.5
+    tutorialBro.normY = 0
 
     var transXY = dbc.translateCoordinates(false, .3, 0, gameCanvas)
     blueHairBro.posX = transXY.transX
@@ -163,7 +163,7 @@ loadImage('../assets/fountain.png')
     fountain.sprites = fountainSprites
     fountain.active = true
     fountain.isMoving = true
-    var transXY = translateCoordinates(false, 0, -.6, gameCanvas)
+    var transXY = translateCoordinates(false, -0.25, -.15, gameCanvas)
     fountain.posX = transXY.transX
     fountain.posY = transXY.transY
     fountain.scene = 0
