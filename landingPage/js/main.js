@@ -33,7 +33,7 @@ var accountControlModule = {
 var currentWidth = window.innerWidth * .75;
 var currentHeight = window.innerHeight * .85
 console.log(currentWidth)
-var display = new Display(gameCanvas, currentWidth, currentHeight) 
+var display = new Display(gameCanvas, 1633, 920) 
 var controller = 0;
 var engine = 0;
 //display.loadScene()
@@ -43,9 +43,9 @@ var otherPlayers = new Map()
 var sprites = -1
 var movingSprites = -1
 var scene = new Image();
-scene.src = '../assets/townRevision1.png'
+scene.src = '../assets/sceneMobile.png'
 var sceneOpenCafe = new Image();
-sceneOpenCafe.src = '../assets/townCafeOpen.png'
+sceneOpenCafe.src = '../assets/sceneOpenCafeMobile.png'
 var sceneCafe = new Image();
 sceneCafe.src = '../assets/cafe.png'
 var tutorialBro = -1;
