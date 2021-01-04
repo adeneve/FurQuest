@@ -151,7 +151,7 @@ class Engine{
 
 	checkForSceneChange(currentScene, normX, normY){
 		if(currentScene == 0){
-			if(normX < .71 && normX > .6125 && normY < 0.238 && normY > .0638){
+			if(normX < .675 && normX > .566 && normY < 0.15 && normY > -.05){ 
 				debugger
 				var centerX = .658
 				var centerY = .16

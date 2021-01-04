@@ -23,7 +23,7 @@ class Controller{
 				this.GameObjInteraction = engine.checkForInteraction(normalized_x, normalized_y)
 				var sceneChange = engine.checkForSceneChange(player.scene, normalized_x, normalized_y)
 				if(this.GameObjInteraction == null && sceneChange == player.scene){
-					if(player.scene == 0 && normalized_y > .06 && (normalized_x < .6125 || normalized_x > .71)) return;
+					if(player.scene == 0 && normalized_y > .06 && (normalized_x < .566 || normalized_x > .675)) return;
 					engine.calcMovement(e.clientX -gameScreen.left, e.clientY - gameScreen.top, player)
 					engine.prepMovePlayer(normalized_x, normalized_y)
 				}
@@ -55,7 +55,7 @@ class Controller{
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
 			console.log(normalized_x + " " + normalized_y);
 
-			if(normalized_x < .71 && normalized_x > .6125 && normalized_y < 0.238 && normalized_y > .0638){
+			if(normalized_x < .675 && normalized_x > .566 && normalized_y < 0.15 && normalized_y > -.05){
 				//console.log("entering cafe")
 				engine.enteringCafe = 1
 			}else{

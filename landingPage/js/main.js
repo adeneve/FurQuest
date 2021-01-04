@@ -33,7 +33,7 @@ var accountControlModule = {
 var currentWidth = window.innerWidth * .75;
 var currentHeight = window.innerHeight * .85
 console.log(currentWidth)
-var display = new Display(gameCanvas, 1633, 920) 
+var display = new Display(gameCanvas, 1200, 676) 
 var controller = 0;
 var engine = 0;
 //display.loadScene()
@@ -43,9 +43,9 @@ var otherPlayers = new Map()
 var sprites = -1
 var movingSprites = -1
 var scene = new Image();
-scene.src = '../assets/sceneMobile.png'
+scene.src = '../assets/town1200.png'
 var sceneOpenCafe = new Image();
-sceneOpenCafe.src = '../assets/sceneOpenCafeMobile.png'
+sceneOpenCafe.src = '../assets/town1200openCafe.png'
 var sceneCafe = new Image();
 sceneCafe.src = '../assets/cafe.png'
 var tutorialBro = -1;
@@ -103,11 +103,11 @@ loadImage('../assets/character.png')
     gameObjects.push(blueHairBro);
     interactableNPCs.push(tutorialBro)
     dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
-    var transXY = dbc.translateCoordinates(false, -.5, 0, gameCanvas)
+    var transXY = dbc.translateCoordinates(false, -.57, -.12, gameCanvas)
     tutorialBro.posX = transXY.transX
     tutorialBro.posY = transXY.transY
-    tutorialBro.normX = -.5
-    tutorialBro.normY = 0
+    tutorialBro.normX = -.57
+    tutorialBro.normY = -.12
 
     var transXY = dbc.translateCoordinates(false, .3, 0, gameCanvas)
     blueHairBro.posX = transXY.transX
@@ -163,7 +163,7 @@ loadImage('../assets/fountain.png')
     fountain.sprites = fountainSprites
     fountain.active = true
     fountain.isMoving = true
-    var transXY = translateCoordinates(false, -0.25, -.15, gameCanvas)
+    var transXY = translateCoordinates(false, -0.4, -.3, gameCanvas)
     fountain.posX = transXY.transX
     fountain.posY = transXY.transY
     fountain.scene = 0
