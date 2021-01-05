@@ -127,17 +127,18 @@ class Engine{
 	handleInteraction(NPC, interactionStep){
 		console.log('beep')
 		switch(NPC.name){
-			case "tBro":
+			case "Mysterious Stranger":
 				this.dialogBox.active = true
+				this.dialogBox.name = NPC.name
 				switch(interactionStep){
 					case 1 :
-						this.dialogBox.dialogMsg = "hey there champ!"
+						this.dialogBox.dialogMsg = ["hey there champ!"]
 						break;
 					case 2 :
-						this.dialogBox.dialogMsg = "Welcome to town, theres not much to do yet, \n but stay tuned because I hear big Drewski is coming to town"
+						this.dialogBox.dialogMsg = ["Welcome to town, theres not much to do yet," , "but stay tuned because I hear big Drewski is coming to town"]
 						break;
 					case 3 :
-						this.dialogBox.dialogMsg = "See you around!"
+						this.dialogBox.dialogMsg = ["See you around!"]
 						break;
 				} //\n I hear people drop spare change when they leave the market
 
@@ -188,10 +189,23 @@ class Engine{
 
 	drawDialog(){
 		var context = this.canvas.getContext('2d')
-		context.font = "15px Comic Sans MS";
-			context.fillStyle = "#00ff15";
+		
+			
 			var transXY = this.database.translateCoordinates(false, -0.40, -0.6)
-            context.fillText(this.dialogBox.dialogMsg, transXY.transX, transXY.transY)
+			var yinc = 0;
+			context.font = "20px Comic Sans MS";
+			context.fillStyle = "#00ff00"
+			context.fillText(this.dialogBox.name + ":", transXY.transX, transXY.transY - 30);
+			this.NPCs.forEach(npc => {if(npc.name == this.dialogBox.name){
+				npc.sprites.draw("default", context, transXY.transX - 25, transXY.transY, "");
+			}
+		    })
+			context.font = "15px Comic Sans MS";
+			context.fillStyle = "#00ff15";
+			this.dialogBox.dialogMsg.forEach(line => {
+				context.fillText(line, transXY.transX, transXY.transY + yinc);
+				yinc += 30;
+			});            
 	}
 	
 }

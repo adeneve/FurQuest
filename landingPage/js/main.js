@@ -85,7 +85,7 @@ loadImage('../assets/character.png')
     tutorialBro.sprites = tutorialBroSprites;
     tutorialBro.active = true
     tutorialBro.isMoving = false
-    tutorialBro.name = "tBro"
+    tutorialBro.name = "Mysterious Stranger"
 
     var blueHairBroSprites = new SpriteSheet(image, 64, 64);
     blueHairBroSprites.define("default", 0,2);
