@@ -279,6 +279,62 @@ function update(time){
             })
             
         }
+
+        for(let [key, otherPlayer] of dbc.otherPlayers){
+            if(otherPlayer.charID != dbc.fbUser.uid){
+              if(otherPlayer.isMoving){
+    
+              
+                
+                if(otherPlayer.moveStart == -1) {
+                  otherPlayer.moveStart = time;
+                  otherPlayer.tempStart = time
+                }
+    
+              
+              
+                var timeElapsed = time - otherPlayer.moveStart
+                
+                var tempX = otherPlayer.oldX + otherPlayer.speedX * timeElapsed
+                var tempY = otherPlayer.oldY + otherPlayer.speedY * timeElapsed
+                
+                var diffX = Math.abs(tempX - otherPlayer.oldX);
+                var diffY = Math.abs(tempY - otherPlayer.oldY);
+                var diffSqX = diffX * diffX 
+                var diffSqY = diffY * diffY 
+                var totDist =  Math.sqrt( diffSqX + diffSqY)
+                
+                if(totDist >= otherPlayer.totalDistanceReq) {
+                    otherPlayer.oldX = otherPlayer.posX
+                    otherPlayer.oldY = otherPlayer.posY
+                    otherPlayer.moveStart = -1
+                    otherPlayer.isMoving = false
+                    otherPlayer.isRunning = false
+                    otherPlayer.movingLeft = false
+                          otherPlayer.movingRight = false
+                    return
+                }
+                
+                otherPlayer.posX = otherPlayer.oldX + otherPlayer.speedX * timeElapsed
+                otherPlayer.posY = otherPlayer.oldY + otherPlayer.speedY * timeElapsed
+                
+                
+                if (Math.abs(Math.round(otherPlayer.posX, 2) - Math.round(otherPlayer.destX, 2)) > 1 || Math.abs(Math.round(otherPlayer.posY, 2) - Math.round(otherPlayer.destY, 2)) > 1) {
+
+                }else {
+                    otherPlayer.oldX = otherPlayer.posX
+                    otherPlayer.oldY = otherPlayer.posY
+                    otherPlayer.isMoving = false
+                    otherPlayer.isRunning = false
+                    otherPlayer.movingLeft = false
+                          otherPlayer.movingRight = false
+                    otherPlayer.moveStart = -1
+                    return
+                }
+    
+              }
+            }
+          }
     
 
         if(gameObject.active){
