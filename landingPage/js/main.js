@@ -94,7 +94,7 @@ loadImage('../assets/character.png')
     blueHairBro = new GameObject(blueHairBroSprites, 3, 400);
     blueHairBro.sprites = blueHairBroSprites;
     blueHairBro.active = true
-    blueHairBro.isMoving = true
+    blueHairBro.isMoving = false
     blueHairBro.scene = 0
     blueHairBro.name = "Bobby Scar"
 
@@ -163,7 +163,7 @@ loadImage('../assets/fountain.png')
     fountain = new GameObject(fountainSprites, 1, 240);
     fountain.sprites = fountainSprites
     fountain.active = true
-    fountain.isMoving = true
+    fountain.isMoving = false
     var transXY = translateCoordinates(false, -0.4, -.3, gameCanvas)
     fountain.posX = transXY.transX
     fountain.posY = transXY.transY
@@ -280,61 +280,57 @@ function update(time){
             
         }
 
-        for(let [key, otherPlayer] of dbc.otherPlayers){
-            if(otherPlayer.charID != dbc.fbUser.uid){
-              if(otherPlayer.isMoving){
+        if(gameObject.isMoving){
     
               
                 
-                if(otherPlayer.moveStart == -1) {
-                  otherPlayer.moveStart = time;
-                  otherPlayer.tempStart = time
-                }
-    
-              
-              
-                var timeElapsed = time - otherPlayer.moveStart
-                
-                var tempX = otherPlayer.oldX + otherPlayer.speedX * timeElapsed
-                var tempY = otherPlayer.oldY + otherPlayer.speedY * timeElapsed
-                
-                var diffX = Math.abs(tempX - otherPlayer.oldX);
-                var diffY = Math.abs(tempY - otherPlayer.oldY);
-                var diffSqX = diffX * diffX 
-                var diffSqY = diffY * diffY 
-                var totDist =  Math.sqrt( diffSqX + diffSqY)
-                
-                if(totDist >= otherPlayer.totalDistanceReq) {
-                    otherPlayer.oldX = otherPlayer.posX
-                    otherPlayer.oldY = otherPlayer.posY
-                    otherPlayer.moveStart = -1
-                    otherPlayer.isMoving = false
-                    otherPlayer.isRunning = false
-                    otherPlayer.movingLeft = false
-                          otherPlayer.movingRight = false
-                    return
-                }
-                
-                otherPlayer.posX = otherPlayer.oldX + otherPlayer.speedX * timeElapsed
-                otherPlayer.posY = otherPlayer.oldY + otherPlayer.speedY * timeElapsed
-                
-                
-                if (Math.abs(Math.round(otherPlayer.posX, 2) - Math.round(otherPlayer.destX, 2)) > 1 || Math.abs(Math.round(otherPlayer.posY, 2) - Math.round(otherPlayer.destY, 2)) > 1) {
-
-                }else {
-                    otherPlayer.oldX = otherPlayer.posX
-                    otherPlayer.oldY = otherPlayer.posY
-                    otherPlayer.isMoving = false
-                    otherPlayer.isRunning = false
-                    otherPlayer.movingLeft = false
-                          otherPlayer.movingRight = false
-                    otherPlayer.moveStart = -1
-                    return
-                }
-    
-              }
+            if(gameObject.moveStart == -1) {
+              gameObject.moveStart = time;
+              gameObject.tempStart = time
             }
+
+          
+          
+            var timeElapsed = time - gameObject.moveStart
+            
+            var tempX = gameObject.oldX + gameObject.speedX * timeElapsed
+            var tempY = gameObject.oldY + gameObject.speedY * timeElapsed
+            
+            var diffX = Math.abs(tempX - gameObject.oldX);
+            var diffY = Math.abs(tempY - gameObject.oldY);
+            var diffSqX = diffX * diffX 
+            var diffSqY = diffY * diffY 
+            var totDist =  Math.sqrt( diffSqX + diffSqY)
+            
+            if(totDist >= gameObject.totalDistanceReq) {
+                gameObject.oldX = gameObject.posX
+                gameObject.oldY = gameObject.posY
+                gameObject.moveStart = -1
+                gameObject.isMoving = false
+                gameObject.isRunning = false
+                gameObject.movingLeft = false
+                      gameObject.movingRight = false
+                return
+            }
+            
+            gameObject.posX = gameObject.oldX + gameObject.speedX * timeElapsed
+            gameObject.posY = gameObject.oldY + gameObject.speedY * timeElapsed
+            
+            
+            if (Math.abs(Math.round(gameObject.posX, 2) - Math.round(gameObject.destX, 2)) > 1 || Math.abs(Math.round(gameObject.posY, 2) - Math.round(gameObject.destY, 2)) > 1) {
+
+            }else {
+                gameObject.oldX = gameObject.posX
+                gameObject.oldY = gameObject.posY
+                gameObject.isMoving = false
+                gameObject.isRunning = false
+                gameObject.movingLeft = false
+                      gameObject.movingRight = false
+                gameObject.moveStart = -1
+            }
+
           }
+
     
 
         if(gameObject.active){

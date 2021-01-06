@@ -99,8 +99,8 @@ class Engine{
 		console.log("x : " + normX + "y :" + normY)
 		this.player.isMoving = true
 		this.player.isRunning = true
-		const mvplayer = this.movePlayer.bind(this)
-		requestAnimationFrame(mvplayer)
+		//const mvplayer = this.movePlayer.bind(this)
+		//requestAnimationFrame(mvplayer)
 	}
 
 	saveMessage(msg){
