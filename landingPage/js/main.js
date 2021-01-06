@@ -96,12 +96,13 @@ loadImage('../assets/character.png')
     blueHairBro.active = true
     blueHairBro.isMoving = true
     blueHairBro.scene = 0
-    blueHairBro.name = "bhBro"
+    blueHairBro.name = "Bobby Scar"
 
     
     gameObjects.push(tutorialBro);
     gameObjects.push(blueHairBro);
     interactableNPCs.push(tutorialBro)
+    interactableNPCs.push(blueHairBro)
     dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
     var transXY = dbc.translateCoordinates(false, -.57, -.12, gameCanvas)
     tutorialBro.posX = transXY.transX

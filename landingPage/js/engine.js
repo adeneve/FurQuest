@@ -124,7 +124,7 @@ class Engine{
 		return clickedNPC
 	}
 
-	handleInteraction(NPC, interactionStep){
+	handleInteraction(NPC, interactionStep, normx, normy){
 		console.log('beep')
 		switch(NPC.name){
 			case "Mysterious Stranger":
@@ -146,6 +146,39 @@ class Engine{
 					this.player.interacting = false
 					this.dialogBox.active = false
 				}
+				break;
+
+				case "Bobby Scar":
+					this.dialogBox.active = true
+					this.dialogBox.name = NPC.name
+					switch(interactionStep){
+						case 1 :
+							this.dialogBox.dialogMsg = ["You there!"]
+							break;
+						case 2 :
+							this.dialogBox.dialogMsg = [`So, your name is ${this.player.name}.`, "You look like a real tough cookie."]
+							break;
+						case 3 :
+							this.dialogBox.dialogMsg = ["How about a little sparring match?", "If you win I'll buy you lunch!"]
+							break;
+						case 4 :
+							this.dialogBox.dialogMsg = ["What do you say?", "YES                                          NO"]
+							break;
+						case 5 :
+							debugger
+							if(normx < -.19 && normy < -.65) {
+								this.dialogBox.dialogMsg = [`all right ${this.player.name}, show me what you got!`]
+							}else{
+								this.dialogBox.dialogMsg = ["Thats what I thought!", "It's not every day someone wants to tussle with Bobby Scar!"]
+							}
+
+					} //\n I hear people drop spare change when they leave the market
+	
+					if(interactionStep > 5){
+						this.player.interacting = false
+						this.dialogBox.active = false
+					}
+					break;
 
 		}
 	}
@@ -158,6 +191,13 @@ class Engine{
 				var centerY = .16
 				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
 				if(Math.abs(transXY.transX - centerX) < .05 && Math.abs(transXY.transY - centerY) < .16){
+					var transXY = this.db.translateCoordinates(false, 0, -.8);
+					this.player.posX = transXY.transX 
+					this.player.posY = transXY.transY
+					this.player.oldX = this.player.posX
+					this.player.oldY = this.player.posY
+					this.player.normX = 0
+					this.player.normY = -.8
 					return 1
 				}else{
 					return 0
@@ -173,6 +213,13 @@ class Engine{
 				var centerY = -.9
 				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
 				if(Math.abs(transXY.transX - centerX) < .1 && Math.abs(transXY.transY - centerY) < .2){
+					var transXY = this.db.translateCoordinates(false, .618, 0);
+					this.player.posX = transXY.transX 
+					this.player.posY = transXY.transY
+					this.player.oldX = this.player.posX
+					this.player.oldY = this.player.posY
+					this.player.normX = 0.618
+					this.player.normY = 0
 					return 0
 				}else{
 					return 1

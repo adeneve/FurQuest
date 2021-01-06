@@ -13,6 +13,7 @@ class Controller{
 
 			var gameScreen = canvas.getBoundingClientRect(); 
 			  
+			debugger;
 			var normalized_x = ((e.clientX - gameScreen.left)-(canvas.width/2))/(canvas.width/2);
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
 			
@@ -29,7 +30,7 @@ class Controller{
 				}
 				if(this.GameObjInteraction != null)
 				{
-					engine.handleInteraction(this.GameObjInteraction, this.interactionStep)
+					engine.handleInteraction(this.GameObjInteraction, this.interactionStep, normalized_x, normalized_y)
 					this.interactionStep += 1;
 					player.interacting = true
 				}
@@ -40,7 +41,7 @@ class Controller{
 				}
 			}
 			if(player.interacting){
-				engine.handleInteraction(this.GameObjInteraction, this.interactionStep)
+				engine.handleInteraction(this.GameObjInteraction, this.interactionStep, normalized_x, normalized_y)
 				this.interactionStep += 1
 			}
 

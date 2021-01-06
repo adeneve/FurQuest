@@ -109,6 +109,7 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.destX = translatedXY.transX
         this.player.destY = translatedXY.transY
         this.player.message = this.playerDat.message
+        this.player.name = this.playerDat.name
         this.player.active = true
         this.player.sprites = this.sprites
         this.player.isPlayer = true
