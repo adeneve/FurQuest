@@ -285,8 +285,6 @@ import SpriteSheet from './SpriteSheet.js'
 
           }
         })
-        const mvOtherplayers = this.moveOtherPlayers.bind(this)
-        requestAnimationFrame(mvOtherplayers)
         
     }
 
