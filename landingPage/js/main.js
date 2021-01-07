@@ -206,7 +206,7 @@ function update(time){
             if(gameObject.scene != player.scene && gameObject.name != "dialogBox"){
                 return
             }
-            if(false){
+            if(gameObject.animating){ 
             if(gameObject.tempStart == -1) gameObject.tempStart = time
             if(gameObject.start == -1) {
                 gameObject.start = time;
@@ -270,10 +270,10 @@ function update(time){
                     //NPC.isMoving = true
                     NPC.interactable = true
                 }else{
-                    //NPC.isMoving = false
-                    //NPC.frameNames = NPC.spriteSheet.tiles.keys()
-                    //NPC.next = 'default'
-                    //NPC.nextFrame = NPC.next
+                    NPC.isMoving = false
+                    NPC.frameNames = NPC.spriteSheet.tiles.keys()
+                    NPC.next = 'default'
+                    NPC.nextFrame = NPC.next
                     NPC.interactable = false
                 }
             })
@@ -286,7 +286,6 @@ function update(time){
                 
             if(gameObject.moveStart == -1) {
               gameObject.moveStart = time;
-              gameObject.tempStart = time
             }
 
           
