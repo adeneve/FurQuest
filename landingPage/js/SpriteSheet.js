@@ -35,7 +35,7 @@ export default class SpriteSheet {
             }
     }
 
-    draw(name, context, x, y, msg) {
+    draw(name, context, x, y, msg, gameObj) {
 
         var buffer = this.tiles.get(name);
         if(name.includes("moving")){
@@ -46,11 +46,25 @@ export default class SpriteSheet {
         }
         
         context.drawImage(buffer, x-this.width/2, y -this.height/2);
+        
+
         if(msg != ""){
+            context.fillStyle = "#FFFFFF";
+            context.globalAlpha = 0.4;
+            context.fillRect( x - this.width/2 - 15, y - this.height/2 - 35, 150 * ((msg.length / 20) + 1), 30);
+            context.globalAlpha = 1;
             context.font = "20px Comic Sans MS";
-            context.fillStyle = "#69fff0";
-            context.fillText(msg, x - this.width/2, y - this.height/2)
+            context.fillStyle = "#000000";
+            context.fillText(msg, x - this.width/2, y - this.height/2 - 10)
         }
+
+        if(gameObj != undefined && (gameObj.isPlayer || gameObj.isOtherPlayer)){
+            context.font = "15px Comic Sans MS";
+            context.fillStyle = "#000000";
+            context.fillText(gameObj.name, x - this.width/2 + 10, y - this.height/2 + 80)
+        }
+        
+        
     }
 
     drawTile(name, context, x, y) {

@@ -43,6 +43,7 @@ export default class GameObject{
         this.name = ""
         this.dialogMsg = ""
         this.isPlayer = false
+        this.isOtherPlayer = false
         this.interactable = false
         this.interacting = false
         this.scene = -3

@@ -110,6 +110,8 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.destY = translatedXY.transY
         this.player.message = this.playerDat.message
         this.player.name = this.playerDat.name
+        this.player.color = this.playerDat.color
+        this.player.type = this.playerDat.type
         this.player.active = true
         this.player.sprites = this.sprites
         this.player.isPlayer = true
@@ -139,6 +141,7 @@ import SpriteSheet from './SpriteSheet.js'
             otherPlayer.destY = translatedXY.transY;
             otherPlayer.name = charData[key].name;
             otherPlayer.message = charData[key].message;
+            otherPlayer.isOtherPlayer = true;
             otherPlayer.scene = charData[key].scene
             otherPlayer.active = charData[key].active;
             otherPlayer.sprites = this.sprites
@@ -242,6 +245,7 @@ import SpriteSheet from './SpriteSheet.js'
               otherPlayer.active = true;
               otherPlayer.charID = key;
               otherPlayer.isMoving = false;
+              otherPlayer.isOtherPlayer = true;
               otherPlayer.sprites = this.sprites;
               this.gameObjects.push(otherPlayer);
               this.otherPlayers.set(String(key), otherPlayer);
@@ -365,8 +369,8 @@ import SpriteSheet from './SpriteSheet.js'
         color : this.playerDat.color,
         name : this.playerDat.name,
         type : this.playerDat.type,
-        x : transXY.transX,
-        y : transXY.transY,
+        x : this.player.normX,
+        y : this.player.normY,
         message : this.player.message,
         scene : scene
       }

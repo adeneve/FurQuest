@@ -66,6 +66,9 @@ class Controller{
 
 		  sendBtn.addEventListener("click", e => {
 			  engine.saveMessage(msgBox.value)
+			  
+
 		  })
+
 	}
 }

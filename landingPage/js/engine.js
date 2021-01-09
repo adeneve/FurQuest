@@ -103,9 +103,26 @@ class Engine{
 		//requestAnimationFrame(mvplayer)
 	}
 
-	saveMessage(msg){
+	saveMessage(msg = ""){
 		this.db.saveMessage(msg)
+		const svmsg = this.db.saveMessage.bind(this.db)
+		setTimeout(svmsg, 5000, "");
 	}
+
+	translateCoordinates(toGlobal, x, y){
+		var boundingRect = this.canvas.getBoundingClientRect();
+		var transX = 0
+		var transY = 0
+		if(toGlobal){
+		  transX = ((x )-(this.canvas.width/2))/(this.canvas.width/2); 
+				transY = ((this.canvas.height/2)-(y - boundingRect.top))/(this.canvas.height/2);
+		}
+		else{
+		  transX = ((this.canvas.width/2) * (x)) + (this.canvas.width/2)   
+		  transY = (this.canvas.height/2) - ((this.canvas.height/2) * (y))
+		}
+		return {transX, transY}
+	  }
 
 	checkForInteraction(normX, normY){
 		console.log("xNorm: " + normX + ", yNorm: " + normY)
@@ -196,8 +213,13 @@ class Engine{
 					this.player.posY = transXY.transY
 					this.player.oldX = this.player.posX
 					this.player.oldY = this.player.posY
+					this.player.destX = this.player.posX
+					this.player.destY = this.player.posY
 					this.player.normX = 0
 					this.player.normY = -.8
+					console.log("saving loc in cafe")
+					console.log(this.player.normX, this.player.normY)
+					this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
 					return 1
 				}else{
 					return 0
@@ -218,8 +240,11 @@ class Engine{
 					this.player.posY = transXY.transY
 					this.player.oldX = this.player.posX
 					this.player.oldY = this.player.posY
+					this.player.destX = this.player.posX
+					this.player.destY = this.player.posY
 					this.player.normX = 0.618
 					this.player.normY = 0
+					this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
 					return 0
 				}else{
 					return 1
