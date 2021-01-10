@@ -208,15 +208,15 @@ class Engine{
 				var centerY = .16
 				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
 				if(Math.abs(transXY.transX - centerX) < .05 && Math.abs(transXY.transY - centerY) < .16){
-					var transXY = this.db.translateCoordinates(false, 0, -.8);
+					var transXY = this.db.translateCoordinates(false, -0.16, 0.21);
 					this.player.posX = transXY.transX 
 					this.player.posY = transXY.transY
 					this.player.oldX = this.player.posX
 					this.player.oldY = this.player.posY
 					this.player.destX = this.player.posX
 					this.player.destY = this.player.posY
-					this.player.normX = 0
-					this.player.normY = -.8
+					this.player.normX = -0.16
+					this.player.normY = 0.21
 					console.log("saving loc in cafe")
 					console.log(this.player.normX, this.player.normY)
 					this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
@@ -229,10 +229,11 @@ class Engine{
 			}
 		}
 		if(currentScene == 1){
-			if(normX < .165 && normX > -.19 && normY < -0.85 && normY > -1){
+			if(normX < -.045 && normX > -.28 && normY < 0.57 && normY > .18){
 				debugger
-				var centerX = 0
-				var centerY = -.9
+				console.log("leaving cafe")
+				var centerX = -0.16
+				var centerY = 0.21
 				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
 				if(Math.abs(transXY.transX - centerX) < .1 && Math.abs(transXY.transY - centerY) < .2){
 					var transXY = this.db.translateCoordinates(false, .618, 0);

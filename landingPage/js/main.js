@@ -98,6 +98,23 @@ loadImage('../assets/character.png')
     blueHairBro.scene = 0
     blueHairBro.name = "Bobby Scar"
 
+    var fishBowlSprites = new SpriteSheet(image, 64, 64)
+    fishBowlSprites.define("default", 0, 1);
+    fishBowlSprites.define("splash1", 1, 1);
+    fishBowlSprites.define("splash2", 2, 1);
+    fishBowlSprites.define("splash3", 3, 1);
+    fishBowlSprites.define("splash4", 4, 1);
+    fishBowlSprites.define("splash5", 5, 1);
+    var fishBowl = new GameObject(fishBowlSprites, 1, 500);
+    fishBowl.sprites = fishBowlSprites
+    fishBowl.active = true
+    fishBowl.isMoving = false
+    var transXY = translateCoordinates(false, 0.67, -.23, gameCanvas)
+    fishBowl.posX = transXY.transX
+    fishBowl.posY = transXY.transY
+    fishBowl.scene = 1
+    gameObjects.push(fishBowl)
+
     
     gameObjects.push(tutorialBro);
     gameObjects.push(blueHairBro);
