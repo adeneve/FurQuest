@@ -6,6 +6,9 @@ export default class SpriteSheet {
         this.tiles = new Map();
         this.movementTiles = new Map();
         this.movementTilesLeft = new Map();
+        this.battleIdleTiles = new Map();
+        this.battleAttackTiles = new Map();
+        this.battleHurtTiles = new Map();
     }
 
     define(name, x, y, z = 0) {
@@ -33,6 +36,15 @@ export default class SpriteSheet {
             if(z == 2){
                 this.movementTilesLeft.set(name, buffer);
             }
+            if(z == 3){
+                this.battleIdleTiles.set(name, buffer)
+            }
+            if(z == 4){
+                this.battleAttackTiles.set(name, buffer)
+            }
+            if(z == 5){
+                this.battleHurtTiles.set(name, buffer)
+            }
     }
 
     draw(name, context, x, y, msg, gameObj) {
@@ -43,6 +55,15 @@ export default class SpriteSheet {
         }
         if(name.includes("Left")){
             buffer = this.movementTilesLeft.get(name);
+        }
+        if(name.includes("battleIdle")){
+            buffer = this.battleIdleTiles.get(name);
+        }
+        if(name.includes("battleAttack")){
+            buffer = this.battleAttackTiles.get(name);
+        }
+        if(name.includes("battleHurt")){
+            buffer = this.battleHurtTiles.get(name);
         }
         
         context.drawImage(buffer, x-this.width/2, y -this.height/2);

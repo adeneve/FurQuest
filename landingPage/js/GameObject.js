@@ -15,6 +15,9 @@ export default class GameObject{
         this.frameNames = spriteSheet.tiles.keys()
         this.movementFrameNames = spriteSheet.movementTiles.keys()
         this.movementLeftFrameNames = spriteSheet.movementTilesLeft.keys()
+        this.battleIdleFrameNames = spriteSheet.battleIdleTiles.keys()
+        this.battleAttackFrameNames = spriteSheet.battleAttackTiles.keys()
+        this.battleHurtFrameNames = spriteSheet.battleHurtTiles.keys()
         this.currentFrame = ""
         this.animating = true
         this.lastUpdateTime = -1
@@ -46,8 +49,13 @@ export default class GameObject{
         this.isOtherPlayer = false
         this.interactable = false
         this.interacting = false
+        this.fighting = false
         this.scene = -3
         this.playerLoaded = false
+        this.defense = 0
+        this.health = 1
+        this.attacking = false
+        this.hurting = false
     }
 
     getNextSprite(){

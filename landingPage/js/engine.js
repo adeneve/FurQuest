@@ -11,6 +11,12 @@ class Engine{
 		this.database = database
 		this.enteringCafe = 0
 		this.gameScreen = canvas.getBoundingClientRect()
+		this.EnemyObj = null
+		this.resetBattleUI = false
+		this.fightSelectUIShown = false
+		this.battlePlayerTurn = 0
+		this.tapout = false
+		this.fightAccepted = false
 	}
 
 	// returns the speedX and speedY
@@ -157,7 +163,7 @@ class Engine{
 					case 3 :
 						this.dialogBox.dialogMsg = ["See you around!"]
 						break;
-				} //\n I hear people drop spare change when they leave the market
+				} 
 
 				if(interactionStep > 3){
 					this.player.interacting = false
@@ -165,7 +171,7 @@ class Engine{
 				}
 				break;
 
-				case "Bobby Scar":
+				case "Lil Drewski":
 					this.dialogBox.active = true
 					this.dialogBox.name = NPC.name
 					switch(interactionStep){
@@ -173,31 +179,238 @@ class Engine{
 							this.dialogBox.dialogMsg = ["You there!"]
 							break;
 						case 2 :
-							this.dialogBox.dialogMsg = [`So, your name is ${this.player.name}.`, "You look like a real tough cookie."]
+							if(NPC.foughtBefore == undefined){
+								this.dialogBox.dialogMsg = [`So, your name is ${this.player.name}.`, "You look like a real tough cookie."]
+							}else{
+								this.dialogBox.dialogMsg = [`Hey ${this.player.name}!`, "Good match!"]
+							}
+							
 							break;
 						case 3 :
-							this.dialogBox.dialogMsg = ["How about a little sparring match?", "If you win I'll buy you lunch!"]
+							if(NPC.foughtBefore == undefined){
+								this.dialogBox.dialogMsg = ["How about a little sparring match?", "If you win I'll buy you lunch!"]
+							}else{
+								this.dialogBox.dialogMsg = ["So, are you up for another round?"]
+							}
+							
 							break;
 						case 4 :
 							this.dialogBox.dialogMsg = ["What do you say?", "YES                                          NO"]
 							break;
 						case 5 :
-							debugger
 							if(normx < -.19 && normy < -.65) {
 								this.dialogBox.dialogMsg = [`all right ${this.player.name}, show me what you got!`]
+								this.fightAccepted = true
+								
 							}else{
 								this.dialogBox.dialogMsg = ["Thats what I thought!", "It's not every day someone wants to tussle with Bobby Scar!"]
+								this.fightAccepted = false
 							}
+							break;
+						case 6 :
+							debugger
+							if(!this.fightAccepted) break;
+							this.dialogBox.dialogMsg = [`all right ${this.player.name}, show me what you got!`]
+							this.player.scene = 100
+							break;
 
-					} //\n I hear people drop spare change when they leave the market
+
+					}
 	
-					if(interactionStep > 5){
+					if(interactionStep > 5 && !this.fightAccepted){
 						this.player.interacting = false
 						this.dialogBox.active = false
+					}
+					if(this.fightAccepted && interactionStep > 5){
+						debugger
+						this.player.interacting = false
+						var trans = this.db.translateCoordinates(false, -.1, 0)
+						this.player.normX = -.1
+						this.player.normX = 0
+						this.player.posX = trans.transX
+						this.player.posY = trans.transY 
+						this.player.fighting = true
+						this.player.speed = 400
+						var trans = this.db.translateCoordinates (false, .1, 0)
+						NPC.normX = .1
+						NPC.normY = 0
+						NPC.posX = trans.transX
+						NPC.posY = trans.transY
+						NPC.fighting = true
+						this.resetBattleUI = true;
+						this.EnemyObj = NPC;
+						this.battlePlayerTurn = Math.random()
+						this.player.health = 6
+						this.EnemyObj.health = 6
+						this.player.defense = 0
+						this.EnemyObj.defense = 0
+						
 					}
 					break;
 
 		}
+	}
+
+
+	handleBattle(normX, normY){
+		if(this.tapout){
+			this.player.scene = 0
+			this.player.fighting = false 
+			this.player.speed = 200
+			var trans = this.db.translateCoordinates (false, .3, 0)
+			this.EnemyObj.normX = .3
+			this.EnemyObj.normY = 0
+			this.EnemyObj.posX = trans.transX
+			this.EnemyObj.posY = trans.transY
+			this.EnemyObj.fighting = false
+			this.EnemyObj.scene = 0
+			this.EnemyObj.foughtBefore = true
+			this.dialogBox.active = false
+			var trans = this.db.translateCoordinates(true, this.player.oldX, this.player.oldY)
+						this.player.normX = trans.transX
+						this.player.normY = trans.transY
+						this.player.posX = this.player.oldX
+						this.player.posY = this.player.oldY
+						this.tapout = false
+						return
+		}
+		if(this.battlePlayerTurn < 0.5){
+			if(this.resetBattleUI){
+				this.dialogBox.dialogMsg = [ "Fight                                          Run", "", "", "Bag"]
+				this.resetBattleUI = false
+				return
+			}
+			
+			if(normX < .5 && normX > -.5 && normY < -.43 && !this.fightSelectUIShown){
+				if(normX > -.2 || normY < -.72){
+					this.dialogBox.dialogMsg = [ "You can't do that right now!"]
+					this.resetBattleUI = true;
+					return
+				}
+				else{
+					this.dialogBox.dialogMsg = [ "Attack                    Block                          Magic"]
+					this.fightSelectUIShown = true
+					return
+				}
+			
+			}
+	
+			if(normX < .5 && normX > -.5 && normY < -.43 && this.fightSelectUIShown){
+				if(this.fightSelectUIShown)
+				{
+					this.dialogBox.dialogMsg = [ "Attack                    Block                          Magic"]
+					if(normX > 0){
+						this.dialogBox.dialogMsg = [ "You have not learned about magic yet!"]
+						this.resetBattleUI = true
+						this.fightSelectUIShown = false
+						
+					}
+					if(normX > -.25 && normX <= 0){
+						if(this.player.defense >= 1.6){
+							this.dialogBox.dialogMsg = [`${this.player.name} used block!`, `block had no effect!`]
+						}else{
+							this.player.defense += 0.4
+							this.dialogBox.dialogMsg = [ `${this.player.name} used block!`, `${this.player.name} raised their defense!`]
+						}
+						this.resetBattleUI = true
+						this.fightSelectUIShown = false
+						this.battlePlayerTurn = 1
+			            return
+					}
+					if(normX > -.48 && normX <= -.25){
+						
+						var landAttack = Math.random()
+
+						if(landAttack > 0.2){
+							var damage = (2 - this.EnemyObj.defense).toFixed(2)
+							this.EnemyObj.health -= damage;
+							this.EnemyObj.health = this.EnemyObj.health.toFixed(2)
+							if(this.EnemyObj.health > 0.1){
+								this.dialogBox.dialogMsg = [ `${this.player.name} used punch!`, `${this.EnemyObj.name} took ${damage} damage!`,
+														`${this.EnemyObj.name} has ${this.EnemyObj.health} remaining!`]
+							}else{
+								this.dialogBox.dialogMsg = [ `${this.EnemyObj.name} tapped out!`]
+								this.tapout = true
+								this.resetBattleUI = true
+						        this.fightSelectUIShown = false
+							}
+
+							this.EnemyObj.hurting = true
+							const chgHrtSt = this.changeHurtState.bind(this)
+							setTimeout(chgHrtSt, 1500, this.EnemyObj, false);
+						
+						}else{
+							this.dialogBox.dialogMsg = [ `${this.player.name} used punch!`, `but the attack missed!`]
+						}
+						
+						this.player.attacking = true
+						const chgAtkSt = this.changeAttackState.bind(this)
+						setTimeout(chgAtkSt, 2000, this.player, false);
+
+						this.resetBattleUI = true
+						this.fightSelectUIShown = false
+						this.battlePlayerTurn = 1
+			            return
+					}
+				}
+	
+			}
+			
+		}
+		else{
+			var enemyMove = Math.random()
+			if(enemyMove > .8){
+				if(this.EnemyObj.defense >= 1.6){
+					this.dialogBox.dialogMsg = [`${this.EnemyObj.name} used block!`, `block had no effect!`]
+				}else{
+					this.EnemyObj.defense += 0.4
+				this.dialogBox.dialogMsg = [ `${this.EnemyObj.name} used block!`, `${this.EnemyObj.name} raised their defense!`]
+				}
+				
+			}else{
+				var landAttack = Math.random()
+				if(landAttack > 0.2){
+					var damage = (2 - this.player.defense).toFixed(2)
+					this.player.health -= damage
+					this.player.health = this.player.health.toFixed(2)
+					if(this.player.health > 0.1){
+						this.dialogBox.dialogMsg = [ `${this.EnemyObj.name} used punch!`, `${this.player.name} took ${damage} damage!`,
+					                             `${this.player.name} has ${this.player.health} remaining!`]
+					}else{
+						this.dialogBox.dialogMsg = [ `${this.player.name} tapped out!`]
+						this.tapout = true
+						this.resetBattleUI = true
+						this.fightSelectUIShown = false
+						
+					}
+
+					this.player.hurting = true
+					const chgHrtSt = this.changeHurtState.bind(this)
+				    setTimeout(chgHrtSt, 1500, this.player, false);
+				
+				}else{
+					this.dialogBox.dialogMsg = [ `${this.EnemyObj.name} used punch!`, `but the attack missed!`]
+				}
+				
+				this.EnemyObj.attacking = true
+				const chgAtkSt = this.changeAttackState.bind(this)
+		        setTimeout(chgAtkSt, 2000, this.EnemyObj, false);
+
+			}
+			this.battlePlayerTurn = 0
+			return
+		}
+		
+
+		
+	}
+
+	changeAttackState(obj, val){
+		obj.attacking = val
+	}
+
+	changeHurtState(obj, val){
+		obj.hurting = val
 	}
 
 	checkForSceneChange(currentScene, normX, normY){
@@ -254,6 +467,7 @@ class Engine{
 				return 1
 			}
 		}
+		else return 100
 	}
 
 	saveScene(scene){
@@ -268,11 +482,14 @@ class Engine{
 			var yinc = 0;
 			context.font = "20px Comic Sans MS";
 			context.fillStyle = "#00ff00"
-			context.fillText(this.dialogBox.name + ":", transXY.transX, transXY.transY - 30);
-			this.NPCs.forEach(npc => {if(npc.name == this.dialogBox.name){
-				npc.sprites.draw("default", context, transXY.transX - 25, transXY.transY, "");
+			if(!this.player.fighting){
+				context.fillText(this.dialogBox.name + ":", transXY.transX, transXY.transY - 30);
+				this.NPCs.forEach(npc => {if(npc.name == this.dialogBox.name){
+					npc.sprites.draw("default", context, transXY.transX - 25, transXY.transY, "");
+				}
+				})
 			}
-		    })
+			
 			context.font = "15px Comic Sans MS";
 			context.fillStyle = "#00ff15";
 			this.dialogBox.dialogMsg.forEach(line => {

@@ -72,6 +72,12 @@ loadImage('../assets/character.png')
     sprites.define('movingLeft2', 1 ,4, 2)
     sprites.define('movingLeft3', 2 ,4, 2)
     sprites.define('movingLeft4', 3 ,4, 2)
+    sprites.define('battleIdle1', 3 ,5, 3)
+    sprites.define('battleIdle2', 4 ,5, 3)
+    sprites.define('battleAttack1', 3 ,5, 4)
+    sprites.define('battleAttack2', 2 ,5, 4)
+    sprites.define('battleHurt1', 0 ,5, 5)
+    sprites.define('battleHurt2', 1 ,5, 5)
     player = new GameObject(sprites, 2, 200)
     var tutorialBroSprites = new SpriteSheet(image, 64, 64);
     tutorialBroSprites.define("default", 0,0);
@@ -91,12 +97,18 @@ loadImage('../assets/character.png')
     blueHairBroSprites.define("default", 0,2);
     blueHairBroSprites.define("idle1", 1, 2);
     blueHairBroSprites.define("idle2", 2, 2);
+    blueHairBroSprites.define('battleIdle1', 3 ,2, 3)
+    blueHairBroSprites.define('battleIdle2', 4 ,2, 3)
+    blueHairBroSprites.define('battleAttack1', 5 ,2, 4)
+    blueHairBroSprites.define('battleAttack2', 4 ,2, 4)
+    blueHairBroSprites.define('battleHurt1', 6 ,2, 5)
+    blueHairBroSprites.define('battleHurt2', 7 ,2, 5)
     blueHairBro = new GameObject(blueHairBroSprites, 3, 400);
     blueHairBro.sprites = blueHairBroSprites;
     blueHairBro.active = true
     blueHairBro.isMoving = false
     blueHairBro.scene = 0
-    blueHairBro.name = "Bobby Scar"
+    blueHairBro.name = "Lil Drewski"
 
     var fishBowlSprites = new SpriteSheet(image, 64, 64)
     fishBowlSprites.define("default", 0, 1);
@@ -207,8 +219,13 @@ function update(time){
                 0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
         }
     }
-    else if(player.scene == 1){
+    if(player.scene == 1){
         gameCanvas.getContext('2d').drawImage(sceneCafe, 0, 0, sceneCafe.width,    sceneCafe.height,     // source rectangle
+            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
+    }
+    if(player.scene == 100){
+        blueHairBro.scene = 100
+        gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
             0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
     }
     
@@ -241,6 +258,16 @@ function update(time){
                 if(gameObject.movingLeft){
                     next = gameObject.movementLeftFrameNames.next().value
                 }
+                
+            }
+            else if(gameObject.fighting && !gameObject.attacking && !gameObject.hurting){
+                next = gameObject.battleIdleFrameNames.next().value
+            }
+            else if(gameObject.fighting && gameObject.attacking){
+                next = gameObject.battleAttackFrameNames.next().value
+            }
+            else if(gameObject.fighting && gameObject.hurting){
+                next = gameObject.battleHurtFrameNames.next().value
             }
             else{
                 next = gameObject.frameNames.next().value
@@ -260,6 +287,18 @@ function update(time){
                         next = 'movingDefaultLeft'
                     }
                 }
+                else if(gameObject.fighting && !gameObject.attacking && !gameObject.hurting){
+                    gameObject.battleIdleFrameNames = gameObject.spriteSheet.battleIdleTiles.keys()
+                        next = 'battleIdle1'
+                }
+                else if(gameObject.fighting && gameObject.attacking){
+                    gameObject.battleAttackFrameNames = gameObject.spriteSheet.battleAttackTiles.keys()
+                        next = 'battleAttack1'
+                }
+                else if(gameObject.fighting && gameObject.hurting){
+                    gameObject.battleHurtFrameNames = gameObject.spriteSheet.battleHurtTiles.keys()
+                        next = 'battleHurt1'
+                }
                 else{
                     gameObject.frameNames = gameObject.spriteSheet.tiles.keys()
                     next = 'default'
@@ -276,7 +315,7 @@ function update(time){
         }
     }
 
-        if(gameObject.isPlayer){
+        if(gameObject.isPlayer && !gameObject.fighting){
             var gameScreen = gameCanvas.getBoundingClientRect(); 
             var transXY = dbc.translateCoordinates(true, gameObject.posX, gameObject.posY +gameScreen.top, gameCanvas)
             

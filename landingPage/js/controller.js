@@ -19,7 +19,7 @@ class Controller{
 			
 			
 			
-			if(!player.isMoving && !player.interacting){
+			if(!player.isMoving && !player.interacting && !player.fighting){ 
 				this.interactionStep = 0
 				this.GameObjInteraction = engine.checkForInteraction(normalized_x, normalized_y)
 				var sceneChange = engine.checkForSceneChange(player.scene, normalized_x, normalized_y)
@@ -43,6 +43,9 @@ class Controller{
 			if(player.interacting){
 				engine.handleInteraction(this.GameObjInteraction, this.interactionStep, normalized_x, normalized_y)
 				this.interactionStep += 1
+			}
+			if(player.fighting){
+				engine.handleBattle( normalized_x, normalized_y)
 			}
 
 			
