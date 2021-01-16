@@ -74,6 +74,7 @@
         <h4 class="modal-title title">Log In</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
+      
 
       <!-- Modal body -->
       <div class="modal-body">
@@ -87,7 +88,7 @@
       </div>
 	  
 	  <div class="modal-footer">
-        <button type="button" class="btn btn-primary"  id="btnLogIn">Log In</button>
+        <button type="button" class="btn btn-primary" name="btnLogIn" id="btnLogIn">Log In</button>
       </div>
 
       <div class="modal-footer">
@@ -210,16 +211,26 @@ btnSignUp.addEventListener('click', e => {
   
 })
 
-btnLogIn.addEventListener('click', e => { 
+btnLogIn.addEventListener('click', logIn);
+document.getElementById('emailLogin').addEventListener("keyup", event => {
+    if(event.key !== "Enter") return; // Use `.key` instead.
+    btnLogIn.click(); // Things you want to do.
+    event.preventDefault(); // No need to `return false;`.
+});;
+document.getElementById('passwordLogin').addEventListener("keyup", event => {
+    if(event.key !== "Enter") return; // Use `.key` instead.
+    btnLogIn.click(); // Things you want to do.
+    event.preventDefault(); // No need to `return false;`.
+});;
+
+function logIn(){
   const email = document.getElementById('emailLogin').value;
   const pass1 = document.getElementById('passwordLogin').value;
-  const pass2 = document.getElementById('password2').value;
   
   const auth = firebase.auth();
   const promise = auth.signInWithEmailAndPassword(email, pass1);
   promise.then(btnCloseLogIn.click()).catch(e => alert(e.message));
-  
-})
+}
 
 btnForgot.addEventListener('click', e => {
   const email = document.getElementById('emailLogin').value;

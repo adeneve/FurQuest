@@ -47,60 +47,12 @@ class Engine{
 		player.totalDistanceReq = totalDistancePx
 	}
 
-	movePlayer(time){
-		if(this.player.moveStart == -1) {
-			this.player.moveStart = time;
-			this.player.tempStart = time
-		}
-
-		
-		var timeElapsed = time - this.player.moveStart
-
-		var tempX = this.player.oldX + this.player.speedX * timeElapsed
-		var tempY = this.player.oldY + this.player.speedY * timeElapsed
-
-		var diffX = Math.abs(tempX - this.player.oldX);
-		var diffY = Math.abs(tempY - this.player.oldY);
-		
-		var diffSqX = diffX * diffX 
-		var diffSqY = diffY * diffY 
-		var totDist =  Math.sqrt( diffSqX + diffSqY)
-
-		if(totDist >= this.player.totalDistanceReq) {
-			this.player.oldX = this.player.posX
-			this.player.oldY = this.player.posY
-			this.player.moveStart = -1
-			
-			this.player.isMoving = false
-			this.player.isRunning = false
-			this.player.movingLeft = false
-			this.player.movingRight = false
-			return
-		}
-	
-		this.player.posX = this.player.oldX + this.player.speedX * timeElapsed
-		this.player.posY = this.player.oldY + this.player.speedY * timeElapsed
-		
-	
-		if (Math.abs(Math.round(this.player.posX, 2) - Math.round(this.player.destX, 2)) > 1 || Math.abs(Math.round(this.player.posY, 2) - Math.round(this.player.destY, 2)) > 1) {
-			const mvplayer = this.movePlayer.bind(this)
-			requestAnimationFrame(mvplayer)
-		}else {
-			this.player.oldX = this.player.posX
-			this.player.oldY = this.player.posY
-			this.player.moveStart = -1
-			debugger
-			this.player.isMoving = false
-			this.player.isRunning = false
-			this.player.movingLeft = false
-			this.player.movingRight = false
-			return
-		}
-	}
 	
 	prepMovePlayer(normX, normY){
 		this.player.oldX = this.player.posX
 		this.player.oldY = this.player.posY
+		this.player.normX = normX;
+		this.player.normY = normY;
 		this.db.savePlayerLocationDB(normX, normY); 
 		console.log("x : " + normX + "y :" + normY)
 		this.player.isMoving = true

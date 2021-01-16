@@ -108,6 +108,8 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.oldY = translatedXY.transY
         this.player.destX = translatedXY.transX
         this.player.destY = translatedXY.transY
+        this.player.normX = this.playerDat.x 
+        this.player.normY = this.playerDat.y
         this.player.message = this.playerDat.message
         this.player.name = this.playerDat.name
         this.player.color = this.playerDat.color
@@ -117,6 +119,9 @@ import SpriteSheet from './SpriteSheet.js'
         this.player.isPlayer = true
         this.player.scene = this.playerDat.scene
         this.player.playerLoaded = true
+        const chkLogout = this.checkForPlayerLogout.bind(this)
+        var oldNormX = this.player.normX;
+        setTimeout(chkLogout, 120000, this.fbUser.uid, this.player, oldNormX ); 
 
 
 
@@ -151,6 +156,9 @@ import SpriteSheet from './SpriteSheet.js'
               if(!this.otherPlayers.has(String(key))){
                 this.gameObjects.push(otherPlayer);
                 this.otherPlayers.set(String(key), otherPlayer);
+                const chkLogout = this.checkForLogout.bind(this)
+                var oldPosX = otherPlayer.posX;
+		            setTimeout(chkLogout, 120000, key, otherPlayer, oldPosX );  //if other player doesn't move in 2 minutes, log them out (set active to false and push)
               }
               
             }
@@ -161,67 +169,24 @@ import SpriteSheet from './SpriteSheet.js'
 
     }
 
-    // iterate through each other player and increment their position if posX != oldX
-    moveOtherPlayers(time){
-      var keys = this.otherPlayers.keys();
-      for(let [key, otherPlayer] of this.otherPlayers){
-        if(otherPlayer.charID != this.fbUser.uid){
-          if(otherPlayer.isMoving){
-
-          
-            
-            if(otherPlayer.moveStart == -1) {
-              otherPlayer.moveStart = time;
-              otherPlayer.tempStart = time
-            }
-
-          
-          
-            var timeElapsed = time - otherPlayer.moveStart
-            
-            var tempX = otherPlayer.oldX + otherPlayer.speedX * timeElapsed
-            var tempY = otherPlayer.oldY + otherPlayer.speedY * timeElapsed
-            
-            var diffX = Math.abs(tempX - otherPlayer.oldX);
-            var diffY = Math.abs(tempY - otherPlayer.oldY);
-            var diffSqX = diffX * diffX 
-            var diffSqY = diffY * diffY 
-            var totDist =  Math.sqrt( diffSqX + diffSqY)
-            
-            if(totDist >= otherPlayer.totalDistanceReq) {
-                otherPlayer.oldX = otherPlayer.posX
-                otherPlayer.oldY = otherPlayer.posY
-                otherPlayer.moveStart = -1
-                otherPlayer.isMoving = false
-                otherPlayer.isRunning = false
-                otherPlayer.movingLeft = false
-			          otherPlayer.movingRight = false
-                return
-            }
-            
-            otherPlayer.posX = otherPlayer.oldX + otherPlayer.speedX * timeElapsed
-            otherPlayer.posY = otherPlayer.oldY + otherPlayer.speedY * timeElapsed
-            
-            
-            if (Math.abs(Math.round(otherPlayer.posX, 2) - Math.round(otherPlayer.destX, 2)) > 1 || Math.abs(Math.round(otherPlayer.posY, 2) - Math.round(otherPlayer.destY, 2)) > 1) {
-              const mvOtherplayers = this.moveOtherPlayers.bind(this)
-              requestAnimationFrame(mvOtherplayers)
-            }else {
-                otherPlayer.oldX = otherPlayer.posX
-                otherPlayer.oldY = otherPlayer.posY
-                otherPlayer.isMoving = false
-                otherPlayer.isRunning = false
-                otherPlayer.movingLeft = false
-			          otherPlayer.movingRight = false
-                otherPlayer.moveStart = -1
-                return
-            }
-
-          }
+    checkForLogout(key, otherPlayer, oldPosX){
+      if(oldPosX == otherPlayer.posX){
+        otherPlayer.active = false;
+        console.log("saving location...");
+        var charDataObj = {
+        active : false,
         }
+        const events = this.dbRef.child('characters');
+        events.child(key).update(charDataObj).catch( e => console.log(e.message))
       }
-      return;
     }
+
+    checkForPlayerLogout(key, otherPlayer, oldNormX){
+      if(oldNormX == otherPlayer.normX){
+        this.loguserOut()
+      }
+    }
+
 
     analyzeChange(data){
         var obj = data.val();
@@ -249,6 +214,9 @@ import SpriteSheet from './SpriteSheet.js'
               otherPlayer.sprites = this.sprites;
               this.gameObjects.push(otherPlayer);
               this.otherPlayers.set(String(key), otherPlayer);
+              const chkLogout = this.checkForLogout.bind(this)
+                var oldPosX = otherPlayer.posX;
+		            setTimeout(chkLogout, 120000, key, otherPlayer, oldPosX ); 
             }
 
             if(obj[key].message == "doop"){
@@ -343,6 +311,9 @@ import SpriteSheet from './SpriteSheet.js'
       }
       const events = this.dbRef.child('characters');
       events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
+      const chkLogout = this.checkForPlayerLogout.bind(this)
+      var oldNormX = this.player.normX;
+      setTimeout(chkLogout, 120000, this.fbUser.uid, this.player, oldNormX); 
     }
 
     saveMessage(msg){
@@ -382,15 +353,16 @@ import SpriteSheet from './SpriteSheet.js'
       var charDataObj = {
         active : false
       }
+      window.onbeforeunload = null;
       this.chartactersDbRef.child(this.fbUser.uid).update(charDataObj).then(e => {
         firebase.auth().signOut().then(function() {
-          alert("log out successful")
+          alert("log out successful");
+          window.location.href = './home.html';
           }, function(error) {
             alert(error.message)
           });
 
       }).catch( e => console.log(e.message))
-      e.returnValue = ''
       return null;
     }
 
