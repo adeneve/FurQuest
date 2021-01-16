@@ -172,7 +172,7 @@ import SpriteSheet from './SpriteSheet.js'
     checkForLogout(key, otherPlayer, oldPosX){
       if(oldPosX == otherPlayer.posX){
         otherPlayer.active = false;
-        console.log("saving location...");
+        console.log("logging out");
         var charDataObj = {
         active : false,
         }
