@@ -90,7 +90,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary"  id="btnForgotPassword">Forgot your password?</button>
+        <button type="button" class="btn btn-warning"  id="btnForgot">Forgot your password?</button>
       </div>
 
       <!-- Modal footer -->
@@ -181,6 +181,7 @@ function chgImgPlayBack(x){
 
 var btnSignUp = document.getElementById('btnSignUp');
 var btnLogIn = document.getElementById('btnLogIn');
+var btnForgot = document.getElementById('btnForgot');
 
 const createAcc = document.getElementById('createAccMenu');
 const LogInMenu = document.getElementById('logInMenu');
@@ -218,6 +219,19 @@ btnLogIn.addEventListener('click', e => {
   promise.then(btnCloseLogIn.click()).catch(e => alert(e.message));
   
 })
+
+btnForgot.addEventListener('click', e => {
+  const email = document.getElementById('emailLogin').value;
+  const promise = firebase.auth().sendPasswordResetEmail(email);
+  //promise.then(alert("a password reset email has been sent to the provided email"))
+    //     .catch(e => alert("there was an error sending the password reset email, please verify that you have entered a valid email."))
+
+         promise.then(value => {
+          alert("a password reset email has been sent to the provided email")
+        }, reason => {
+          alert("there was an error sending the password reset email: " + reason.message + " Please double check the email entered.")
+        });
+        })
 
 logOutMenu.addEventListener('click', e => {
     firebase.auth().signOut().then(function() {
