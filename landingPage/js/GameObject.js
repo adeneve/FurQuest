@@ -7,6 +7,9 @@ export default class GameObject{
     
     constructor(spriteSheet, animationSteps, speed){
         this.spriteSheet = spriteSheet
+        this.battleIdleFrameNames = spriteSheet.battleIdleTiles.keys()
+        this.battleAttackFrameNames = spriteSheet.battleAttackTiles.keys()
+        this.battleHurtFrameNames = spriteSheet.battleHurtTiles.keys()
         this.currentStep = 0
         this.animationSteps = animationSteps
         this.speed = speed
@@ -15,9 +18,8 @@ export default class GameObject{
         this.frameNames = spriteSheet.tiles.keys()
         this.movementFrameNames = spriteSheet.movementTiles.keys()
         this.movementLeftFrameNames = spriteSheet.movementTilesLeft.keys()
-        this.battleIdleFrameNames = spriteSheet.battleIdleTiles.keys()
-        this.battleAttackFrameNames = spriteSheet.battleAttackTiles.keys()
-        this.battleHurtFrameNames = spriteSheet.battleHurtTiles.keys()
+        
+        
         this.currentFrame = ""
         this.animating = true
         this.lastUpdateTime = -1

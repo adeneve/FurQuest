@@ -67,12 +67,13 @@ loadImage('../assets/character2.png')
     BearBlackSprites.define('movingLeft2', 6 , 0, 2)
     BearBlackSprites.define('movingLeft3', 5 ,0, 2)
     BearBlackSprites.define('movingLeft4', 4 ,0, 2)
-    BearBlackSprites.define('battleIdle1', 0 ,0, 3)
-    BearBlackSprites.define('battleIdle2', 0 ,0, 3)
-    BearBlackSprites.define('battleAttack1', 0 ,0, 4)
-    BearBlackSprites.define('battleAttack2', 0 ,0, 4)
-    BearBlackSprites.define('battleHurt1', 0 ,0, 5)
-    BearBlackSprites.define('battleHurt2', 0 ,0, 5)
+    BearBlackSprites.define('battleIdle1', 0 ,6, 3)
+    BearBlackSprites.define('battleIdle2', 1 ,6, 3)
+    BearBlackSprites.define('battleAttack1', 1 ,6, 4)
+    BearBlackSprites.define('battleAttack2', 2 ,6, 4)
+    BearBlackSprites.define('battleHurt1', 0 ,6, 5)
+    BearBlackSprites.define('battleHurt2', 3 ,6, 5)
+
 
     var BearBrownSprites = new SpriteSheet(imageChars, 64, 64);
     BearBrownSprites.define('default', 0, 1);
@@ -118,14 +119,11 @@ loadImage('../assets/character2.png')
     BearRedSprites.define('movingLeft2', 6 , 3, 2)
     BearRedSprites.define('movingLeft3', 5 ,3, 2)
     BearRedSprites.define('movingLeft4', 4 ,3, 2)
-    BearRedSprites.define('battleIdle1', 0 ,3, 3)
-    BearRedSprites.define('battleIdle2', 0 ,3, 3)
-    BearRedSprites.define('battleAttack1', 0 ,3, 4)
-    BearRedSprites.define('battleAttack2', 0 ,3, 4)
-    BearRedSprites.define('battleHurt1', 0 ,3, 5)
-    BearRedSprites.define('battleHurt2', 0 ,3, 5)
 
     player = new GameObject(BearBlackSprites, 2, 200);
+
+
+    
 
     
 
@@ -319,9 +317,11 @@ function update(time){
                 
             }
             else if(gameObject.fighting && !gameObject.attacking && !gameObject.hurting){
+                debugger;
                 next = gameObject.battleIdleFrameNames.next().value
             }
             else if(gameObject.fighting && gameObject.attacking){
+                debugger;
                 next = gameObject.battleAttackFrameNames.next().value
             }
             else if(gameObject.fighting && gameObject.hurting){
