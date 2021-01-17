@@ -57,25 +57,77 @@ var dbc = 0;
 
 loadImage('../assets/character2.png')
 .then(imageChars => {
-    sprites = new SpriteSheet(imageChars, 64, 64);
-    sprites.define('default', 0, 0);
-    sprites.define('idle1', 0, 0);
-    sprites.define('idle2', 0, 0);
-    sprites.define('movingDefault', 1, 0, 1)
-    sprites.define('moving2', 1 ,0, 1)
-    sprites.define('moving3', 2, 0, 1)
-    sprites.define('moving4', 3 ,0, 1)
-    sprites.define('movingDefaultLeft', 6, 0, 2)
-    sprites.define('movingLeft2', 6 , 0, 2)
-    sprites.define('movingLeft3', 5 ,0, 2)
-    sprites.define('movingLeft4', 4 ,0, 2)
-    sprites.define('battleIdle1', 0 ,0, 3)
-    sprites.define('battleIdle2', 0 ,0, 3)
-    sprites.define('battleAttack1', 0 ,0, 4)
-    sprites.define('battleAttack2', 0 ,0, 4)
-    sprites.define('battleHurt1', 0 ,0, 5)
-    sprites.define('battleHurt2', 0 ,0, 5)
-    player = new GameObject(sprites, 2, 200)
+    var BearBlackSprites = new SpriteSheet(imageChars, 64, 64);
+    BearBlackSprites.define('default', 0, 0);
+    BearBlackSprites.define('movingDefault', 1, 0, 1)
+    BearBlackSprites.define('moving2', 1 ,0, 1)
+    BearBlackSprites.define('moving3', 2, 0, 1)
+    BearBlackSprites.define('moving4', 3 ,0, 1)
+    BearBlackSprites.define('movingDefaultLeft', 6, 0, 2)
+    BearBlackSprites.define('movingLeft2', 6 , 0, 2)
+    BearBlackSprites.define('movingLeft3', 5 ,0, 2)
+    BearBlackSprites.define('movingLeft4', 4 ,0, 2)
+    BearBlackSprites.define('battleIdle1', 0 ,0, 3)
+    BearBlackSprites.define('battleIdle2', 0 ,0, 3)
+    BearBlackSprites.define('battleAttack1', 0 ,0, 4)
+    BearBlackSprites.define('battleAttack2', 0 ,0, 4)
+    BearBlackSprites.define('battleHurt1', 0 ,0, 5)
+    BearBlackSprites.define('battleHurt2', 0 ,0, 5)
+
+    var BearBrownSprites = new SpriteSheet(imageChars, 64, 64);
+    BearBrownSprites.define('default', 0, 1);
+    BearBrownSprites.define('movingDefault', 1, 1, 1)
+    BearBrownSprites.define('moving2', 1 ,1, 1)
+    BearBrownSprites.define('moving3', 2, 1, 1)
+    BearBrownSprites.define('moving4', 3 ,1, 1)
+    BearBrownSprites.define('movingDefaultLeft', 6, 1, 2)
+    BearBrownSprites.define('movingLeft2', 6 , 1, 2)
+    BearBrownSprites.define('movingLeft3', 5 ,1, 2)
+    BearBrownSprites.define('movingLeft4', 4 ,1, 2)
+    BearBrownSprites.define('battleIdle1', 0 ,1, 3)
+    BearBrownSprites.define('battleIdle2', 0 ,1, 3)
+    BearBrownSprites.define('battleAttack1', 0 ,1, 4)
+    BearBrownSprites.define('battleAttack2', 0 ,1, 4)
+    BearBrownSprites.define('battleHurt1', 0 ,1, 5)
+    BearBrownSprites.define('battleHurt2', 0 ,1, 5)
+
+    var BearGreySprites = new SpriteSheet(imageChars, 64, 64);
+    BearGreySprites.define('default', 0, 2);
+    BearGreySprites.define('movingDefault', 1, 2, 1)
+    BearGreySprites.define('moving2', 1 ,2, 1)
+    BearGreySprites.define('moving3', 2, 2, 1)
+    BearGreySprites.define('moving4', 3 ,2, 1)
+    BearGreySprites.define('movingDefaultLeft', 6, 2, 2)
+    BearGreySprites.define('movingLeft2', 6 , 2, 2)
+    BearGreySprites.define('movingLeft3', 5 ,2, 2)
+    BearGreySprites.define('movingLeft4', 4 ,2, 2)
+    BearGreySprites.define('battleIdle1', 0 ,2, 3)
+    BearGreySprites.define('battleIdle2', 0 ,2, 3)
+    BearGreySprites.define('battleAttack1', 0 ,2, 4)
+    BearGreySprites.define('battleAttack2', 0 ,2, 4)
+    BearGreySprites.define('battleHurt1', 0 ,2, 5)
+    BearGreySprites.define('battleHurt2', 0 ,2, 5)
+
+    var BearRedSprites = new SpriteSheet(imageChars, 64, 64);
+    BearRedSprites.define('default', 0, 3);
+    BearRedSprites.define('movingDefault', 1, 3, 1)
+    BearRedSprites.define('moving2', 1 ,3, 1)
+    BearRedSprites.define('moving3', 2, 3, 1)
+    BearRedSprites.define('moving4', 3 ,3, 1)
+    BearRedSprites.define('movingDefaultLeft', 6, 3, 2)
+    BearRedSprites.define('movingLeft2', 6 , 3, 2)
+    BearRedSprites.define('movingLeft3', 5 ,3, 2)
+    BearRedSprites.define('movingLeft4', 4 ,3, 2)
+    BearRedSprites.define('battleIdle1', 0 ,3, 3)
+    BearRedSprites.define('battleIdle2', 0 ,3, 3)
+    BearRedSprites.define('battleAttack1', 0 ,3, 4)
+    BearRedSprites.define('battleAttack2', 0 ,3, 4)
+    BearRedSprites.define('battleHurt1', 0 ,3, 5)
+    BearRedSprites.define('battleHurt2', 0 ,3, 5)
+
+    player = new GameObject(BearBlackSprites, 2, 200);
+
+    
 
     loadImage('../assets/character.png')
     .then(image => {
@@ -133,7 +185,7 @@ loadImage('../assets/character2.png')
     gameObjects.push(blueHairBro);
     interactableNPCs.push(tutorialBro)
     interactableNPCs.push(blueHairBro)
-    dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, sprites, accountControlModule );
+    dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, BearBlackSprites, accountControlModule );
     var transXY = dbc.translateCoordinates(false, -.57, -.12, gameCanvas)
     tutorialBro.posX = transXY.transX
     tutorialBro.posY = transXY.transY
