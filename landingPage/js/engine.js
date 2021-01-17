@@ -155,7 +155,7 @@ class Engine{
 								this.fightAccepted = true
 								
 							}else{
-								this.dialogBox.dialogMsg = ["Thats what I thought!", "It's not every day someone wants to tussle with Bobby Scar!"]
+								this.dialogBox.dialogMsg = ["Thats what I thought!", "It's not every day someone wants to tussle with Lil Drewski!"]
 								this.fightAccepted = false
 							}
 							break;

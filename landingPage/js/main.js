@@ -55,30 +55,31 @@ var player = -1;
 var dialogBox = -1;
 var dbc = 0;
 
-
-
-loadImage('../assets/character.png')
-.then(image => {
-    sprites = new SpriteSheet(image, 64, 64);
-    movingSprites = new SpriteSheet(image, 64, 64)
-    sprites.define('default', 0, 3);
-    sprites.define('idle1', 1, 3);
-    sprites.define('idle2', 2, 3);
-    sprites.define('movingDefault', 4, 3, 1)
-    sprites.define('moving2', 5 ,3, 1)
-    sprites.define('moving3', 6 ,3, 1)
-    sprites.define('moving4', 7 ,3, 1)
-    sprites.define('movingDefaultLeft', 0, 4, 2)
-    sprites.define('movingLeft2', 1 ,4, 2)
-    sprites.define('movingLeft3', 2 ,4, 2)
-    sprites.define('movingLeft4', 3 ,4, 2)
-    sprites.define('battleIdle1', 3 ,5, 3)
-    sprites.define('battleIdle2', 4 ,5, 3)
-    sprites.define('battleAttack1', 3 ,5, 4)
-    sprites.define('battleAttack2', 2 ,5, 4)
-    sprites.define('battleHurt1', 0 ,5, 5)
-    sprites.define('battleHurt2', 1 ,5, 5)
+loadImage('../assets/character2.png')
+.then(imageChars => {
+    sprites = new SpriteSheet(imageChars, 64, 64);
+    sprites.define('default', 0, 0);
+    sprites.define('idle1', 0, 0);
+    sprites.define('idle2', 0, 0);
+    sprites.define('movingDefault', 1, 0, 1)
+    sprites.define('moving2', 1 ,0, 1)
+    sprites.define('moving3', 2, 0, 1)
+    sprites.define('moving4', 3 ,0, 1)
+    sprites.define('movingDefaultLeft', 6, 0, 2)
+    sprites.define('movingLeft2', 6 , 0, 2)
+    sprites.define('movingLeft3', 5 ,0, 2)
+    sprites.define('movingLeft4', 4 ,0, 2)
+    sprites.define('battleIdle1', 0 ,0, 3)
+    sprites.define('battleIdle2', 0 ,0, 3)
+    sprites.define('battleAttack1', 0 ,0, 4)
+    sprites.define('battleAttack2', 0 ,0, 4)
+    sprites.define('battleHurt1', 0 ,0, 5)
+    sprites.define('battleHurt2', 0 ,0, 5)
     player = new GameObject(sprites, 2, 200)
+
+    loadImage('../assets/character.png')
+    .then(image => {
+    
     var tutorialBroSprites = new SpriteSheet(image, 64, 64);
     tutorialBroSprites.define("default", 0,0);
     tutorialBroSprites.define("wave1", 1, 0);
@@ -175,6 +176,11 @@ loadImage('../assets/character.png')
 
     
 });
+
+})
+
+
+
 
 
 
