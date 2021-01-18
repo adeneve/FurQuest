@@ -150,7 +150,7 @@ class Engine{
 							this.dialogBox.dialogMsg = ["What do you say?", "YES                                          NO"]
 							break;
 						case 5 :
-							if(normx < -.19 && normy < -.65) {
+							if(normx < -.19 && normy < -.59) {
 								this.dialogBox.dialogMsg = [`all right ${this.player.name}, show me what you got!`]
 								this.fightAccepted = true
 								
@@ -369,10 +369,10 @@ class Engine{
 		if(currentScene == 0){
 			if(normX < .675 && normX > .566 && normY < 0.15 && normY > -.05){ 
 				debugger
-				var centerX = .658
-				var centerY = .16
+				var centerX = .61
+				var centerY = .048
 				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
-				if(Math.abs(transXY.transX - centerX) < .05 && Math.abs(transXY.transY - centerY) < .16){
+				if(Math.abs(transXY.transX - centerX) < .08 && Math.abs(transXY.transY - centerY) < .25){
 					var transXY = this.db.translateCoordinates(false, -0.16, 0.21);
 					this.player.posX = transXY.transX 
 					this.player.posY = transXY.transY

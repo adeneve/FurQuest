@@ -8,7 +8,7 @@ import {loadImage} from './loaders.js'
     playerDat = {}
     gameScreen = 0
 
-    constructor(gameScreen, player, otherPlayers, gameObjects, sprites, accountControlModule){
+    constructor(gameScreen, player, otherPlayers, gameObjects, spriteMap, accountControlModule){
         var firebaseConfig = {
             apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
             authDomain: "furquest-1c939.firebaseapp.com",
@@ -27,7 +27,7 @@ import {loadImage} from './loaders.js'
         this.player = player
         this.otherPlayers = otherPlayers
         this.gameObjects = gameObjects
-        this.sprites = sprites
+        this.spriteMap = spriteMap
         this.fbUser = -1
         this.playerCharID = -1
         this.document = document,
@@ -116,7 +116,7 @@ import {loadImage} from './loaders.js'
         this.player.color = this.playerDat.color
         this.player.type = this.playerDat.type
         this.player.active = true
-        this.player.sprites = this.sprites
+        this.player.sprites = this.spriteMap.get(this.player.color)
         this.player.isPlayer = true
         this.player.scene = this.playerDat.scene
         this.player.playerLoaded = true
@@ -135,10 +135,14 @@ import {loadImage} from './loaders.js'
         var keys = Object.keys(data.val())
         keys.forEach(key => {
           if(key != this.fbUser.uid){
-            var otherPlayer = new GameObject(this.sprites, 2, 500)
+
+            if(charData[key].active){
+            
             var otherPlyerNormX = charData[key].x;
             var otherPlayerNormY = charData[key].y;
             var translatedXY = transCoord(false, otherPlyerNormX, otherPlayerNormY);
+            debugger;
+            var otherPlayer = new GameObject(this.spriteMap.get(charData[key].color), 2, 500)
             otherPlayer.posX = translatedXY.transX;
             otherPlayer.posY = translatedXY.transY;
             otherPlayer.oldX = translatedXY.transX;
@@ -150,10 +154,12 @@ import {loadImage} from './loaders.js'
             otherPlayer.isOtherPlayer = true;
             otherPlayer.scene = charData[key].scene
             otherPlayer.active = charData[key].active;
-            otherPlayer.sprites = this.sprites
+            otherPlayer.color = charData[key].color;
+            otherPlayer.sprites = this.spriteMap.get(otherPlayer.color);
             otherPlayer.charID = key;
             otherPlayer.isMoving = false;
-            if(otherPlayer.active){
+            
+            
               if(!this.otherPlayers.has(String(key))){
                 this.gameObjects.push(otherPlayer);
                 this.otherPlayers.set(String(key), otherPlayer);
@@ -194,10 +200,11 @@ import {loadImage} from './loaders.js'
         keys.forEach(key => {
           if(key != this.fbUser.uid){
             if(!this.otherPlayers.has(String(key)) && obj[key].active){
-              var otherPlayer = new GameObject(this.sprites, 2, 500)
+              
               var otherPlyerNormX = obj[key].x;
               var otherPlayerNormY = obj[key].y;
               var translatedXY = this.translateCoordinates(false, otherPlyerNormX, otherPlayerNormY);
+              var otherPlayer = new GameObject(this.spriteMap.get(obj[key].color), 2, 500)
               otherPlayer.posX = translatedXY.transX;
               otherPlayer.posY = translatedXY.transY;
               otherPlayer.oldX = translatedXY.transX;
@@ -207,11 +214,12 @@ import {loadImage} from './loaders.js'
               otherPlayer.name = obj[key].name;
               otherPlayer.message = obj[key].message;
               otherPlayer.scene = obj[key].scene;
+              otherPlayer.color = obj[key].color;
               otherPlayer.active = true;
               otherPlayer.charID = key;
               otherPlayer.isMoving = false;
               otherPlayer.isOtherPlayer = true;
-              otherPlayer.sprites = this.sprites;
+              otherPlayer.sprites = this.spriteMap.get(otherPlayer.color);
               this.gameObjects.push(otherPlayer);
               this.otherPlayers.set(String(key), otherPlayer);
               const chkLogout = this.checkForLogout.bind(this)

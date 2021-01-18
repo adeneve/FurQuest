@@ -55,6 +55,7 @@
     </div>
   </div>
   
+  <!-- 
   <div class="card" id="frogCard" style="width:400px; margin-left: 30%;float:center;visibility:hidden">
     <img class="card-img-top" src="../assets/panda.png" alt="Card image" style="width:100%">
     <div class="card-body">
@@ -77,35 +78,9 @@
     </div>
   </form>
 		
-      <a href="#" class="btn btn-primary" style="font-size:2em" id="createF">Create</a>
+      <a href="#" class="btn btn-primary" style="font-size:2em" id="createF" disabled>Create</a>
     </div>
-  </div>
-  
-  <div class="card" id="catCard" style="width:400px; margin-left: 30%; float:center;visibility:hidden">
-    <img class="card-img-top" src="../assets/panda.png" alt="Card image" style="width:100%">
-    <div class="card-body">
-      <h4 class="card-title menuItem">Cat</h4>
-      <p class="card-text characterText">meow.</p>
-	  <br> <br>
-		<form>
-    <div class="form-group">
-	  <label for="name" style="font-size:1.5em">Give your character a name:</label>
-		<input  id="nameCreate3" name="name" style="padding:0.2em"> <br>
-		
-      <label for="selColor" style="font-size:1.5em">Select A Color (select one):</label>
-      <select class="form-control" id="selColor3" style="font-size:1.5em">
-        <option>Brown</option>
-        <option>Grey</option>
-        <option>Red</option>
-        <option>Black</option>
-      </select>
-      <br>
-    </div>
-  </form>
-		
-      <a href="#" class="btn btn-primary" style="font-size:2em" id="createC">Create</a>
-    </div>
-  </div>
+  </div>  -->
 
 
    <div id="charCard" style="display: none;" >
@@ -184,7 +159,10 @@ createBear.addEventListener('click', e => {
   alert("your character was successfully created!")
 })
 
+/*
 createFrog.addEventListener('click', e => {
+  alert("froggies coming soon!");
+  
   var charName = document.getElementById('nameCreate2')
   var charColor = document.getElementById('selColor2')
   if(charName.value.length == 0) {alert("name must be at least 1 character long"); return}
@@ -192,14 +170,7 @@ createFrog.addEventListener('click', e => {
   alert("your character was successfully created!")
 })
 
-createCat.addEventListener('click', e => {
-  var charName = document.getElementById('nameCreate3')
-  var charColor = document.getElementById('selColor3')
-  if(charName.value.length == 0) {alert("name must be at least 1 character long"); return}
-  createCharacter(charName.value, charColor.value, "Cat")
-  alert("your character was successfully created!")
-})
-
+*/
 
 
 // Your web app's Firebase configuration
@@ -238,15 +209,13 @@ createCat.addEventListener('click', e => {
 	  charTitle.innerText = "Create a character!"
 	  charTitle.style.visibility = "visible"
 	  document.getElementById('bearCard').style.visibility = "visible"
-	  document.getElementById('frogCard').style.visibility = "visible"
-	  document.getElementById('catCard').style.visibility = "visible"
+	  //document.getElementById('frogCard').style.visibility = "visible"
 	}
 	else{
 	  charTitle.innerText = "Select your character!"
 	  charTitle.style.visibility = "visible"
 	  document.getElementById('bearCard').style.display = "none"
-	  document.getElementById('frogCard').style.display = "none"
-    document.getElementById('catCard').style.display = "none"
+	  //document.getElementById('frogCard').style.display = "none"
     console.log(data.val())
     var charDataObj = data.val();
     document.getElementById('charCard').style.display = "initial";
