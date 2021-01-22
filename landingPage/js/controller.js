@@ -11,6 +11,8 @@ class Controller{
 
 		canvas.addEventListener("mousedown", e => { 
 
+			if(player.BlockClick) return;
+
 			var gameScreen = canvas.getBoundingClientRect(); 
 			  
 			debugger;

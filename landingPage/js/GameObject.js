@@ -18,8 +18,6 @@ export default class GameObject{
         this.frameNames = spriteSheet.tiles.keys()
         this.movementFrameNames = spriteSheet.movementTiles.keys()
         this.movementLeftFrameNames = spriteSheet.movementTilesLeft.keys()
-        
-        
         this.currentFrame = ""
         this.animating = true
         this.lastUpdateTime = -1
@@ -58,6 +56,7 @@ export default class GameObject{
         this.health = 1
         this.attacking = false
         this.hurting = false
+        this.BlockClick = false
     }
 
     getNextSprite(){

@@ -284,11 +284,16 @@ class Engine{
 								this.dialogBox.dialogMsg = [ `${this.EnemyObj.name} tapped out!`]
 								this.tapout = true
 								this.resetBattleUI = true
-						        this.fightSelectUIShown = false
+								this.fightSelectUIShown = false
+								this.EnemyObj.hurting = true
+								const chgHrtSt = this.changeHurtState.bind(this)
+								this.player.BlockClick = true;
+								setTimeout(chgHrtSt, 1500, this.EnemyObj, false);
 							}
 
 							this.EnemyObj.hurting = true
 							const chgHrtSt = this.changeHurtState.bind(this)
+							this.player.BlockClick = true;
 							setTimeout(chgHrtSt, 1500, this.EnemyObj, false);
 						
 						}else{
@@ -297,6 +302,7 @@ class Engine{
 						
 						this.player.attacking = true
 						const chgAtkSt = this.changeAttackState.bind(this)
+						this.player.BlockClick = true;
 						setTimeout(chgAtkSt, 2000, this.player, false);
 
 						this.resetBattleUI = true
@@ -333,11 +339,16 @@ class Engine{
 						this.tapout = true
 						this.resetBattleUI = true
 						this.fightSelectUIShown = false
+						this.player.hurting = true
+						const chgHrtSt = this.changeHurtState.bind(this)
+						this.player.BlockClick = true;
+						setTimeout(chgHrtSt, 1500, this.player, false);
 						
 					}
 
 					this.player.hurting = true
 					const chgHrtSt = this.changeHurtState.bind(this)
+					this.player.BlockClick = true;
 				    setTimeout(chgHrtSt, 1500, this.player, false);
 				
 				}else{
@@ -345,6 +356,7 @@ class Engine{
 				}
 				
 				this.EnemyObj.attacking = true
+				this.player.BlockClick = true;
 				const chgAtkSt = this.changeAttackState.bind(this)
 		        setTimeout(chgAtkSt, 2000, this.EnemyObj, false);
 
@@ -359,10 +371,12 @@ class Engine{
 
 	changeAttackState(obj, val){
 		obj.attacking = val
+		this.player.BlockClick = false
 	}
 
 	changeHurtState(obj, val){
 		obj.hurting = val
+		this.player.BlockClick = false;
 	}
 
 	checkForSceneChange(currentScene, normX, normY){
