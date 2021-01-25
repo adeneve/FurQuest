@@ -466,7 +466,7 @@ class Engine{
 			if(!this.player.fighting){
 				context.fillText(this.dialogBox.name + ":", transXY.transX, transXY.transY - 30);
 				this.NPCs.forEach(npc => {if(npc.name == this.dialogBox.name){
-					npc.sprites.draw("default", context, transXY.transX - 25, transXY.transY, "");
+					npc.sprites.draw("default", context, transXY.transX - 25, transXY.transY, "", npc);
 				}
 				})
 			}

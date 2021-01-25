@@ -72,8 +72,15 @@ export default class SpriteSheet {
         if(name.includes("active")){
             buffer = this.activeTiles.get(name);
         }
+
+        var scale = 1;
+        if(gameObj.isPlayer || gameObj.isOtherPlayer){
+            if(gameObj.scene == 1){
+                scale = 1.2;
+            }
+        }
         
-        context.drawImage(buffer, x-this.width/2, y -this.height/2);
+        context.drawImage(buffer, x-this.width/2, y -this.height/2, this.width*scale, this.height*scale);
         
 
         if(msg != ""){

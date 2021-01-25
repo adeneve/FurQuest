@@ -209,10 +209,10 @@ loadImage('../assets/character2.png')
     blender.sprites = blenderSprites
     blender.active = true
     blender.name = "Blendy"
-    var transXY = translateCoordinates(false, -0.575, -.3, gameCanvas)
+    var transXY = translateCoordinates(false, -0.6, -.3, gameCanvas)
     blender.posX = transXY.transX
     blender.posY = transXY.transY
-    blender.normX = -.575
+    blender.normX = -.6
     blender.normY = -.3
     blender.scene = 1
     blender.mouseActive = true
