@@ -10,6 +10,7 @@ export default class GameObject{
         this.battleIdleFrameNames = spriteSheet.battleIdleTiles.keys()
         this.battleAttackFrameNames = spriteSheet.battleAttackTiles.keys()
         this.battleHurtFrameNames = spriteSheet.battleHurtTiles.keys()
+        this.activeFrameNames = spriteSheet.activeTiles.keys()
         this.currentStep = 0
         this.animationSteps = animationSteps
         this.speed = speed
@@ -57,6 +58,8 @@ export default class GameObject{
         this.attacking = false
         this.hurting = false
         this.BlockClick = false
+        this.mouseActive = false
+        this.mouseAnimate = false
     }
 
     getNextSprite(){

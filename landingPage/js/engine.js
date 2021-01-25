@@ -123,6 +123,21 @@ class Engine{
 				}
 				break;
 
+				case "Blendy":
+					this.dialogBox.active = true
+					this.dialogBox.name = NPC.name
+					switch(interactionStep){
+						case 1 :
+							this.dialogBox.dialogMsg = ["Its me Blendy the Blender!"]
+							break;
+					} 
+
+					if(interactionStep > 1){
+						this.player.interacting = false
+						this.dialogBox.active = false
+					}
+					break;
+
 				case "Lil Drewski":
 					this.dialogBox.active = true
 					this.dialogBox.name = NPC.name

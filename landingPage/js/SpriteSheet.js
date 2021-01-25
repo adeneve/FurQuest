@@ -9,6 +9,7 @@ export default class SpriteSheet {
         this.battleIdleTiles = new Map();
         this.battleAttackTiles = new Map();
         this.battleHurtTiles = new Map();
+        this.activeTiles = new Map();
     }
 
     define(name, x, y, z = 0) {
@@ -45,6 +46,9 @@ export default class SpriteSheet {
             if(z == 5){
                 this.battleHurtTiles.set(name, buffer)
             }
+            if(z == 6){
+                this.activeTiles.set(name, buffer)
+            }
     }
 
     draw(name, context, x, y, msg, gameObj) {
@@ -64,6 +68,9 @@ export default class SpriteSheet {
         }
         if(name.includes("battleHurt")){
             buffer = this.battleHurtTiles.get(name);
+        }
+        if(name.includes("active")){
+            buffer = this.activeTiles.get(name);
         }
         
         context.drawImage(buffer, x-this.width/2, y -this.height/2);

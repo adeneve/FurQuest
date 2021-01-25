@@ -1,13 +1,15 @@
 export default
 class Controller{
 
-	constructor(canvas, engine, player, msgBox, sendBtn){
+	constructor(canvas, engine, dbc, player, msgBox, sendBtn, interactableNPCs){
 		this.canvas = canvas
 		this.engine = engine
+		this.dbc = dbc
 		this.msgBox = msgBox
 		this.sendBtn = sendBtn
 		this.GameObjInteraction = null
 		this.interactionStep = 0
+		this.interactableNPCs = interactableNPCs
 
 		canvas.addEventListener("mousedown", e => { 
 
@@ -67,12 +69,31 @@ class Controller{
 			}else{
 				engine.enteringCafe = 0
 			}
-		  })
+			
+
+			interactableNPCs.forEach(NPC => {
+                if(NPC.scene == player.scene && NPC.mouseActive == true){
+					var gameScreen = canvas.getBoundingClientRect(); 
+					var transXY = dbc.translateCoordinates(true, player.posX, player.posY +gameScreen.top, canvas)
+                    var diffX = Math.abs(normalized_x - NPC.normX)
+                    var diffY = Math.abs(normalized_y - NPC.normY)
+                    if(diffX < .15 && diffY < .31){
+                        NPC.mouseAnimate = true
+                    }else{
+						NPC.mouseAnimate = false
+						/*var diffX = Math.abs(NPC.normX - transXY.transX)
+						var diffY = Math.abs(NPC.normY - transXY.transY)
+						if(diffX > .15 || diffY > .31){
+						  NPC.MoveInteractable = false
+						}*/
+                    }
+				}
+			})
+                
+            })
 
 		  sendBtn.addEventListener("click", e => {
 			  engine.saveMessage(msgBox.value)
-			  
-
 		  })
 
 	}

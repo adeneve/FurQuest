@@ -148,11 +148,11 @@ loadImage('../assets/character2.png')
     
     var tutorialBroSprites = new SpriteSheet(image, 64, 64);
     tutorialBroSprites.define("default", 0,0);
-    tutorialBroSprites.define("wave1", 1, 0);
-    tutorialBroSprites.define("wave2", 2, 0);
-    tutorialBroSprites.define("wave3", 3, 0);
-    tutorialBroSprites.define("wave4", 4, 0);
-    tutorialBroSprites.define("wave5", 5, 0);
+    tutorialBroSprites.define("activeDefault", 1, 0, 6);
+    tutorialBroSprites.define("active2", 2, 0, 6);
+    tutorialBroSprites.define("active3", 3, 0, 6);
+    tutorialBroSprites.define("active4", 4, 0, 6);
+    tutorialBroSprites.define("active5", 5, 0, 6);
     tutorialBro = new GameObject(tutorialBroSprites, 5, 250);
     tutorialBro.scene = 0
     tutorialBro.sprites = tutorialBroSprites;
@@ -162,8 +162,10 @@ loadImage('../assets/character2.png')
 
     var blueHairBroSprites = new SpriteSheet(image, 64, 64);
     blueHairBroSprites.define("default", 0,2);
-    blueHairBroSprites.define("idle1", 1, 2);
-    blueHairBroSprites.define("idle2", 2, 2);
+    blueHairBroSprites.define("idle1", 1,2);
+    blueHairBroSprites.define("idle2", 2,2);
+    blueHairBroSprites.define("activeDefault", 1, 2, 6);
+    blueHairBroSprites.define("active2", 2, 2, 6);
     blueHairBroSprites.define('battleIdle1', 3 ,2, 3)
     blueHairBroSprites.define('battleIdle2', 4 ,2, 3)
     blueHairBroSprites.define('battleAttack1', 5 ,2, 4)
@@ -194,6 +196,29 @@ loadImage('../assets/character2.png')
     fishBowl.scene = 1
     gameObjects.push(fishBowl)
 
+    var blenderSprites = new SpriteSheet(image, 64, 64)
+    blenderSprites.define("default", 0, 3);
+    blenderSprites.define("idle1", 1, 3);
+    blenderSprites.define("idle2", 2, 3);
+    blenderSprites.define("idle3", 3, 3);
+    blenderSprites.define("activeDefault", 4, 3, 6);
+    blenderSprites.define("active1", 5, 3, 6);
+    blenderSprites.define("active2", 6, 3, 6);
+    blenderSprites.define("active3", 7, 3, 6);
+    var blender = new GameObject(blenderSprites, 1, 310);
+    blender.sprites = blenderSprites
+    blender.active = true
+    blender.name = "Blendy"
+    var transXY = translateCoordinates(false, -0.575, -.3, gameCanvas)
+    blender.posX = transXY.transX
+    blender.posY = transXY.transY
+    blender.normX = -.575
+    blender.normY = -.3
+    blender.scene = 1
+    blender.mouseActive = true
+    gameObjects.push(blender)
+    interactableNPCs.push(blender)
+
     
     gameObjects.push(tutorialBro);
     gameObjects.push(blueHairBro);
@@ -212,7 +237,7 @@ loadImage('../assets/character2.png')
     blueHairBro.normX = .3
     blueHairBro.normY = 0
     engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
-    controller = new Controller(gameCanvas, engine, player, msgBox, sendBtn)
+    controller = new Controller(gameCanvas, engine, dbc, player, msgBox, sendBtn, interactableNPCs)
 
     
 
@@ -343,6 +368,10 @@ function update(time){
             else if(gameObject.fighting && gameObject.hurting){
                 next = gameObject.battleHurtFrameNames.next().value
             }
+            else if(gameObject.interactable || gameObject.mouseAnimate){
+                debugger;
+                next = gameObject.activeFrameNames.next().value
+            }
             else{
                 next = gameObject.frameNames.next().value
             }
@@ -373,6 +402,10 @@ function update(time){
                     gameObject.battleHurtFrameNames = gameObject.spriteSheet.battleHurtTiles.keys()
                         next = 'battleHurt1'
                 }
+                else if(gameObject.interactable || gameObject.mouseAnimate){
+                    gameObject.activeFrameNames = gameObject.spriteSheet.activeTiles.keys()
+                        next = 'activeDefault'
+                }
                 else{
                     gameObject.frameNames = gameObject.spriteSheet.tiles.keys()
                     next = 'default'
@@ -394,18 +427,16 @@ function update(time){
             var transXY = dbc.translateCoordinates(true, gameObject.posX, gameObject.posY +gameScreen.top, gameCanvas)
             
             interactableNPCs.forEach(NPC => {
-                var diffX = Math.abs(NPC.normX - transXY.transX)
-                var diffY = Math.abs(NPC.normY - transXY.transY)
-                if(diffX < .15 && diffY < .31){
-                    //NPC.isMoving = true
-                    NPC.interactable = true
-                }else{
-                    NPC.isMoving = false
-                    NPC.frameNames = NPC.spriteSheet.tiles.keys()
-                    NPC.next = 'default'
-                    NPC.nextFrame = NPC.next
-                    NPC.interactable = false
+                if(NPC.scene == gameObject.scene){
+                    var diffX = Math.abs(NPC.normX - transXY.transX)
+                    var diffY = Math.abs(NPC.normY - transXY.transY)
+                    if(diffX < .15 && diffY < .31){
+                        NPC.interactable = true
+                    }else{
+                        NPC.interactable = false
+                    }
                 }
+                
             })
             
         }
