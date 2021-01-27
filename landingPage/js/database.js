@@ -188,7 +188,7 @@ import {loadImage} from './loaders.js'
     }
 
     checkForPlayerLogout(key, otherPlayer, oldNormX){
-      if(oldNormX == otherPlayer.normX){
+      if(oldNormX == otherPlayer.normX && !otherPlayer.inMiniGame){
         this.loguserOut()
       }
     }

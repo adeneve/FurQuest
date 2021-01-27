@@ -49,6 +49,8 @@ var sceneOpenCafe = new Image();
 sceneOpenCafe.src = '../assets/town1200openCafe.png'
 var sceneCafe = new Image();
 sceneCafe.src = '../assets/cafe.png'
+var fruitBlastScene = new Image();
+fruitBlastScene.src = '../assets/fruitBlast.png'
 var tutorialBro = -1;
 var blueHairBro = -1;
 var fountain = -1;
@@ -208,7 +210,7 @@ loadImage('../assets/character2.png')
     var blender = new GameObject(blenderSprites, 1, 310);
     blender.sprites = blenderSprites
     blender.active = true
-    blender.name = "Blendy"
+    blender.name = "Fruit Blast"
     var transXY = translateCoordinates(false, -0.6, -.3, gameCanvas)
     blender.posX = transXY.transX
     blender.posY = transXY.transY
@@ -254,6 +256,39 @@ loadImage('../assets/character2.png')
     dialogBox.posY = transXY.transY
     dialogBox.name = "dialogBox"
     engine.dialogBox = dialogBox
+    })
+
+    loadImage('../assets/fruit.png')
+    .then(image => {
+        var bananaSprites = new SpriteSheet(image, 64, 64)
+        bananaSprites.define("default", 0, 0);
+        bananaSprites.define("idle1", 1, 0);
+        bananaSprites.define("idle2", 2, 0);
+        bananaSprites.define("idle3", 3, 0);
+        var banana = new GameObject(bananaSprites, 1, 500);
+        banana.sprites = bananaSprites
+        var transXY = translateCoordinates(false, 0, 0, gameCanvas)
+        banana.posX = transXY.transX
+        banana.posY = transXY.transY
+        banana.name = "banana"
+        banana.scene = 101
+        banana.active = false
+        debugger
+
+        var crossHairSprites = new SpriteSheet(image, 64, 64)
+        crossHairSprites.define("default", 0, 1);
+        crossHairSprites.define("shoot", 1, 1, 4);
+        var crossHair = new GameObject(crossHairSprites, 1, 200)
+        var transXY = translateCoordinates(false, 0, -0.5, gameCanvas)
+        banana.posX = transXY.transX
+        banana.posY = transXY.transY
+        crossHair.sprites = crossHairSprites
+        crossHair.active = true
+        crossHair.scene = 101
+        crossHair.name = "cHair"
+        gameObjects.push(banana)
+        gameObjects.push(crossHair)
+
     })
 
     window.onbeforeunload = function() {
@@ -325,6 +360,14 @@ function update(time){
         gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
             0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
     }
+    if(player.scene == 101){
+        gameCanvas.getContext('2d').drawImage(fruitBlastScene, 0, 0, fruitBlastScene.width,    fruitBlastScene.height,     // source rectangle
+            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
+            const ctx = gameCanvas.getContext('2d');
+						ctx.fillStyle = "#00ff00"
+						ctx.font = '50px serif';
+						ctx.fillText(`Score : ${player.miniGameScore}`, 50, 90);
+    }
     
 
     
@@ -337,7 +380,7 @@ function update(time){
             if(gameObject.scene != player.scene && gameObject.name != "dialogBox"){
                 return
             }
-            if(gameObject.animating){ 
+            if(gameObject.animating && !gameObject.invisible){ 
             if(gameObject.tempStart == -1) gameObject.tempStart = time
             if(gameObject.start == -1) {
                 gameObject.start = time;
@@ -369,7 +412,6 @@ function update(time){
                 next = gameObject.battleHurtFrameNames.next().value
             }
             else if(gameObject.interactable || gameObject.mouseAnimate){
-                debugger;
                 next = gameObject.activeFrameNames.next().value
             }
             else{
@@ -462,7 +504,7 @@ function update(time){
             var diffSqY = diffY * diffY 
             var totDist =  Math.sqrt( diffSqX + diffSqY)
             
-            if(totDist >= gameObject.totalDistanceReq) {
+            if(totDist >= gameObject.totalDistanceReq && gameObject.miniGameVal != 1) {
                 gameObject.oldX = gameObject.posX
                 gameObject.oldY = gameObject.posY
                 gameObject.moveStart = -1
@@ -480,20 +522,23 @@ function update(time){
             if (Math.abs(Math.round(gameObject.posX, 2) - Math.round(gameObject.destX, 2)) > 1 || Math.abs(Math.round(gameObject.posY, 2) - Math.round(gameObject.destY, 2)) > 1) {
 
             }else {
-                gameObject.oldX = gameObject.posX
-                gameObject.oldY = gameObject.posY
-                gameObject.isMoving = false
-                gameObject.isRunning = false
-                gameObject.movingLeft = false
-                      gameObject.movingRight = false
-                gameObject.moveStart = -1
+                if(gameObject.miniGameVal != 1){
+                        gameObject.oldX = gameObject.posX
+                    gameObject.oldY = gameObject.posY
+                    gameObject.isMoving = false
+                    gameObject.isRunning = false
+                    gameObject.movingLeft = false
+                        gameObject.movingRight = false
+                    gameObject.moveStart = -1
+                }
+                
             }
 
           }
 
     
 
-        if(gameObject.active){
+        if(gameObject.active && !gameObject.invisible){
             gameObject.sprites.draw(gameObject.nextFrame, gameCanvas.getContext('2d'), gameObject.posX, gameObject.posY, gameObject.message, gameObject)
         }
         

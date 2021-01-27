@@ -60,6 +60,10 @@ export default class GameObject{
         this.BlockClick = false
         this.mouseActive = false
         this.mouseAnimate = false
+        this.invisible = false
+        this.inMiniGame = false
+        this.miniGameVal = 0
+        this.miniGameScore = 0
     }
 
     getNextSprite(){

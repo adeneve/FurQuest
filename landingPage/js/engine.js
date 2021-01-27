@@ -1,3 +1,5 @@
+import GameObject from './GameObject.js'
+
 export default
 class Engine{
 
@@ -17,11 +19,12 @@ class Engine{
 		this.battlePlayerTurn = 0
 		this.tapout = false
 		this.fightAccepted = false
+		this.gameAccepted = false
 	}
 
 	// returns the speedX and speedY
 	calcMovement(destX, destY, player){
-		player.isMoving = true
+		
 		player.destX = destX
 		player.destY = destY
 		var playerSpeed = .17 // .001 px per ms
@@ -45,6 +48,7 @@ class Engine{
 		var diffSqY = diffY * diffY 
 		var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
 		player.totalDistanceReq = totalDistancePx
+		player.isMoving = true
 	}
 
 	
@@ -123,18 +127,54 @@ class Engine{
 				}
 				break;
 
-				case "Blendy":
+				case "Fruit Blast":
 					this.dialogBox.active = true
 					this.dialogBox.name = NPC.name
+					debugger
 					switch(interactionStep){
 						case 1 :
-							this.dialogBox.dialogMsg = ["Its me Blendy the Blender!"]
+							this.dialogBox.dialogMsg = ["Do you want to play Fruit Blast?", "YES                                          NO"]
+							break;
+						case 2 :
+							if(normx < -.19 && normy < -.59) {
+								this.dialogBox.active = false
+								this.gameAccepted = true
+								
+							}else{
+								this.dialogBox.active = false
+								this.player.interacting = false
+								this.gameAccepted = false
+							}
 							break;
 					} 
 
-					if(interactionStep > 1){
+					if(interactionStep > 1 && this.gameAccepted){
+						debugger
+						this.player.scene = 101
+						this.player.invisible = true
 						this.player.interacting = false
-						this.dialogBox.active = false
+						this.player.inMiniGame = true
+						this.player.miniGameVal = 1
+						this.player.miniGameScore = 0
+						var bananaArray = this.gameObjects.filter(obj => obj.name == 'banana')
+						var bananaRef = bananaArray[0]
+						this.spawnIteration = 0
+						this.bananaSpawner = null
+						const spwnBananas = this.spawnBananas.bind(this)
+						const clnFruitBlast = this.cleanFruitBlast.bind(this)
+						const ctx = this.canvas.getContext('2d');
+						ctx.fillStyle = "#00ff00"
+						ctx.font = '50px serif';
+						ctx.fillText('Score : 0', 50, 90);
+						
+						var i = 1
+						for(i = 1; i < 7; i++){
+							setTimeout(spwnBananas, i * 5000);
+						}
+						i++
+						setTimeout(clnFruitBlast, i * 5000);
+						
+
 					}
 					break;
 
@@ -382,6 +422,78 @@ class Engine{
 		
 
 		
+	}
+
+	spawnBananas(){
+		var bananaArray = this.gameObjects.filter(obj => obj.name == 'banana')
+		var bananaRef = bananaArray[0]
+		for(var i = 0; i < 5; i++){
+			
+			var banana = new GameObject(bananaRef.sprites, 1, 500);
+			banana.sprites = bananaRef.sprites
+			var posNegX = Math.random();
+			var initPosX = Math.random();
+			if(posNegX > .5) initPosX = -initPosX
+			var posNegY = Math.random();
+			var initPosY = Math.random();
+			if(posNegY > .5) initPosY = -initPosY
+			var destNegX = Math.random();
+			var initDestX = Math.random();
+			if(destNegX > .5) initDestX = -initDestX
+			var destNegY = Math.random();
+			var initDestY = Math.random();
+			if(destNegY > .5) initDestY = -initDestY
+			var transXY = this.db.translateCoordinates(false, initPosX, initPosY, gameCanvas)
+			var transXYDest = this.db.translateCoordinates(false, initDestX, initDestY, gameCanvas)
+			banana.posX = transXY.transX
+			banana.posY = transXY.transY
+			banana.oldX = banana.posX 
+			banana.oldY = banana.posY
+			banana.destX = transXYDest.transX
+			banana.destY = transXYDest.transY
+			banana.name = "bananaClone" + i 
+			banana.scene = 101
+			banana.miniGameVal = 1
+			banana.active = true
+			this.gameObjects.push(banana)
+			this.calcMovement(banana.destX, banana.destY, banana)
+		}
+	}
+
+	cleanFruitBlast(){
+		var i = this.gameObjects.length
+		while(i--){
+			if(this.gameObjects[i].name.includes('bananaClone')){
+				debugger
+				this.gameObjects.splice(i, 1)
+			}
+		}
+
+		this.player.scene = 1
+		this.player.inMiniGame = false 
+		this.player.invisible = false
+		this.player.miniGameVal = 0
+		
+	}
+
+	handleMiniGame(normX, normY){
+		if(this.player.miniGameVal == 1){  //fruit blast
+			console.log("xNorm: " + normX + ", yNorm: " + normY)
+				var bananaClones = this.gameObjects.filter(obj => obj.name.includes("bananaClone"))
+				bananaClones.forEach( banana => {
+					    var gameScreen = gameCanvas.getBoundingClientRect()
+						var transXY = this.db.translateCoordinates(true, banana.posX, banana.posY + gameScreen.top, gameCanvas)
+						banana.normX = transXY.transX
+						banana.normY = transXY.transY
+						var diffX = Math.abs(banana.normX - normX)
+						var diffY = Math.abs(banana.normY - normY)
+						if(diffX < .06 && diffY < .06){
+							banana.active = false
+							this.player.miniGameScore += 10
+						}
+
+				})
+		}
 	}
 
 	changeAttackState(obj, val){

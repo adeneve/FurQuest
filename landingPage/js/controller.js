@@ -17,13 +17,11 @@ class Controller{
 
 			var gameScreen = canvas.getBoundingClientRect(); 
 			  
-			debugger;
 			var normalized_x = ((e.clientX - gameScreen.left)-(canvas.width/2))/(canvas.width/2);
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
 			
 			
-			
-			if(!player.isMoving && !player.interacting && !player.fighting){ 
+			if(!player.isMoving && !player.interacting && !player.fighting && !player.inMiniGame){ 
 				this.interactionStep = 0
 				this.GameObjInteraction = engine.checkForInteraction(normalized_x, normalized_y)
 				var sceneChange = engine.checkForSceneChange(player.scene, normalized_x, normalized_y)
@@ -51,6 +49,9 @@ class Controller{
 			if(player.fighting){
 				engine.handleBattle( normalized_x, normalized_y)
 			}
+			if(player.inMiniGame){
+				engine.handleMiniGame(normalized_x, normalized_y)
+			}
 
 			
 			//savePlayerLocationDB(x, y)           game engine -> database
@@ -61,7 +62,16 @@ class Controller{
 			  
 			var normalized_x = ((e.clientX - gameScreen.left)-(canvas.width/2))/(canvas.width/2);
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
+			var transXY = dbc.translateCoordinates(false, normalized_x, normalized_y, canvas)
 			console.log(normalized_x + " " + normalized_y);
+
+			if(player.scene == 101){
+				var cHair = 0
+				this.engine.gameObjects.forEach( obj => {if(obj.name == "cHair") cHair = obj})
+				cHair.posX = transXY.transX
+				cHair.posY = transXY.transY
+				return
+			}
 
 			if(normalized_x < .675 && normalized_x > .566 && normalized_y < 0.15 && normalized_y > -.05){
 				//console.log("entering cafe")
