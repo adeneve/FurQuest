@@ -61,15 +61,17 @@ var dbc = 0;
 loadImage('../assets/character2.png')
 .then(imageChars => {
     var BearRedSprites = new SpriteSheet(imageChars, 64, 64);
-    BearRedSprites.define('default', 0, 0);
-    BearRedSprites.define('movingDefault', 1, 0, 1)
-    BearRedSprites.define('moving2', 1 ,0, 1)
-    BearRedSprites.define('moving3', 2, 0, 1)
-    BearRedSprites.define('moving4', 3 ,0, 1)
-    BearRedSprites.define('movingDefaultLeft', 6, 0, 2)
-    BearRedSprites.define('movingLeft2', 6 , 0, 2)
-    BearRedSprites.define('movingLeft3', 5 ,0, 2)
-    BearRedSprites.define('movingLeft4', 4 ,0, 2)
+    BearRedSprites.define('default', 0, 8);
+    BearRedSprites.define('idle1', 1, 8);
+    BearRedSprites.define('idle2', 2, 8);
+    BearRedSprites.define('movingDefault', 3, 8, 1)
+    BearRedSprites.define('moving2', 4 ,8, 1)
+    BearRedSprites.define('moving3', 5, 8, 1)
+    BearRedSprites.define('moving4', 6, 8, 1)
+    BearRedSprites.define('movingDefaultLeft', 0, 9, 2)
+    BearRedSprites.define('movingLeft2', 1 , 9, 2)
+    BearRedSprites.define('movingLeft3', 2 ,9, 2)
+    BearRedSprites.define('movingLeft4', 3 ,9, 2)
     BearRedSprites.define('battleIdle1', 0 ,4, 3)
     BearRedSprites.define('battleIdle2', 1 ,4, 3)
     BearRedSprites.define('battleAttack1', 1 ,4, 4)
