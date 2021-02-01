@@ -279,8 +279,11 @@ loadImage('../assets/character2.png')
 
         var crossHairSprites = new SpriteSheet(image, 64, 64)
         crossHairSprites.define("default", 0, 1);
-        crossHairSprites.define("shoot", 1, 1, 4);
-        var crossHair = new GameObject(crossHairSprites, 1, 200)
+        crossHairSprites.define("battleIdle1", 0, 1, 3);
+        crossHairSprites.define("battleAttack1", 2, 1, 4);
+        crossHairSprites.define("battleAttack2", 3, 1, 4);
+        crossHairSprites.define("battleAttack3", 4, 1, 4);
+        var crossHair = new GameObject(crossHairSprites, 1, 100)
         var transXY = translateCoordinates(false, 0, -0.5, gameCanvas)
         banana.posX = transXY.transX
         banana.posY = transXY.transY

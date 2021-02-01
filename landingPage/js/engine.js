@@ -479,6 +479,12 @@ class Engine{
 	handleMiniGame(normX, normY){
 		if(this.player.miniGameVal == 1){  //fruit blast
 			console.log("xNorm: " + normX + ", yNorm: " + normY)
+			var crosshair = this.gameObjects.filter(obj => obj.name == "cHair")[0];
+						const chgAtkSt = this.changeAttackState.bind(this)
+						crosshair.attacking = true;
+						crosshair.fighting = true;
+						setTimeout(chgAtkSt, 500, crosshair, false);
+			
 				var bananaClones = this.gameObjects.filter(obj => obj.name.includes("bananaClone"))
 				bananaClones.forEach( banana => {
 					    var gameScreen = gameCanvas.getBoundingClientRect()
