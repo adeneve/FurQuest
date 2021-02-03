@@ -62,8 +62,6 @@ loadImage('../assets/character2.png')
 .then(imageChars => {
     var BearRedSprites = new SpriteSheet(imageChars, 64, 64);
     BearRedSprites.define('default', 0, 8);
-    BearRedSprites.define('idle1', 1, 8);
-    BearRedSprites.define('idle2', 2, 8);
     BearRedSprites.define('movingDefault', 3, 8, 1)
     BearRedSprites.define('moving2', 4 ,8, 1)
     BearRedSprites.define('moving3', 5, 8, 1)
@@ -283,6 +281,14 @@ loadImage('../assets/character2.png')
         crossHairSprites.define("battleAttack1", 2, 1, 4);
         crossHairSprites.define("battleAttack2", 3, 1, 4);
         crossHairSprites.define("battleAttack3", 4, 1, 4);
+        crossHairSprites.define("battleAttack5", 5, 1, 4);
+        crossHairSprites.define("battleAttack6", 6, 1, 4);
+        crossHairSprites.define("battleAttack7", 7, 1, 4);
+        crossHairSprites.define("battleAttack8", 0, 2, 4);
+        crossHairSprites.define("battleAttack9", 1, 2, 4);
+        crossHairSprites.define("battleAttack10", 2, 2, 4);
+        crossHairSprites.define("battleAttack11", 3, 2, 4);
+        crossHairSprites.define("battleAttack12", 4, 2, 4);
         var crossHair = new GameObject(crossHairSprites, 1, 100)
         var transXY = translateCoordinates(false, 0, -0.5, gameCanvas)
         banana.posX = transXY.transX

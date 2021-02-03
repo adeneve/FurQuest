@@ -463,7 +463,7 @@ class Engine{
 	cleanFruitBlast(){
 		var i = this.gameObjects.length
 		while(i--){
-			if(this.gameObjects[i].name.includes('bananaClone')){
+			if(this.gameObjects[i].name.includes('bananaClone') || this.gameObjects[i].name.includes('explosion')){
 				debugger
 				this.gameObjects.splice(i, 1)
 			}
@@ -479,11 +479,28 @@ class Engine{
 	handleMiniGame(normX, normY){
 		if(this.player.miniGameVal == 1){  //fruit blast
 			console.log("xNorm: " + normX + ", yNorm: " + normY)
+			
 			var crosshair = this.gameObjects.filter(obj => obj.name == "cHair")[0];
+			var explosion = new GameObject(crosshair.sprites, 1, 50);
+			var transXY = this.db.translateCoordinates(false, normX, normY, gameCanvas)
+			explosion.sprites = crosshair.sprites
+			debugger;
+			explosion.posX = transXY.transX
+			explosion.posY = transXY.transY
+			explosion.oldX = explosion.posX 
+			explosion.oldY = explosion.posY
+			explosion.destX = explosion.posX
+			explosion.destY = explosion.posY
+			explosion.name = "explosionClone" + normX
+			explosion.scene = 101
+			explosion.miniGameVal = 1
+			explosion.active = true
+			explosion.attacking = true;
+			explosion.fighting = true;
+			this.gameObjects.push(explosion);
 						const chgAtkSt = this.changeAttackState.bind(this)
-						crosshair.attacking = true;
-						crosshair.fighting = true;
-						setTimeout(chgAtkSt, 500, crosshair, false);
+						
+						setTimeout(chgAtkSt, 1100, explosion, true, true);
 			
 				var bananaClones = this.gameObjects.filter(obj => obj.name.includes("bananaClone"))
 				bananaClones.forEach( banana => {
@@ -502,8 +519,9 @@ class Engine{
 		}
 	}
 
-	changeAttackState(obj, val){
+	changeAttackState(obj, val, makeInvis = false){
 		obj.attacking = val
+		obj.invisible = makeInvis
 		this.player.BlockClick = false
 	}
 
