@@ -515,7 +515,7 @@ function update(time){
             var diffSqY = diffY * diffY 
             var totDist =  Math.sqrt( diffSqX + diffSqY)
             
-            if(totDist >= gameObject.totalDistanceReq && gameObject.miniGameVal != 1) {
+            /*if(totDist >= gameObject.totalDistanceReq && gameObject.miniGameVal != 1) {
                 gameObject.oldX = gameObject.posX
                 gameObject.oldY = gameObject.posY
                 gameObject.moveStart = -1
@@ -524,7 +524,7 @@ function update(time){
                 gameObject.movingLeft = false
                       gameObject.movingRight = false
                 return
-            }
+            }*/
             
             gameObject.posX = gameObject.oldX + gameObject.speedX * timeElapsed
             gameObject.posY = gameObject.oldY + gameObject.speedY * timeElapsed

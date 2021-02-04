@@ -30,12 +30,15 @@ class Engine{
 		var playerSpeed = .17 // .001 px per ms
 		var diffX = Math.abs(destX - player.posX);
 		var diffY = Math.abs(destY - player.posY);
+		debugger;
 		var diffXraw = destX - player.posX
 		if(diffXraw > 0){
 			this.player.movingRight = true
+			this.player.movingLeft = false
 		}
 		if(diffXraw < 0){
 			this.player.movingLeft = true
+			this.player.movingRight = false
 		}
 		var diffTot = diffX + diffY 
 		var percentX = diffX / diffTot
@@ -148,11 +151,11 @@ class Engine{
 							break;
 					} 
 
-					if(interactionStep > 1 && this.gameAccepted){
-						debugger
+					if(interactionStep == 2 && this.gameAccepted){
+						//debugger
 						this.player.scene = 101
 						this.player.invisible = true
-						this.player.interacting = false
+						this.player.interacting = true
 						this.player.inMiniGame = true
 						this.player.miniGameVal = 1
 						this.player.miniGameScore = 0
@@ -175,6 +178,11 @@ class Engine{
 						setTimeout(clnFruitBlast, i * 5000);
 						
 
+					}
+
+					if(interactionStep  > 2){
+						this.player.interacting = false
+						this.dialogBox.active = false
 					}
 					break;
 
@@ -464,12 +472,14 @@ class Engine{
 		var i = this.gameObjects.length
 		while(i--){
 			if(this.gameObjects[i].name.includes('bananaClone') || this.gameObjects[i].name.includes('explosion')){
-				debugger
+				//debugger
 				this.gameObjects.splice(i, 1)
 			}
 		}
 
 		this.player.scene = 1
+		this.dialogBox.active = true
+		this.dialogBox.dialogMsg = [`Score : ${this.player.miniGameScore}`, `the blender popped out ${this.player.miniGameScore / 10} coins!`]
 		this.player.inMiniGame = false 
 		this.player.invisible = false
 		this.player.miniGameVal = 0

@@ -20,9 +20,10 @@ class Controller{
 			var normalized_x = ((e.clientX - gameScreen.left)-(canvas.width/2))/(canvas.width/2);
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
 			
-			
+			debugger;
 			if(player.inMiniGame){
 				engine.handleMiniGame(normalized_x, normalized_y)
+				return;
 			}
 			if(!player.isMoving && !player.interacting && !player.fighting && !player.inMiniGame){ 
 				this.interactionStep = 0
