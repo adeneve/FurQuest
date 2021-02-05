@@ -245,7 +245,7 @@ class Engine{
 						this.player.posX = trans.transX
 						this.player.posY = trans.transY 
 						this.player.fighting = true
-						this.player.speed = 400
+						this.player.speed = 150
 						var trans = this.db.translateCoordinates (false, .1, 0)
 						NPC.normX = .1
 						NPC.normY = 0
@@ -533,6 +533,7 @@ class Engine{
 		obj.attacking = val
 		obj.invisible = makeInvis
 		this.player.BlockClick = false
+		this.player.battleAttackFrameNames = this.player.spriteSheet.battleAttackTiles.keys()
 	}
 
 	changeHurtState(obj, val){

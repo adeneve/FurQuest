@@ -60,24 +60,7 @@ var dbc = 0;
 
 loadImage('../assets/character2.png')
 .then(imageChars => {
-    var BearRedSprites = new SpriteSheet(imageChars, 64, 64);
-    BearRedSprites.define('default', 0, 8);
-    BearRedSprites.define('movingDefault', 3, 8, 1)
-    BearRedSprites.define('moving2', 4 ,8, 1)
-    BearRedSprites.define('moving3', 5, 8, 1)
-    BearRedSprites.define('moving4', 6, 8, 1)
-    BearRedSprites.define('movingDefaultLeft', 0, 9, 2)
-    BearRedSprites.define('movingLeft2', 1 , 9, 2)
-    BearRedSprites.define('movingLeft3', 2 ,9, 2)
-    BearRedSprites.define('movingLeft4', 3 ,9, 2)
-    BearRedSprites.define('battleIdle1', 0 ,4, 3)
-    BearRedSprites.define('battleIdle2', 1 ,4, 3)
-    BearRedSprites.define('battleAttack1', 1 ,4, 4)
-    BearRedSprites.define('battleAttack2', 2 ,4, 4)
-    BearRedSprites.define('battleHurt1', 0 ,4, 5)
-    BearRedSprites.define('battleHurt2', 3 ,4, 5)
-
-    spriteMap.set("Red", BearRedSprites);
+    
 
 
     var BearBrownSprites = new SpriteSheet(imageChars, 64, 64);
@@ -138,7 +121,7 @@ loadImage('../assets/character2.png')
 
     spriteMap.set("Black", BearBlackSprites);
 
-    player = new GameObject(BearRedSprites, 2, 200);
+    
 
 
     
@@ -226,23 +209,59 @@ loadImage('../assets/character2.png')
     gameObjects.push(blueHairBro);
     interactableNPCs.push(tutorialBro)
     interactableNPCs.push(blueHairBro)
-    dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, spriteMap, accountControlModule );
-    var transXY = dbc.translateCoordinates(false, -.57, -.12, gameCanvas)
+    
+    var transXY = translateCoordinates(false, -.57, -.12, gameCanvas)
     tutorialBro.posX = transXY.transX
     tutorialBro.posY = transXY.transY
     tutorialBro.normX = -.57
     tutorialBro.normY = -.12
 
-    var transXY = dbc.translateCoordinates(false, .3, 0, gameCanvas)
+    var transXY = translateCoordinates(false, .3, 0, gameCanvas)
     blueHairBro.posX = transXY.transX
     blueHairBro.posY = transXY.transY
     blueHairBro.normX = .3
     blueHairBro.normY = 0
-    engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
-    controller = new Controller(gameCanvas, engine, dbc, player, msgBox, sendBtn, interactableNPCs)
-
     
 
+    
+    
+    loadImage('../assets/characters128.png')
+    .then(image => {
+
+        var BearRedSprites = new SpriteSheet(image, 128, 128);
+        BearRedSprites.define('default', 0, 2);
+        BearRedSprites.define('movingDefault', 0, 4, 1)
+        BearRedSprites.define('moving2', 1 ,4, 1)
+        BearRedSprites.define('moving3', 2, 4, 1)
+        BearRedSprites.define('moving4', 3, 4, 1)
+        BearRedSprites.define('movingDefaultLeft', 0, 3, 2)
+        BearRedSprites.define('movingLeft2', 1 , 3, 2)
+        BearRedSprites.define('movingLeft3', 2 ,3, 2)
+        BearRedSprites.define('movingLeft4', 3 ,3, 2)
+        BearRedSprites.define('battleIdle1', 0 ,5, 3)
+        BearRedSprites.define('battleIdle2', 1 ,5, 3)
+        BearRedSprites.define('battleIdle3', 2 ,5, 3)
+        BearRedSprites.define('battleIdle4', 3 ,5, 3)
+        BearRedSprites.define('battleAttack1', 0 ,6, 4)
+        BearRedSprites.define('battleAttack2', 1 ,6, 4)
+        BearRedSprites.define('battleAttack3', 2 ,6, 4)
+        BearRedSprites.define('battleAttack3', 2 ,6, 4)
+        BearRedSprites.define('battleAttack4', 2 ,6, 4)
+        BearRedSprites.define('battleAttack5', 2 ,6, 4)
+        BearRedSprites.define('battleAttack6', 3 ,6, 4)
+        BearRedSprites.define('battleHurt1', 0 ,5, 5)
+        BearRedSprites.define('battleHurt2', 1 ,5, 5)
+
+        spriteMap.set("Red", BearRedSprites);
+
+        player = new GameObject(BearRedSprites, 2, 150);
+
+        dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, spriteMap, accountControlModule );
+        engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
+        controller = new Controller(gameCanvas, engine, dbc, player, msgBox, sendBtn, interactableNPCs)
+
+
+    })
 
     loadImage('../assets/dialogBox.png')
     .then(image => {
@@ -465,6 +484,7 @@ function update(time){
                 }
 
                 gameObject.nextFrame = next
+                gameObject.tempStart = time
 
             }else{
                     gameObject.nextFrame = next
@@ -523,7 +543,7 @@ function update(time){
                 gameObject.isRunning = false
                 gameObject.movingLeft = false
                       gameObject.movingRight = false
-                return
+                return  // perhaps this return statement is causing an issue with player flicker
             }*/
             
             gameObject.posX = gameObject.oldX + gameObject.speedX * timeElapsed
