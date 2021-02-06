@@ -260,10 +260,7 @@ loadImage('../assets/character2.png')
         engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
         controller = new Controller(gameCanvas, engine, dbc, player, msgBox, sendBtn, interactableNPCs)
 
-
-    })
-
-    loadImage('../assets/dialogBox.png')
+        loadImage('../assets/dialogBox.png')
     .then(image => {
     var dialogBoxSprites = new SpriteSheet(image, 610, 260)
     dialogBoxSprites.define("default", 0, 0);
@@ -276,6 +273,11 @@ loadImage('../assets/character2.png')
     dialogBox.name = "dialogBox"
     engine.dialogBox = dialogBox
     })
+
+
+    })
+
+    
 
     loadImage('../assets/fruit.png')
     .then(image => {
