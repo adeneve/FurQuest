@@ -2,8 +2,8 @@ import SpriteSheet from "./SpriteSheet.js"
 
 export default class GameObject{
 
-    animating = false
-    lastUpdateTime = -1
+    //animating = false;
+    //lastUpdateTime = -1;
     
     constructor(spriteSheet, animationSteps, speed){
         this.spriteSheet = spriteSheet
