@@ -502,16 +502,6 @@ function update(time){
             var diffSqY = diffY * diffY 
             var totDist =  Math.sqrt( diffSqX + diffSqY)
             
-            /*if(totDist >= gameObject.totalDistanceReq && gameObject.miniGameVal != 1) {
-                gameObject.oldX = gameObject.posX
-                gameObject.oldY = gameObject.posY
-                gameObject.moveStart = -1
-                gameObject.isMoving = false
-                gameObject.isRunning = false
-                gameObject.movingLeft = false
-                      gameObject.movingRight = false
-                return  // perhaps this return statement is causing an issue with player flicker
-            }*/
             
             gameObject.posX = gameObject.oldX + gameObject.speedX * timeElapsed
             gameObject.posY = gameObject.oldY + gameObject.speedY * timeElapsed
@@ -536,6 +526,8 @@ function update(time){
                         gameObject.movingRight = false
                     gameObject.moveStart = -1
                     prevDifX = prevDifY = 10000
+                    error = 0
+                }else{
                     error = 0
                 }
                 
