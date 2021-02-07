@@ -29,34 +29,24 @@ var accountControlModule = {
 
 
 
-
-var currentWidth = window.innerWidth * .75;
-var currentHeight = window.innerHeight * .85
-console.log(currentWidth)
-var display = new Display(gameCanvas, 1200, 676) 
-var controller = 0;
-var engine = 0;
+var controller;
+var engine;
 //display.loadScene()
 var gameObjects = []
 var interactableNPCs = []
 var spriteMap = new Map()
 var otherPlayers = new Map()
-var sprites = -1
-var movingSprites = -1
-var scene = new Image();
-scene.src = '../assets/town1200.png'
-var sceneOpenCafe = new Image();
-sceneOpenCafe.src = '../assets/town1200openCafe.png'
-var sceneCafe = new Image();
-sceneCafe.src = '../assets/cafe.png'
-var fruitBlastScene = new Image();
-fruitBlastScene.src = '../assets/fruitBlast.png'
-var tutorialBro = -1;
-var blueHairBro = -1;
-var fountain = -1;
-var player = -1;
-var dialogBox = -1;
-var dbc = 0;
+var tutorialBro;
+var blueHairBro;
+var fountain;
+var player;
+var dialogBox;
+var dbc;
+var loaded = false;
+
+var display = new Display(gameCanvas, player) 
+display.SetScreenDimensions(1200, 676)
+display.PrepareScenes();
 
 loadImage('../assets/character2.png')
 .then(imageChars => {
@@ -274,6 +264,11 @@ loadImage('../assets/character2.png')
     engine.dialogBox = dialogBox
     })
 
+    loadImage('../assets/store.jpg')
+    .then(image => {
+        requestAnimationFrame(update)
+    })
+
 
     })
 
@@ -364,51 +359,18 @@ loadImage('../assets/fountain.png')
     gameObjects.push(fountain)
 })
 
-loadImage('../assets/store.jpg')
-.then(image => {
-    requestAnimationFrame(update)
-})
+
 
 var next = 'default'
 function update(time){
 
-    //gameCanvas.getContext('2d').drawImage(scene, 0, 0);
-    //var currentScene = engine.getPlayerScene()
-    if(player.scene == 0){
-        if(!engine.enteringCafe){
-            gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
-                0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
-        }else{
-            gameCanvas.getContext('2d').drawImage(sceneOpenCafe, 0, 0, scene.width,    scene.height,     // source rectangle
-                0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
-        }
-    }
-    if(player.scene == 1){
-        gameCanvas.getContext('2d').drawImage(sceneCafe, 0, 0, sceneCafe.width,    sceneCafe.height,     // source rectangle
-            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
-    }
-    if(player.scene == 100){
-        blueHairBro.scene = 100
-        gameCanvas.getContext('2d').drawImage(scene, 0, 0, scene.width,    scene.height,     // source rectangle
-            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
-    }
-    if(player.scene == 101){
-        gameCanvas.getContext('2d').drawImage(fruitBlastScene, 0, 0, fruitBlastScene.width,    fruitBlastScene.height,     // source rectangle
-            0, 0, gameCanvas.width, gameCanvas.height); // destination rectangle
-            const ctx = gameCanvas.getContext('2d');
-						ctx.fillStyle = "#00ff00"
-						ctx.font = '50px serif';
-						ctx.fillText(`Score : ${player.miniGameScore}`, 50, 90);
-    }
     
-
-    
-    
-        
+    display.LoadScene(player.scene)
         
     gameObjects.forEach( gameObject => 
         {
             if(!player.playerLoaded) return
+            display.player = player
             if(gameObject.scene != player.scene && gameObject.name != "dialogBox"){
                 return
             }

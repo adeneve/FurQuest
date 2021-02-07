@@ -227,6 +227,7 @@ class Engine{
 							if(!this.fightAccepted) break;
 							this.dialogBox.dialogMsg = [`all right ${this.player.name}, show me what you got!`]
 							this.player.scene = 100
+							NPC.scene = 100
 							break;
 
 

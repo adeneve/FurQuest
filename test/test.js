@@ -16,6 +16,7 @@ describe('DefaultGameObject', function() {
             var player = new GameObject(playerSprites, 2, 150);
             assert.strictEqual(150, player.speed);
             assert.strictEqual(playerSprites, player.spriteSheet);
+            assert.strictEqual(false, player.animating)
         })
 
     });
