@@ -1,3 +1,5 @@
+import Utils from './Utils.js'
+
 export default
 class Controller{
 
@@ -32,7 +34,7 @@ class Controller{
 				var sceneChange = engine.checkForSceneChange(player.scene, normalized_x, normalized_y)
 				if(this.GameObjInteraction == null && sceneChange == player.scene){
 					if(player.scene == 0 && normalized_y > .06 && (normalized_x < .566 || normalized_x > .675)) return;
-					engine.calcMovement(e.clientX -gameScreen.left, e.clientY - gameScreen.top, player)
+					Utils.calcMovement(e.clientX -gameScreen.left, e.clientY - gameScreen.top, player)
 					engine.prepMovePlayer(normalized_x, normalized_y)
 				}
 				if(this.GameObjInteraction != null)
@@ -42,7 +44,6 @@ class Controller{
 					player.interacting = true
 				}
 				if(sceneChange != player.scene){
-					console.log("entering cafe1") // push scene change to db
 					player.scene = sceneChange
 					engine.saveScene(sceneChange)
 				}
@@ -54,10 +55,6 @@ class Controller{
 			if(player.fighting){
 				engine.handleBattle( normalized_x, normalized_y)
 			}
-			
-
-			
-			//savePlayerLocationDB(x, y)           game engine -> database
 		  })
 
 		  canvas.addEventListener("mousemove", e => {
@@ -65,7 +62,7 @@ class Controller{
 			  
 			var normalized_x = ((e.clientX - gameScreen.left)-(canvas.width/2))/(canvas.width/2);
 			var normalized_y = ((canvas.height/2)-(e.clientY-gameScreen.top))/(canvas.height/2);
-			var transXY = dbc.translateCoordinates(false, normalized_x, normalized_y, canvas)
+			var transXY = Utils.translateCoordinates(canvas, false, normalized_x, normalized_y)
 			console.log(normalized_x + " " + normalized_y);
 
 			if(player.scene == 101){
@@ -85,19 +82,12 @@ class Controller{
 
 			interactableNPCs.forEach(NPC => {
                 if(NPC.scene == player.scene && NPC.mouseActive == true){
-					var gameScreen = canvas.getBoundingClientRect(); 
-					var transXY = dbc.translateCoordinates(true, player.posX, player.posY +gameScreen.top, canvas)
                     var diffX = Math.abs(normalized_x - NPC.normX)
                     var diffY = Math.abs(normalized_y - NPC.normY)
                     if(diffX < .15 && diffY < .31){
                         NPC.mouseAnimate = true
                     }else{ 
 						NPC.mouseAnimate = false
-						/*var diffX = Math.abs(NPC.normX - transXY.transX)
-						var diffY = Math.abs(NPC.normY - transXY.transY)
-						if(diffX > .15 || diffY > .31){
-						  NPC.MoveInteractable = false
-						}*/
                     }
 				}
 			})

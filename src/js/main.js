@@ -4,6 +4,7 @@ import Display from './display.js'
 import SpriteSheet from './SpriteSheet.js'
 import GameObject from './GameObject.js'
 import Engine from './engine.js'
+import Utils from './Utils.js'
 import {loadImage} from './loaders.js'
 
 
@@ -31,7 +32,6 @@ var accountControlModule = {
 
 var controller;
 var engine;
-//display.loadScene()
 var gameObjects = []
 var interactableNPCs = []
 var spriteMap = new Map()
@@ -165,7 +165,7 @@ loadImage('../assets/character2.png')
     fishBowl.sprites = fishBowlSprites
     fishBowl.active = true
     fishBowl.isMoving = false
-    var transXY = translateCoordinates(false, 0.67, -.23, gameCanvas)
+    var transXY = Utils.translateCoordinates(gameCanvas, false, 0.67, -.23)
     fishBowl.posX = transXY.transX
     fishBowl.posY = transXY.transY
     fishBowl.scene = 1
@@ -184,7 +184,7 @@ loadImage('../assets/character2.png')
     blender.sprites = blenderSprites
     blender.active = true
     blender.name = "Fruit Blast"
-    var transXY = translateCoordinates(false, -0.6, -.3, gameCanvas)
+    var transXY = Utils.translateCoordinates(gameCanvas, false, -0.6, -.3)
     blender.posX = transXY.transX
     blender.posY = transXY.transY
     blender.normX = -.6
@@ -200,13 +200,13 @@ loadImage('../assets/character2.png')
     interactableNPCs.push(tutorialBro)
     interactableNPCs.push(blueHairBro)
     
-    var transXY = translateCoordinates(false, -.57, -.12, gameCanvas)
+    var transXY = Utils.translateCoordinates(gameCanvas, false, -.57, -.12)
     tutorialBro.posX = transXY.transX
     tutorialBro.posY = transXY.transY
     tutorialBro.normX = -.57
     tutorialBro.normY = -.12
 
-    var transXY = translateCoordinates(false, .3, 0, gameCanvas)
+    var transXY = Utils.translateCoordinates(gameCanvas, false, .3, 0)
     blueHairBro.posX = transXY.transX
     blueHairBro.posY = transXY.transY
     blueHairBro.normX = .3
@@ -257,7 +257,7 @@ loadImage('../assets/character2.png')
     dialogBox = new GameObject(dialogBoxSprites, 1, 500);
     dialogBox.sprites = dialogBoxSprites
     dialogBox.active = false
-    var transXY = translateCoordinates(false, 0, -.8, gameCanvas)
+    var transXY = Utils.translateCoordinates(gameCanvas, false, 0, -.8)
     dialogBox.posX = transXY.transX
     dialogBox.posY = transXY.transY
     dialogBox.name = "dialogBox"
@@ -283,7 +283,7 @@ loadImage('../assets/character2.png')
         bananaSprites.define("idle3", 3, 0);
         var banana = new GameObject(bananaSprites, 1, 500);
         banana.sprites = bananaSprites
-        var transXY = translateCoordinates(false, 0, 0, gameCanvas)
+        var transXY = Utils.translateCoordinates(gameCanvas, false, 0, 0)
         banana.posX = transXY.transX
         banana.posY = transXY.transY
         banana.name = "banana"
@@ -306,7 +306,7 @@ loadImage('../assets/character2.png')
         crossHairSprites.define("battleAttack11", 3, 2, 4);
         crossHairSprites.define("battleAttack12", 4, 2, 4);
         var crossHair = new GameObject(crossHairSprites, 1, 100)
-        var transXY = translateCoordinates(false, 0, -0.5, gameCanvas)
+        var transXY = Utils.translateCoordinates(gameCanvas, false, 0, -0.5)
         banana.posX = transXY.transX
         banana.posY = transXY.transY
         crossHair.sprites = crossHairSprites
@@ -344,15 +344,11 @@ loadImage('../assets/fountain.png')
     fountainSprites.define("splash1", 1, 0);
     fountainSprites.define("splash2", 2, 0);
     fountainSprites.define("splash3", 3, 0);
-    //fountainSprites.define("splash4", 0, 1);
-    //fountainSprites.define("splash5", 1, 1);
-    //fountainSprites.define("splash6", 2, 1);
-   // fountainSprites.define("splash7", 3, 1);
     fountain = new GameObject(fountainSprites, 1, 240);
     fountain.sprites = fountainSprites
     fountain.active = true
     fountain.isMoving = false
-    var transXY = translateCoordinates(false, -0.4, -.3, gameCanvas)
+    var transXY = Utils.translateCoordinates(gameCanvas, false, -0.4, -.3)
     fountain.posX = transXY.transX
     fountain.posY = transXY.transY
     fountain.scene = 0
@@ -464,7 +460,7 @@ function update(time){
 
         if(gameObject.isPlayer && !gameObject.fighting){
             var gameScreen = gameCanvas.getBoundingClientRect(); 
-            var transXY = dbc.translateCoordinates(true, gameObject.posX, gameObject.posY +gameScreen.top, gameCanvas)
+            var transXY = Utils.translateCoordinates(gameCanvas, true, gameObject.posX, gameObject.posY +gameScreen.top)
             
             interactableNPCs.forEach(NPC => {
                 if(NPC.scene == gameObject.scene){
@@ -552,18 +548,3 @@ function update(time){
 
 requestAnimationFrame(update)
 }
-
-function translateCoordinates(toGlobal, x, y){
-    var boundingRect = gameCanvas.getBoundingClientRect();
-    var transX = 0
-    var transY = 0
-    if(toGlobal){
-      transX = ((x )-(gameCanvas.width/2))/(gameCanvas.width/2); 
-            transY = ((gameCanvas.height/2)-(y - boundingRect.top))/(gameCanvas.height/2);
-    }
-    else{
-      transX = ((gameCanvas.width/2) * (x)) + (gameCanvas.width/2)   
-      transY = (gameCanvas.height/2) - ((gameCanvas.height/2) * (y))
-    }
-    return {transX, transY}
-  }

@@ -1,4 +1,5 @@
 import GameObject from './GameObject.js'
+import Utils from './Utils.js'
 
 export default
 class Engine{
@@ -22,39 +23,6 @@ class Engine{
 		this.gameAccepted = false
 	}
 
-	// returns the speedX and speedY
-	calcMovement(destX, destY, player){
-		
-		player.destX = destX
-		player.destY = destY
-		var playerSpeed = .17 // .001 px per ms
-		var diffX = Math.abs(destX - player.posX);
-		var diffY = Math.abs(destY - player.posY);
-		debugger;
-		var diffXraw = destX - player.posX
-		if(diffXraw > 0){
-			this.player.movingRight = true
-			this.player.movingLeft = false
-		}
-		if(diffXraw < 0){
-			this.player.movingLeft = true
-			this.player.movingRight = false
-		}
-		var diffTot = diffX + diffY 
-		var percentX = diffX / diffTot
-		var percentY = diffY / diffTot 
-		player.speedX = playerSpeed * percentX
-		player.speedY = playerSpeed * percentY
-		if(destX < player.oldX) player.speedX *= -1
-		if(destY < player.oldY) player.speedY *= -1
-		var diffSqX = diffX * diffX 
-		var diffSqY = diffY * diffY 
-		var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
-		player.totalDistanceReq = totalDistancePx
-		player.isMoving = true
-	}
-
-	
 	prepMovePlayer(normX, normY){
 		this.player.oldX = this.player.posX
 		this.player.oldY = this.player.posY
@@ -64,8 +32,6 @@ class Engine{
 		console.log("x : " + normX + "y :" + normY)
 		this.player.isMoving = true
 		this.player.isRunning = true
-		//const mvplayer = this.movePlayer.bind(this)
-		//requestAnimationFrame(mvplayer)
 	}
 
 	saveMessage(msg = ""){
@@ -74,26 +40,11 @@ class Engine{
 		setTimeout(svmsg, 5000, "");
 	}
 
-	translateCoordinates(toGlobal, x, y){
-		var boundingRect = this.canvas.getBoundingClientRect();
-		var transX = 0
-		var transY = 0
-		if(toGlobal){
-		  transX = ((x )-(this.canvas.width/2))/(this.canvas.width/2); 
-				transY = ((this.canvas.height/2)-(y - boundingRect.top))/(this.canvas.height/2);
-		}
-		else{
-		  transX = ((this.canvas.width/2) * (x)) + (this.canvas.width/2)   
-		  transY = (this.canvas.height/2) - ((this.canvas.height/2) * (y))
-		}
-		return {transX, transY}
-	  }
-
 	checkForInteraction(normX, normY){
 		console.log("xNorm: " + normX + ", yNorm: " + normY)
 		var clickedNPC = null
 		this.NPCs.forEach( NPC => {
-			if(NPC.interactable){ // AND the player clicked directly on the NPC
+			if(NPC.interactable){ 
 				var diffX = Math.abs(NPC.normX - normX)
                 var diffY = Math.abs(NPC.normY - normY)
                 if(diffX < .03 && diffY < .1){
@@ -102,7 +53,6 @@ class Engine{
                 
             }
 		})
-		//did player click on that obj?
 		return clickedNPC
 	}
 
@@ -159,25 +109,18 @@ class Engine{
 						this.player.inMiniGame = true
 						this.player.miniGameVal = 1
 						this.player.miniGameScore = 0
-						var bananaArray = this.gameObjects.filter(obj => obj.name == 'banana')
-						var bananaRef = bananaArray[0]
-						this.spawnIteration = 0
-						this.bananaSpawner = null
 						const spwnBananas = this.spawnBananas.bind(this)
 						const clnFruitBlast = this.cleanFruitBlast.bind(this)
 						const ctx = this.canvas.getContext('2d');
 						ctx.fillStyle = "#00ff00"
 						ctx.font = '50px serif';
 						ctx.fillText('Score : 0', 50, 90);
-						
-						var i = 1
+						let i = 1
 						for(i = 1; i < 7; i++){
 							setTimeout(spwnBananas, i * 5000);
 						}
 						i++
 						setTimeout(clnFruitBlast, i * 5000);
-						
-
 					}
 
 					if(interactionStep  > 2){
@@ -240,14 +183,14 @@ class Engine{
 					if(this.fightAccepted && interactionStep > 5){
 						debugger
 						this.player.interacting = false
-						var trans = this.db.translateCoordinates(false, -.1, 0)
+						var trans = Utils.translateCoordinates(this.canvas, false, -.1, 0)
 						this.player.normX = -.1
 						this.player.normX = 0
 						this.player.posX = trans.transX
 						this.player.posY = trans.transY 
 						this.player.fighting = true
 						this.player.speed = 150
-						var trans = this.db.translateCoordinates (false, .1, 0)
+						var trans = Utils.translateCoordinates (this.canvas, false, .1, 0)
 						NPC.normX = .1
 						NPC.normY = 0
 						NPC.posX = trans.transX
@@ -273,7 +216,7 @@ class Engine{
 			this.player.scene = 0
 			this.player.fighting = false 
 			this.player.speed = 200
-			var trans = this.db.translateCoordinates (false, .3, 0)
+			var trans = Utils.translateCoordinates (this.canvas ,false, .3, 0)
 			this.EnemyObj.normX = .3
 			this.EnemyObj.normY = 0
 			this.EnemyObj.posX = trans.transX
@@ -282,7 +225,7 @@ class Engine{
 			this.EnemyObj.scene = 0
 			this.EnemyObj.foughtBefore = true
 			this.dialogBox.active = false
-			var trans = this.db.translateCoordinates(true, this.player.oldX, this.player.oldY)
+			var trans = Utils.translateCoordinates(this.canvas, true, this.player.oldX, this.player.oldY)
 						this.player.normX = trans.transX
 						this.player.normY = trans.transY
 						this.player.posX = this.player.oldX
@@ -452,8 +395,8 @@ class Engine{
 			var destNegY = Math.random();
 			var initDestY = Math.random();
 			if(destNegY > .5) initDestY = -initDestY
-			var transXY = this.db.translateCoordinates(false, initPosX, initPosY, gameCanvas)
-			var transXYDest = this.db.translateCoordinates(false, initDestX, initDestY, gameCanvas)
+			var transXY = Utils.translateCoordinates(this.canvas, false, initPosX, initPosY, gameCanvas)
+			var transXYDest = Utils.translateCoordinates(this.canvas, false, initDestX, initDestY, gameCanvas)
 			banana.posX = transXY.transX
 			banana.posY = transXY.transY
 			banana.oldX = banana.posX 
@@ -465,7 +408,7 @@ class Engine{
 			banana.miniGameVal = 1
 			banana.active = true
 			this.gameObjects.push(banana)
-			this.calcMovement(banana.destX, banana.destY, banana)
+			Utils.calcMovement(banana.destX, banana.destY, banana)
 		}
 	}
 
@@ -480,7 +423,7 @@ class Engine{
 
 		this.player.scene = 1
 		this.dialogBox.active = true
-		this.dialogBox.dialogMsg = [`Score : ${this.player.miniGameScore}`, `the blender popped out ${this.player.miniGameScore / 10} coins!`]
+		this.dialogBox.dialogMsg = [`Score : ${this.player.miniGameScore}`, `the blender popped out ${(this.player.miniGameScore / 10) + 3} coins!`]
 		this.player.inMiniGame = false 
 		this.player.invisible = false
 		this.player.miniGameVal = 0
@@ -493,7 +436,7 @@ class Engine{
 			
 			var crosshair = this.gameObjects.filter(obj => obj.name == "cHair")[0];
 			var explosion = new GameObject(crosshair.sprites, 1, 50);
-			var transXY = this.db.translateCoordinates(false, normX, normY, gameCanvas)
+			var transXY = Utils.translateCoordinates(this.canvas, false, normX, normY, gameCanvas)
 			explosion.sprites = crosshair.sprites
 			debugger;
 			explosion.posX = transXY.transX
@@ -516,7 +459,7 @@ class Engine{
 				var bananaClones = this.gameObjects.filter(obj => obj.name.includes("bananaClone"))
 				bananaClones.forEach( banana => {
 					    var gameScreen = gameCanvas.getBoundingClientRect()
-						var transXY = this.db.translateCoordinates(true, banana.posX, banana.posY + gameScreen.top, gameCanvas)
+						var transXY = Utils.translateCoordinates(this.canvas, true, banana.posX, banana.posY + gameScreen.top, gameCanvas)
 						banana.normX = transXY.transX
 						banana.normY = transXY.transY
 						var diffX = Math.abs(banana.normX - normX)
@@ -548,9 +491,9 @@ class Engine{
 				debugger
 				var centerX = .61
 				var centerY = .048
-				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
+				var transXY = Utils.translateCoordinates(this.canvas, true, this.player.posX, this.player.posY + this.gameScreen.top);
 				if(Math.abs(transXY.transX - centerX) < .08 && Math.abs(transXY.transY - centerY) < .25){
-					var transXY = this.db.translateCoordinates(false, -0.16, 0.21);
+					var transXY = Utils.translateCoordinates(this.canvas, false, -0.16, 0.21);
 					this.player.posX = transXY.transX 
 					this.player.posY = transXY.transY
 					this.player.oldX = this.player.posX
@@ -576,9 +519,9 @@ class Engine{
 				console.log("leaving cafe")
 				var centerX = -0.16
 				var centerY = 0.21
-				var transXY = this.db.translateCoordinates(true, this.player.posX, this.player.posY + this.gameScreen.top);
+				var transXY = Utils.translateCoordinates(this.canvas, true, this.player.posX, this.player.posY + this.gameScreen.top);
 				if(Math.abs(transXY.transX - centerX) < .1 && Math.abs(transXY.transY - centerY) < .2){
-					var transXY = this.db.translateCoordinates(false, .618, 0);
+					var transXY = Utils.translateCoordinates(this.canvas, false, .618, 0);
 					this.player.posX = transXY.transX 
 					this.player.posY = transXY.transY
 					this.player.oldX = this.player.posX
@@ -607,7 +550,7 @@ class Engine{
 		var context = this.canvas.getContext('2d')
 		
 			
-			var transXY = this.database.translateCoordinates(false, -0.40, -0.6)
+			var transXY = Utils.translateCoordinates(this.canvas, false, -0.40, -0.6)
 			var yinc = 0;
 			context.font = "20px Comic Sans MS";
 			context.fillStyle = "#00ff00"

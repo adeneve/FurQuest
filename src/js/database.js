@@ -1,5 +1,6 @@
 import GameObject from "./GameObject.js";
 import SpriteSheet from './SpriteSheet.js'
+import Utils from "./Utils.js"
 import {loadImage} from './loaders.js'
 
  export default 
@@ -86,7 +87,6 @@ import {loadImage} from './loaders.js'
     }
 
     loadPlayerData(data){
-      const transCoord = this.translateCoordinates.bind(this)
       
         this.playerDat = data.val()
         if(this.playerDat.message == undefined) this.playerDat.message = "";
@@ -100,7 +100,7 @@ import {loadImage} from './loaders.js'
           active : true
         }
         this.chartactersDbRef.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
-        var translatedXY = transCoord(false, this.playerDat.x, this.playerDat.y)
+        var translatedXY = Utils.translateCoordinates(this.gameScreen, false, this.playerDat.x, this.playerDat.y)
         this.playerDat.x = translatedXY.transX
         this.playerDat.y = translatedXY.transY
         this.player.posX = translatedXY.transX
@@ -203,7 +203,7 @@ import {loadImage} from './loaders.js'
               
               var otherPlyerNormX = obj[key].x;
               var otherPlayerNormY = obj[key].y;
-              var translatedXY = this.translateCoordinates(false, otherPlyerNormX, otherPlayerNormY);
+              var translatedXY = Utils.translateCoordinates(this.gameScreen, false, otherPlyerNormX, otherPlayerNormY);
               var otherPlayer = new GameObject(this.spriteMap.get(obj[key].color), 2, 500)
               otherPlayer.posX = translatedXY.transX;
               otherPlayer.posY = translatedXY.transY;
@@ -242,12 +242,12 @@ import {loadImage} from './loaders.js'
 
             var otherPlyer = this.otherPlayers.get(String(key))
             if(otherPlyer == undefined) return;
-            var transXY = this.translateCoordinates(false, obj[key].x, obj[key].y);
+            var transXY = Utils.translateCoordinates(this.gameScreen, false, obj[key].x, obj[key].y);
 
             if(!otherPlyer.isMoving){
               if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY) {
                 otherPlyer.isMoving = true;
-                this.calcMovement(transXY.transX, transXY.transY, otherPlyer)
+                Utils.calcMovement(transXY.transX, transXY.transY, otherPlyer)
               }
             }
             
@@ -268,49 +268,6 @@ import {loadImage} from './loaders.js'
         
     }
 
-    calcMovement(destX, destY, player){
-      player.isMoving = true
-      player.isRunning = true
-      player.destX = destX
-      player.destY = destY
-      var playerSpeed = .15 // .001 px per ms
-      var diffX = Math.abs(destX - player.posX);
-      var diffY = Math.abs(destY - player.posY);
-      var diffXraw = destX - player.posX
-      if(diffXraw > 0){
-        player.movingRight = true
-      }
-      if(diffXraw < 0){
-        player.movingLeft = true
-      }
-      var diffTot = diffX + diffY 
-      var percentX = diffX / diffTot
-      var percentY = diffY / diffTot 
-      player.speedX = playerSpeed * percentX
-      player.speedY = playerSpeed * percentY
-      if(destX < player.oldX) player.speedX *= -1
-      if(destY < player.oldY) player.speedY *= -1
-      var diffSqX = diffX * diffX 
-      var diffSqY = diffY * diffY 
-      var totalDistancePx = Math.sqrt( diffSqX + diffSqY)
-      player.totalDistanceReq = totalDistancePx
-    }
-
-    translateCoordinates(toGlobal, x, y){
-      var boundingRect = this.gameScreen.getBoundingClientRect();
-      var transX = 0
-      var transY = 0
-      if(toGlobal){
-        transX = ((x )-(this.gameScreen.width/2))/(this.gameScreen.width/2); 
-			  transY = ((this.gameScreen.height/2)-(y - boundingRect.top))/(this.gameScreen.height/2);
-      }
-      else{
-        transX = ((this.gameScreen.width/2) * (x)) + (this.gameScreen.width/2)   
-        transY = (this.gameScreen.height/2) - ((this.gameScreen.height/2) * (y))
-      }
-      return {transX, transY}
-    }
-
     savePlayerLocationDB(normX, normY){
       console.log("saving location...");
       var charDataObj = {
@@ -327,7 +284,7 @@ import {loadImage} from './loaders.js'
     saveMessage(msg){
       console.log("saving message...");
       console.log(msg)
-      var transXY = this.translateCoordinates(true, this.player.destX, this.player.destY);
+      var transXY = Utils.translateCoordinates(this.gameScreen, true, this.player.destX, this.player.destY);
       var charDataObj = {
         color : this.playerDat.color,
         name : this.playerDat.name,
@@ -343,7 +300,6 @@ import {loadImage} from './loaders.js'
 
     saveScene(scene){
       console.log("saving scene")
-      var transXY = this.translateCoordinates(true, this.player.destX, this.player.destY);
       var charDataObj = {
         color : this.playerDat.color,
         name : this.playerDat.name,
