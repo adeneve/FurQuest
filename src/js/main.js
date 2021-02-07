@@ -44,7 +44,7 @@ var dialogBox;
 var dbc;
 var loaded = false;
 
-var display = new Display(gameCanvas, player) 
+var display = new Display(gameCanvas, player, engine) 
 display.SetScreenDimensions(1200, 676)
 display.PrepareScenes();
 
@@ -248,7 +248,7 @@ loadImage('../assets/character2.png')
 
         dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, spriteMap, accountControlModule );
         engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
-        controller = new Controller(gameCanvas, engine, dbc, player, msgBox, sendBtn, interactableNPCs)
+        controller = new Controller(gameCanvas, engine, dbc, display, player, msgBox, sendBtn, interactableNPCs)
 
         loadImage('../assets/dialogBox.png')
     .then(image => {
@@ -361,6 +361,9 @@ loadImage('../assets/fountain.png')
 
 
 
+var prevDifX = 10000
+var prevDifY = 10000
+var error = 0
 var next = 'default'
 function update(time){
 
@@ -512,9 +515,16 @@ function update(time){
             
             gameObject.posX = gameObject.oldX + gameObject.speedX * timeElapsed
             gameObject.posY = gameObject.oldY + gameObject.speedY * timeElapsed
+
+            var difX = Math.abs(Math.round(gameObject.posX, 2) - Math.round(gameObject.destX, 2))
+            var difY = Math.abs(Math.round(gameObject.posY, 2) - Math.round(gameObject.destY, 2))
+            if( difX > prevDifX) error += Math.abs(gameObject.destX - prevDifX)
+            if( difY > prevDifY) error += Math.abs(gameObject.destY - prevDifY)
+            prevDifX = difX
+            prevDifY = difY
             
             
-            if (Math.abs(Math.round(gameObject.posX, 2) - Math.round(gameObject.destX, 2)) > 1 || Math.abs(Math.round(gameObject.posY, 2) - Math.round(gameObject.destY, 2)) > 1) {
+            if ( (difX > 1 || difY > 1) && error < 3) {
 
             }else {
                 if(gameObject.miniGameVal != 1){
@@ -525,9 +535,12 @@ function update(time){
                     gameObject.movingLeft = false
                         gameObject.movingRight = false
                     gameObject.moveStart = -1
+                    prevDifX = prevDifY = 10000
+                    error = 0
                 }
                 
             }
+            
 
           }
 

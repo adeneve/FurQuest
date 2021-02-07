@@ -1,7 +1,7 @@
 export default
 class Controller{
 
-	constructor(canvas, engine, dbc, player, msgBox, sendBtn, interactableNPCs){
+	constructor(canvas, engine, dbc, display, player, msgBox, sendBtn, interactableNPCs){
 		this.canvas = canvas
 		this.engine = engine
 		this.dbc = dbc
@@ -10,6 +10,7 @@ class Controller{
 		this.GameObjInteraction = null
 		this.interactionStep = 0
 		this.interactableNPCs = interactableNPCs
+		this.display = display
 
 		canvas.addEventListener("mousedown", e => { 
 
@@ -76,10 +77,9 @@ class Controller{
 			}
 
 			if(normalized_x < .675 && normalized_x > .566 && normalized_y < 0.15 && normalized_y > -.05){
-				//console.log("entering cafe")
-				engine.enteringCafe = 1
+				this.display.enteringCafe = 1
 			}else{
-				engine.enteringCafe = 0
+				this.display.enteringCafe = 0
 			}
 			
 
@@ -91,7 +91,7 @@ class Controller{
                     var diffY = Math.abs(normalized_y - NPC.normY)
                     if(diffX < .15 && diffY < .31){
                         NPC.mouseAnimate = true
-                    }else{
+                    }else{ 
 						NPC.mouseAnimate = false
 						/*var diffX = Math.abs(NPC.normX - transXY.transX)
 						var diffY = Math.abs(NPC.normY - transXY.transY)

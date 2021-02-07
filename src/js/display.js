@@ -1,9 +1,11 @@
 export default
 class Display{
 
-	constructor(canvas, player){
+	constructor(canvas, player, engine){
         this.gameCanvas = canvas
         this.player = player
+        this.engine = engine
+        this.enteringCafe = false
     }
 
     SetScreenDimensions(widthPx, heightPx){
@@ -27,7 +29,11 @@ class Display{
 
         switch(scene){
             case 0: 
-              this.gameCanvas.getContext('2d').drawImage(this.scene, 0, 0, this.scene.width, this.scene.height, 0, 0, this.gameCanvas.width, this.gameCanvas.height);
+              if(!this.enteringCafe){
+                this.gameCanvas.getContext('2d').drawImage(this.scene, 0, 0, this.scene.width, this.scene.height, 0, 0, this.gameCanvas.width, this.gameCanvas.height);
+              }else{
+                this.gameCanvas.getContext('2d').drawImage(this.sceneOpenCafe, 0, 0, this.scene.width, this.scene.height, 0, 0, this.gameCanvas.width, this.gameCanvas.height);
+              }
               break;
             case 1: 
               this.gameCanvas.getContext('2d').drawImage(this.sceneCafe, 0, 0, this.sceneCafe.width, this.sceneCafe.height, 0, 0, this.gameCanvas.width, this.gameCanvas.height);
