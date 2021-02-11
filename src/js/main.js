@@ -357,9 +357,6 @@ loadImage('../assets/fountain.png')
 
 
 
-var prevDifX = 10000
-var prevDifY = 10000
-var error = 0
 var next = 'default'
 function update(time){
 
@@ -460,7 +457,7 @@ function update(time){
 
         if(gameObject.isPlayer && !gameObject.fighting){
             var gameScreen = gameCanvas.getBoundingClientRect(); 
-            var transXY = Utils.translateCoordinates(gameCanvas, true, gameObject.posX, gameObject.posY +gameScreen.top)
+            var transXY = Utils.translateCoordinates(gameCanvas, true, gameObject.posX, gameObject.posY)
             
             interactableNPCs.forEach(NPC => {
                 if(NPC.scene == gameObject.scene){
@@ -485,32 +482,20 @@ function update(time){
               gameObject.moveStart = time;
             }
 
-          
-          
-            var timeElapsed = time - gameObject.moveStart
+            gameObject.timeElapsed = time - gameObject.moveStart
             
-            var tempX = gameObject.oldX + gameObject.speedX * timeElapsed
-            var tempY = gameObject.oldY + gameObject.speedY * timeElapsed
-            
-            var diffX = Math.abs(tempX - gameObject.oldX);
-            var diffY = Math.abs(tempY - gameObject.oldY);
-            var diffSqX = diffX * diffX 
-            var diffSqY = diffY * diffY 
-            var totDist =  Math.sqrt( diffSqX + diffSqY)
-            
-            
-            gameObject.posX = gameObject.oldX + gameObject.speedX * timeElapsed
-            gameObject.posY = gameObject.oldY + gameObject.speedY * timeElapsed
+            gameObject.posX = gameObject.oldX + gameObject.speedX * gameObject.timeElapsed
+            gameObject.posY = gameObject.oldY + gameObject.speedY * gameObject.timeElapsed
 
             var difX = Math.abs(Math.round(gameObject.posX, 2) - Math.round(gameObject.destX, 2))
             var difY = Math.abs(Math.round(gameObject.posY, 2) - Math.round(gameObject.destY, 2))
-            if( difX > prevDifX) error += Math.abs(gameObject.destX - prevDifX)
-            if( difY > prevDifY) error += Math.abs(gameObject.destY - prevDifY)
-            prevDifX = difX
-            prevDifY = difY
+            if( difX > gameObject.prevDifX) gameObject.error += Math.abs(gameObject.destX - gameObject.prevDifX)
+            if( difY > gameObject.prevDifY) gameObject.error += Math.abs(gameObject.destY - gameObject.prevDifY)
+            gameObject.prevDifX = difX
+            gameObject.prevDifY = difY
             
             
-            if ( (difX > 1 || difY > 1) && error < 3) {
+            if ( (difX > 1 || difY > 1) && gameObject.error < 3) {
 
             }else {
                 if(gameObject.miniGameVal != 1){
@@ -521,10 +506,11 @@ function update(time){
                     gameObject.movingLeft = false
                         gameObject.movingRight = false
                     gameObject.moveStart = -1
-                    prevDifX = prevDifY = 10000
-                    error = 0
+                    gameObject.prevDifX = 10000
+                    gameObject.prevDifY = 10000
+                    gameObject.error = 0
                 }else{
-                    error = 0
+                    gameObject.error = 0
                 }
                 
             }

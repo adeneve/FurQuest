@@ -459,7 +459,7 @@ class Engine{
 				var bananaClones = this.gameObjects.filter(obj => obj.name.includes("bananaClone"))
 				bananaClones.forEach( banana => {
 					    var gameScreen = gameCanvas.getBoundingClientRect()
-						var transXY = Utils.translateCoordinates(this.canvas, true, banana.posX, banana.posY + gameScreen.top, gameCanvas)
+						var transXY = Utils.translateCoordinates(this.canvas, true, banana.posX, banana.posY, gameCanvas)
 						banana.normX = transXY.transX
 						banana.normY = transXY.transY
 						var diffX = Math.abs(banana.normX - normX)
@@ -488,7 +488,6 @@ class Engine{
 	checkForSceneChange(currentScene, normX, normY){
 		if(currentScene == 0){
 			if(normX < .675 && normX > .566 && normY < 0.15 && normY > -.05){ 
-				debugger
 				var centerX = .61
 				var centerY = .048
 				var transXY = Utils.translateCoordinates(this.canvas, true, this.player.posX, this.player.posY + this.gameScreen.top);

@@ -1,7 +1,6 @@
 export default class Utils{
 
     static calcMovement(destX, destY, player){
-		
 		player.destX = destX
 		player.destY = destY
 		var playerSpeed = .17 // .001 px per ms
@@ -37,7 +36,7 @@ export default class Utils{
         var transY = 0
         if(toGlobal){
           transX = ((x )-(gameScreen.width/2))/(gameScreen.width/2); 
-                transY = ((gameScreen.height/2)-(y - boundingRect.top))/(gameScreen.height/2);
+          transY = ((gameScreen.height/2)-(y))/(gameScreen.height/2);
         }
         else{
           transX = ((gameScreen.width/2) * (x)) + (gameScreen.width/2)   

@@ -122,7 +122,7 @@ import {loadImage} from './loaders.js'
         this.player.playerLoaded = true
         const chkLogout = this.checkForPlayerLogout.bind(this)
         var oldNormX = this.player.normX;
-        setTimeout(chkLogout, 120000, this.fbUser.uid, this.player, oldNormX ); 
+        setTimeout(chkLogout, 1200000000, this.fbUser.uid, this.player, oldNormX ); 
 
 
 
@@ -140,8 +140,7 @@ import {loadImage} from './loaders.js'
             
             var otherPlyerNormX = charData[key].x;
             var otherPlayerNormY = charData[key].y;
-            var translatedXY = transCoord(false, otherPlyerNormX, otherPlayerNormY);
-            debugger;
+            var translatedXY = Utils.translateCoordinates(this.gameScreen, false, otherPlyerNormX, otherPlayerNormY);
             var otherPlayer = new GameObject(this.spriteMap.get(charData[key].color), 2, 500)
             otherPlayer.posX = translatedXY.transX;
             otherPlayer.posY = translatedXY.transY;
@@ -165,7 +164,7 @@ import {loadImage} from './loaders.js'
                 this.otherPlayers.set(String(key), otherPlayer);
                 const chkLogout = this.checkForLogout.bind(this)
                 var oldPosX = otherPlayer.posX;
-		            setTimeout(chkLogout, 120000, key, otherPlayer, oldPosX );  //if other player doesn't move in 2 minutes, log them out (set active to false and push)
+		            setTimeout(chkLogout, 1200000000, key, otherPlayer, oldPosX );  //if other player doesn't move in 2 minutes, log them out (set active to false and push)
               }
               
             }
@@ -224,11 +223,10 @@ import {loadImage} from './loaders.js'
               this.otherPlayers.set(String(key), otherPlayer);
               const chkLogout = this.checkForLogout.bind(this)
                 var oldPosX = otherPlayer.posX;
-		            setTimeout(chkLogout, 120000, key, otherPlayer, oldPosX ); 
+		            setTimeout(chkLogout, 1200000000, key, otherPlayer, oldPosX ); 
             }
 
             if(obj[key].message == "doop"){
-              debugger
             }
             
 
@@ -278,7 +276,7 @@ import {loadImage} from './loaders.js'
       events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
       const chkLogout = this.checkForPlayerLogout.bind(this)
       var oldNormX = this.player.normX;
-      setTimeout(chkLogout, 120000, this.fbUser.uid, this.player, oldNormX); 
+      setTimeout(chkLogout, 1200000000, this.fbUser.uid, this.player, oldNormX); 
     }
 
     saveMessage(msg){

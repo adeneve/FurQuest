@@ -40,6 +40,9 @@ export default class GameObject{
         this.destY = 400
         this.oldX = 512
         this.oldY = 400
+        this.prevDifX = 10000
+        this.prevDifY = 10000
+        this.error = 0
         this.nextFrame = "default"
         this.totalDistanceReq = 0
         this.charID = -1
