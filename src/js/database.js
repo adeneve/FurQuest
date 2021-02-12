@@ -244,7 +244,9 @@ import {loadImage} from './loaders.js'
 
             if(!otherPlyer.isMoving){
               if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY) {
+                debugger;
                 otherPlyer.isMoving = true;
+                otherPlyer.isRunning = true;
                 Utils.calcMovement(transXY.transX, transXY.transY, otherPlyer)
               }
             }

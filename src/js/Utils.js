@@ -31,7 +31,6 @@ export default class Utils{
 
 
     static translateCoordinates(gameScreen, toGlobal, x, y){
-        var boundingRect = gameScreen.getBoundingClientRect();
         var transX = 0
         var transY = 0
         if(toGlobal){

@@ -334,9 +334,6 @@ loadImage('../assets/character2.png')
 
 
 
-
-
-
 loadImage('../assets/fountain.png')
 .then(image => {
     var fountainSprites = new SpriteSheet(image, 128, 128)
@@ -382,6 +379,7 @@ function update(time){
         
         if(gameObject.tempTimeElapsed >= gameObject.speed){
             if(gameObject.isRunning){
+                debugger;
                 if(gameObject.movingRight){
                     next = gameObject.movementFrameNames.next().value
                 }
@@ -456,9 +454,7 @@ function update(time){
     }
 
         if(gameObject.isPlayer && !gameObject.fighting){
-            var gameScreen = gameCanvas.getBoundingClientRect(); 
             var transXY = Utils.translateCoordinates(gameCanvas, true, gameObject.posX, gameObject.posY)
-            
             interactableNPCs.forEach(NPC => {
                 if(NPC.scene == gameObject.scene){
                     var diffX = Math.abs(NPC.normX - transXY.transX)
@@ -475,9 +471,7 @@ function update(time){
         }
 
         if(gameObject.isMoving){
-    
-              
-                
+  
             if(gameObject.moveStart == -1) {
               gameObject.moveStart = time;
             }
@@ -494,12 +488,11 @@ function update(time){
             gameObject.prevDifX = difX
             gameObject.prevDifY = difY
             
-            
             if ( (difX > 1 || difY > 1) && gameObject.error < 3) {
 
             }else {
                 if(gameObject.miniGameVal != 1){
-                        gameObject.oldX = gameObject.posX
+                    gameObject.oldX = gameObject.posX
                     gameObject.oldY = gameObject.posY
                     gameObject.isMoving = false
                     gameObject.isRunning = false

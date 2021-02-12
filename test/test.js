@@ -11,9 +11,7 @@ const playerSpeed = .17;
 
 const mockGameScreen = {
   "width": 1200,
-  "height": 676,
-  "top": 100,
-  "left": 200
+  "height": 676
 }
 
 before(async () => {  
@@ -54,10 +52,10 @@ describe('CalculateMovement', function() {
   
       });
       it('Calculate Movement should set correct direction', function(){
-        const destX = 800, destY = 800;
+        var destX = 800, destY = 800;
         assert.strictEqual(player.movingLeft, false);
         assert.strictEqual(player.movingRight, true);
-        const destX = 300, destY = 300;
+        destX = 300, destY = 300;
         Utils.calcMovement(destX, destY, player)
         assert.strictEqual(player.movingLeft, true);
         assert.strictEqual(player.movingRight, false);
@@ -67,12 +65,34 @@ describe('CalculateMovement', function() {
 
   describe('TranslateCoordinates', function() {
     describe('#Utils TranslateCoordinates', function() {
-      const clickX = 600, clickY = 700;
       it('Translate Coordinates to Global should return values is normalized form', function(){
+        var x = 700, y = 720;
+        var transXY = Utils.translateCoordinates(mockGameScreen, true, x, y)
+        assert.strictEqual((x - (mockGameScreen.width / 2))/(mockGameScreen.width/2), transXY.transX);
+        assert.strictEqual(((mockGameScreen.height / 2) - y)/(mockGameScreen.height/2), transXY.transY);
 
       });
       it('Translate Coordinates to Local should return values in local form', function(){
-
+        var x = 1, y = 1;
+        var transXY = Utils.translateCoordinates(mockGameScreen, false, x, y)
+        assert.strictEqual(mockGameScreen.width, transXY.transX);
+        assert.strictEqual(0 , transXY.transY);
+        x = 0, y = 0;
+        var transXY = Utils.translateCoordinates(mockGameScreen, false, x, y)
+        assert.strictEqual(mockGameScreen.width/2, transXY.transX);
+        assert.strictEqual(mockGameScreen.height/2, transXY.transY);
+        x = -1, y = -1;
+        var transXY = Utils.translateCoordinates(mockGameScreen, false, x, y)
+        assert.strictEqual(0, transXY.transX);
+        assert.strictEqual(mockGameScreen.height, transXY.transY);
+        x = -1, y = 1;
+        var transXY = Utils.translateCoordinates(mockGameScreen, false, x, y)
+        assert.strictEqual(0, transXY.transX);
+        assert.strictEqual(0, transXY.transY);
+        x = 1, y = -1;
+        var transXY = Utils.translateCoordinates(mockGameScreen, false, x, y)
+        assert.strictEqual(mockGameScreen.width, transXY.transX);
+        assert.strictEqual(mockGameScreen.height, transXY.transY);
       });
     });
   });
