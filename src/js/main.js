@@ -3,6 +3,7 @@ import Controller from './controller.js'
 import Display from './display.js'
 import SpriteSheet from './SpriteSheet.js'
 import GameObject from './GameObject.js'
+import GameObjectLoader from './GameObjectLoader.js'
 import Engine from './engine.js'
 import Utils from './Utils.js'
 import {loadImage} from './loaders.js'
@@ -33,6 +34,7 @@ var accountControlModule = {
 var controller;
 var engine;
 var gameObjects = []
+var localGameObjects = []
 var interactableNPCs = []
 var spriteMap = new Map()
 var otherPlayers = new Map()
@@ -47,6 +49,11 @@ var loaded = false;
 var display = new Display(gameCanvas, player, engine) 
 display.SetScreenDimensions(1200, 676)
 display.PrepareScenes();
+
+var gameObjectLoader = new GameObjectLoader(gameObjects, localGameObjects);
+gameObjectLoader.Initialize();
+
+
 
 loadImage('../assets/character2.png')
 .then(imageChars => {
