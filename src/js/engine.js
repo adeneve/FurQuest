@@ -1,14 +1,17 @@
 import GameObject from './GameObject.js'
 import Utils from './Utils.js'
+import GameObjectLoader from './GameObjectLoader.js'
+
 
 export default
 class Engine{
 
-	constructor(database, canvas, player, gameObjects, NPCs, dialogBox){
+	constructor(database, canvas, player, localGameObjects, gameObjects, NPCs, dialogBox){
 		this.canvas = canvas
 		this.player = player
 		this.db = database
 		this.gameObjects = gameObjects
+		this.localGameObjects = localGameObjects
 		this.NPCs = NPCs
 		this.dialogBox = dialogBox
 		this.database = database
@@ -104,6 +107,7 @@ class Engine{
 					if(interactionStep == 2 && this.gameAccepted){
 						//debugger
 						this.player.scene = 101
+						GameObjectLoader.LoadLocalObjects(101, this.localGameObjects, this.gameObjects)
 						this.player.invisible = true
 						this.player.interacting = true
 						this.player.inMiniGame = true
@@ -407,21 +411,14 @@ class Engine{
 			banana.scene = 101
 			banana.miniGameVal = 1
 			banana.active = true
-			this.gameObjects.push(banana)
+			this.localGameObjects.push(banana)
 			Utils.calcMovement(banana.destX, banana.destY, banana)
 		}
 	}
 
 	cleanFruitBlast(){
-		var i = this.gameObjects.length
-		while(i--){
-			if(this.gameObjects[i].name.includes('bananaClone') || this.gameObjects[i].name.includes('explosion')){
-				//debugger
-				this.gameObjects.splice(i, 1)
-			}
-		}
-
 		this.player.scene = 1
+		GameObjectLoader.LoadLocalObjects(1, this.localGameObjects, this.gameObjects)
 		this.dialogBox.active = true
 		this.dialogBox.dialogMsg = [`Score : ${this.player.miniGameScore}`, `the blender popped out ${(this.player.miniGameScore / 10) + 3} coins!`]
 		this.player.inMiniGame = false 
@@ -451,12 +448,12 @@ class Engine{
 			explosion.active = true
 			explosion.attacking = true;
 			explosion.fighting = true;
-			this.gameObjects.push(explosion);
+			this.localGameObjects.push(explosion);
 						const chgAtkSt = this.changeAttackState.bind(this)
 						
 						setTimeout(chgAtkSt, 1100, explosion, true, true);
 			
-				var bananaClones = this.gameObjects.filter(obj => obj.name.includes("bananaClone"))
+				var bananaClones = this.localGameObjects.filter(obj => obj.name.includes("bananaClone"))
 				bananaClones.forEach( banana => {
 					    var gameScreen = gameCanvas.getBoundingClientRect()
 						var transXY = Utils.translateCoordinates(this.canvas, true, banana.posX, banana.posY, gameCanvas)
@@ -504,6 +501,7 @@ class Engine{
 					console.log("saving loc in cafe")
 					console.log(this.player.normX, this.player.normY)
 					this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
+					GameObjectLoader.LoadLocalObjects(1, this.localGameObjects, this.gameObjects)
 					return 1
 				}else{
 					return 0
@@ -530,6 +528,7 @@ class Engine{
 					this.player.normX = 0.618
 					this.player.normY = 0
 					this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
+					GameObjectLoader.LoadLocalObjects(0, this.localGameObjects, this.gameObjects)
 					return 0
 				}else{
 					return 1
@@ -538,7 +537,10 @@ class Engine{
 				return 1
 			}
 		}
-		else return 100
+		else {
+			GameObjectLoader.LoadLocalObjects(100, this.localGameObjects, this.gameObjects)
+			return 100
+		}
 	}
 
 	saveScene(scene){

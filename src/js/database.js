@@ -1,7 +1,7 @@
 import GameObject from "./GameObject.js";
 import SpriteSheet from './SpriteSheet.js'
 import Utils from "./Utils.js"
-import {loadImage} from './loaders.js'
+import GameObjectLoader from "./GameObjectLoader.js"
 
  export default 
  class DatabaseController {
@@ -9,7 +9,7 @@ import {loadImage} from './loaders.js'
     playerDat = {}
     gameScreen = 0
 
-    constructor(gameScreen, player, otherPlayers, gameObjects, spriteMap, accountControlModule){
+    constructor(gameScreen, player, otherPlayers, localGameObjects, gameObjects, spriteMap, accountControlModule){
         var firebaseConfig = {
             apiKey: "AIzaSyDGPX41BsvlB0a05akJiWTS_9yH_UZO744",
             authDomain: "furquest-1c939.firebaseapp.com",
@@ -27,6 +27,7 @@ import {loadImage} from './loaders.js'
         this.gameScreen = gameScreen
         this.player = player
         this.otherPlayers = otherPlayers
+        this.localGameObjects = localGameObjects
         this.gameObjects = gameObjects
         this.spriteMap = spriteMap
         this.fbUser = -1
@@ -119,6 +120,8 @@ import {loadImage} from './loaders.js'
         this.player.sprites = this.spriteMap.get(this.player.color)
         this.player.isPlayer = true
         this.player.scene = this.playerDat.scene
+        debugger;
+        GameObjectLoader.LoadLocalObjects(this.player.scene, this.localGameObjects, this.gameObjects)
         this.player.playerLoaded = true
         const chkLogout = this.checkForPlayerLogout.bind(this)
         var oldNormX = this.player.normX;

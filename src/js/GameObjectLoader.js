@@ -5,10 +5,6 @@ import {loadImage} from './loaders.js'
 
 export default class GameObjectLoader{
 
-    
-    constructor(){
-
-    }
 
     static Initialize(gameObjects, localGameObjects, interactableNPCs, spriteMap){
         var tutorialBro;
@@ -24,8 +20,6 @@ export default class GameObjectLoader{
         loadImage('../assets/character2.png')
         .then(imageChars => {
     
-
-
             var BearBrownSprites = new SpriteSheet(imageChars, 64, 64);
             BearBrownSprites.define('default', 0, 1);
             BearBrownSprites.define('movingDefault', 1, 1, 1)
@@ -213,6 +207,7 @@ export default class GameObjectLoader{
                 spriteMap.set("Red", BearRedSprites);
 
                 player = new GameObject(BearRedSprites, 2, 150);
+                player.isPlayer = true;
                 gameObjects.push(player)
                 
 
@@ -316,6 +311,11 @@ export default class GameObjectLoader{
         })
 
       });
+    }
+
+    static LoadLocalObjects(scene, localGameObjects, gameObjects){
+        localGameObjects.splice(0, localGameObjects.length)
+        gameObjects.forEach(obj => {if(obj.scene == scene || obj.isPlayer)localGameObjects.push(obj)});
     }
 
 

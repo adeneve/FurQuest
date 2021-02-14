@@ -84,19 +84,43 @@ export default class SpriteSheet {
         
 
         if(msg != ""){
+            var msgSectionA = msg.substring(0,32)
+            if(msg.substring(32,33) != " " && msg.length >= 33 && msg.substring(31,32) != " ") msgSectionA += "-"
+            var msgSectionB = msg.substring(32, 64)
+            if(msg.substring(64,65) != " " && msg.length>64 && msg.substring(63,64) != " ") msgSectionB += "-"
+            var msgSectionC = msg.substring(64,101)
             context.fillStyle = "#FFFFFF";
             context.globalAlpha = 0.4;
-            context.fillRect( x - this.width/2 - 15, y - this.height/2 - 35, 150 * ((msg.length / 20) + 1), 30);
+            if(msg.length < 33)  context.fillRect( x - this.width/2 - 12, y - this.height/2 - 35, Math.min(165 * (1 + msg.length/20), 330), 30);
+            if(msg.length >= 33 && msg.length <= 64)  context.fillRect( x - this.width/2 - 12, y - this.height/2 - 35, Math.min(165 * (1 + msg.length/20), 330), 60);
+            if(msg.length > 64) context.fillRect( x - this.width/2 - 12, y - this.height/2 - 50, Math.min(165 * (1 + msg.length/20), 330), 75);
+
             context.globalAlpha = 1;
             context.font = "20px Comic Sans MS";
             context.fillStyle = "#000000";
-            context.fillText(msg, x - this.width/2, y - this.height/2 - 10)
+            if(msg.length <= 64){
+                context.fillText(msgSectionA, x - this.width/2, y - this.height/2 - 10)
+            context.fillText(msgSectionB, x - this.width/2, y - this.height/2 + 10)
+            context.fillText(msgSectionC, x - this.width/2, y - this.height/2 + 30 )
+            }else{
+                context.fillText(msgSectionA, x - this.width/2, y - this.height/2 - 30)
+            context.fillText(msgSectionB, x - this.width/2, y - this.height/2 - 10)
+            context.fillText(msgSectionC, x - this.width/2, y - this.height/2 + 10 )
+            }
+            
+            
         }
 
         if(gameObj != undefined && (gameObj.isPlayer || gameObj.isOtherPlayer)){
             context.font = "15px Comic Sans MS";
             context.fillStyle = "#000000";
-            context.fillText(gameObj.name, x - this.width/2 + 10, y - this.height/2 + 80)
+            if(gameObj.isOtherPlayer){
+                context.fillText(gameObj.name, x , y - this.height/2 + 160)
+            }else{
+                context.font = "15px Comic Sans MS";
+                context.fillStyle = "#55F1D5";
+                context.fillText(gameObj.name, x - 5 , y + this.height/2 - 10)
+            }
         }
         
         

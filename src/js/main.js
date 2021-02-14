@@ -1,12 +1,9 @@
 import DatabaseController from './database.js'
 import Controller from './controller.js'
 import Display from './display.js'
-import SpriteSheet from './SpriteSheet.js'
-import GameObject from './GameObject.js'
 import GameObjectLoader from './GameObjectLoader.js'
 import Engine from './engine.js'
 import Utils from './Utils.js'
-import {loadImage} from './loaders.js'
 
 
 var gameCanvas = document.getElementById("gameCanvas") 
@@ -51,13 +48,12 @@ display.PrepareScenes();
 GameObjectLoader.Initialize(gameObjects, localGameObjects, interactableNPCs, spriteMap).then((objs) => {
     player = objs.player;
     dialogBox = objs.dialogBox;
-    dbc = new DatabaseController(gameCanvas, player, otherPlayers, gameObjects, spriteMap, accountControlModule);
-    engine = new Engine(dbc, gameCanvas, player, gameObjects, interactableNPCs, dialogBox);
+    dbc = new DatabaseController(gameCanvas, player, otherPlayers, localGameObjects, gameObjects, spriteMap, accountControlModule);
+    engine = new Engine(dbc, gameCanvas, player, localGameObjects, gameObjects, interactableNPCs, dialogBox);
     controller = new Controller(gameCanvas, engine, dbc, display, player, msgBox, sendBtn, interactableNPCs)
+    GameObjectLoader.LoadLocalObjects(player.scene, localGameObjects, gameObjects)
+    debugger;
 });
-
-
-
 
 
 var next = 'default'
@@ -68,7 +64,7 @@ function update(time){
     
     display.LoadScene(player.scene)
         
-    gameObjects.forEach( gameObject => 
+    localGameObjects.forEach( gameObject => 
         {
             if(!player.playerLoaded) return
             display.player = player

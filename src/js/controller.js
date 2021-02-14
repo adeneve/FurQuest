@@ -95,7 +95,11 @@ class Controller{
             })
 
 		  sendBtn.addEventListener("click", e => {
-			  engine.saveMessage(msgBox.value)
+			  if(msgBox.value.length < 100){
+				engine.saveMessage(msgBox.value)
+			  }else{
+				  alert("please only enter a maximum of 99 characters")
+			  }
 		  })
 
 	}

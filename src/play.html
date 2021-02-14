@@ -107,8 +107,10 @@
       <textarea class="form-control" rows="5" id="comment" style="font-size: 20px;"></textarea>
     </div>
   </form>
+  <p id="msgCounter">0/99</p>
   <button type="button" id="sendMsg" class="btn btn-primary btn-lg">Send Message</button>
 </div>
+
 
 
 <audio id="happy" src="../assets/music/happy.mp3" muted></audio>
@@ -128,6 +130,12 @@
     x.src = "./assets/play3.png"
   }
 
+  var msgSection = document.getElementById("comment");
+  msgSection.onkeyup = function(){
+    var counter = document.getElementById("msgCounter")
+    console.log(msgSection.value)
+    counter.innerHTML = `${msgSection.value.length} / 99`
+  }
 
 </script>
 </html>
