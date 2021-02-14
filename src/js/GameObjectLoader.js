@@ -156,6 +156,86 @@ export default class GameObjectLoader{
             gameObjects.push(blender)
             interactableNPCs.push(blender)
 
+
+            var inventoryIconSprites = new SpriteSheet(image, 64, 64)
+            inventoryIconSprites.define("default", 0, 4);
+            inventoryIconSprites.define("idle1", 0, 4);
+            inventoryIconSprites.define("activeDefault", 1, 4, 6);
+            inventoryIconSprites.define("active1", 1, 4, 6);
+            var inventoryIcon = new GameObject(inventoryIconSprites, 1, 20);
+            inventoryIcon.sprites = inventoryIconSprites
+            inventoryIcon.active = true
+            inventoryIcon.name = "Inventory"
+            var transXY = Utils.translateCoordinates(gameCanvas, false, 0.75, -.93)
+            inventoryIcon.posX = transXY.transX
+            inventoryIcon.posY = transXY.transY
+            inventoryIcon.normX = .75
+            inventoryIcon.normY = -.93
+            inventoryIcon.scene = -9
+            inventoryIcon.mouseActive = true
+            gameObjects.push(inventoryIcon)
+            interactableNPCs.push(inventoryIcon)
+
+            var accountStatsIconSprites = new SpriteSheet(image, 64, 64)
+            accountStatsIconSprites.define("default", 2, 4);
+            accountStatsIconSprites.define("idle1", 2, 4);
+            accountStatsIconSprites.define("activeDefault", 3, 4, 6);
+            accountStatsIconSprites.define("active1", 3, 4, 6);
+            var accountStats = new GameObject(accountStatsIconSprites, 1, 20);
+            accountStats.sprites = accountStatsIconSprites
+            accountStats.active = true
+            accountStats.name = "accountIcon"
+            var transXY = Utils.translateCoordinates(gameCanvas, false, 0.68, -.93)
+            accountStats.posX = transXY.transX
+            accountStats.posY = transXY.transY
+            accountStats.normX = .68
+            accountStats.normY = -.93
+            accountStats.scene = -9
+            accountStats.mouseActive = true
+            gameObjects.push(accountStats)
+            interactableNPCs.push(accountStats)
+
+            var phoneIconSprites = new SpriteSheet(image, 64, 64)
+            phoneIconSprites.define("default", 4, 4);
+            phoneIconSprites.define("idle1", 4, 4);
+            phoneIconSprites.define("activeDefault", 5, 4, 6);
+            phoneIconSprites.define("active1", 5, 4, 6);
+            var phoneIcon = new GameObject(phoneIconSprites, 1, 20);
+            phoneIcon.sprites = phoneIconSprites
+            phoneIcon.active = true
+            phoneIcon.name = "phoneIon"
+            var transXY = Utils.translateCoordinates(gameCanvas, false, 0.82, -.93)
+            phoneIcon.posX = transXY.transX
+            phoneIcon.posY = transXY.transY
+            phoneIcon.normX = .82
+            phoneIcon.normY = -.93
+            phoneIcon.scene = -9
+            phoneIcon.mouseActive = true
+            gameObjects.push(phoneIcon)
+            interactableNPCs.push(phoneIcon)
+
+            var InventoryBoxSprites = new SpriteSheet(image, 64, 64)
+            InventoryBoxSprites.define("default", 0, 5);
+            InventoryBoxSprites.define("idle1", 0, 5);
+            InventoryBoxSprites.define("activeDefault", 0, 5, 6);
+            InventoryBoxSprites.define("active1", 0, 5, 6);
+            var InventoryBox = new GameObject(InventoryBoxSprites, 1, 20);
+            InventoryBox.sprites = InventoryBoxSprites
+            InventoryBox.active = true
+            InventoryBox.name = "InventoryBox"
+            var transXY = Utils.translateCoordinates(gameCanvas, false, 0.38, -0.47)
+            InventoryBox.posX = transXY.transX
+            InventoryBox.posY = transXY.transY
+            InventoryBox.normX = .7
+            InventoryBox.normY = -.85
+            InventoryBox.scene = -9
+            InventoryBox.interactable = false
+            InventoryBox.invisible = true
+            InventoryBox.doScale = true
+            InventoryBox.scale = 8
+            gameObjects.push(InventoryBox)
+
+
             
             gameObjects.push(tutorialBro);
             gameObjects.push(blueHairBro);
@@ -315,7 +395,7 @@ export default class GameObjectLoader{
 
     static LoadLocalObjects(scene, localGameObjects, gameObjects){
         localGameObjects.splice(0, localGameObjects.length)
-        gameObjects.forEach(obj => {if(obj.scene == scene || obj.isPlayer)localGameObjects.push(obj)});
+        gameObjects.forEach(obj => {if(obj.scene == scene || obj.isPlayer || obj.scene == -9)localGameObjects.push(obj)});
     }
 
 

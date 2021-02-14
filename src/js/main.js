@@ -38,6 +38,12 @@ var otherPlayers = new Map()
 
 var player = {};
 var dialogBox = {};
+var inventoryIcon = {};
+var inventoryUI = {};
+var playerStatsIcon = {};
+var playerStatsUI = {};
+var phoneIcon = {};
+var phoneUI = {};
 var dbc;
 var loaded = false;
 
@@ -68,9 +74,7 @@ function update(time){
         {
             if(!player.playerLoaded) return
             display.player = player
-            if(gameObject.scene != player.scene && gameObject.name != "dialogBox"){
-                return
-            }
+
             if(gameObject.animating && !gameObject.invisible){ 
             if(gameObject.tempStart == -1) gameObject.tempStart = time
             if(gameObject.start == -1) {
@@ -160,7 +164,7 @@ function update(time){
         if(gameObject.isPlayer && !gameObject.fighting){
             var transXY = Utils.translateCoordinates(gameCanvas, true, gameObject.posX, gameObject.posY)
             interactableNPCs.forEach(NPC => {
-                if(NPC.scene == gameObject.scene){
+                if((NPC.scene == gameObject.scene)){
                     var diffX = Math.abs(NPC.normX - transXY.transX)
                     var diffY = Math.abs(NPC.normY - transXY.transY)
                     if(diffX < .15 && diffY < .31){

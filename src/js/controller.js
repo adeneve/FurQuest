@@ -81,13 +81,15 @@ class Controller{
 			
 
 			interactableNPCs.forEach(NPC => {
-                if(NPC.scene == player.scene && NPC.mouseActive == true){
+                if((NPC.scene == player.scene || NPC.scene == -9) && NPC.mouseActive == true){
                     var diffX = Math.abs(normalized_x - NPC.normX)
                     var diffY = Math.abs(normalized_y - NPC.normY)
-                    if(diffX < .15 && diffY < .31){
+                    if(( NPC.scene != -9 && diffX < .1 && diffY < .31) || (diffX < .025 && diffY < .05)){
                         NPC.mouseAnimate = true
+						if(NPC.scene == -9) NPC.interactable = true
                     }else{ 
 						NPC.mouseAnimate = false
+						if(NPC.scene == -9) NPC.interactable = false
                     }
 				}
 			})

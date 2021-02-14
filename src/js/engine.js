@@ -24,6 +24,7 @@ class Engine{
 		this.tapout = false
 		this.fightAccepted = false
 		this.gameAccepted = false
+		this.inventoryOpen = false
 	}
 
 	prepMovePlayer(normX, normY){
@@ -62,6 +63,21 @@ class Engine{
 	handleInteraction(NPC, interactionStep, normx, normy){
 		console.log('beep')
 		switch(NPC.name){
+			case "Inventory":
+				debugger
+				if(interactionStep > 0) {this.player.interacting = false; return;}
+				if(this.inventoryOpen == false){
+					this.localGameObjects.filter(obj => obj.name == "InventoryBox")[0].invisible = false
+					this.inventoryOpen = true
+				}else{
+					this.localGameObjects.filter(obj => obj.name == "InventoryBox")[0].invisible = true
+					this.inventoryOpen = false
+				}
+
+				this.player.interacting = false
+				
+				break;
+
 			case "Mysterious Stranger":
 				this.dialogBox.active = true
 				this.dialogBox.name = NPC.name

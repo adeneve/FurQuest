@@ -67,6 +67,8 @@ export default class GameObject{
         this.inMiniGame = false
         this.miniGameVal = 0
         this.miniGameScore = 0
+        this.doScale = false
+        this.scale = 1
     }
 
     getNextSprite(){

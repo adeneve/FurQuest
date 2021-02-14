@@ -79,8 +79,19 @@ export default class SpriteSheet {
                 scale = 1.2;
             }
         }
+        if(gameObj.doScale){
+            scale = gameObj.scale
+        }
+        
+        if(gameObj.name == "Inventory"){
+            context.fillStyle = 'rgba(0,225,225,0.5)';
+        context.fillRect( 980, 620, 330, 200);
+        }
         
         context.drawImage(buffer, x-this.width/2, y -this.height/2, this.width*scale, this.height*scale);
+
+       
+
         
 
         if(msg != ""){
