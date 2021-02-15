@@ -248,6 +248,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
             if(otherPlyer == undefined) return;
             var transXY = Utils.translateCoordinates(this.gameScreen, false, obj[key].x, obj[key].y);
 
+            debugger;
             if(!otherPlyer.isMoving){
               if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY && otherPlyer.scene == obj[key].scene) {
                 debugger;
@@ -272,7 +273,6 @@ import GameObjectLoader from "./GameObjectLoader.js"
                   otherPlyer.invisible = false
                   GameObjectLoader.LoadLocalObjects(this.player.scene, this.localGameObjects, this.gameObjects)
                 }
-                otherPlyer.isMoving = false
                   transXY = Utils.translateCoordinates(this.gameScreen, false, obj[key].x, obj[key].y)
                   otherPlyer.posX = transXY.transX
                   otherPlyer.posY = transXY.transY
@@ -280,6 +280,8 @@ import GameObjectLoader from "./GameObjectLoader.js"
                   otherPlyer.oldY = otherPlyer.posY
                   otherPlyer.normX = obj[key].x 
                   otherPlyer.normY = obj[key].y
+                  otherPlyer.isMoving = false
+                  otherPlyer.isRunning = false
             }
 
             
