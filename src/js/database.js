@@ -126,7 +126,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
         this.player.playerLoaded = true
         const chkLogout = this.checkForPlayerLogout.bind(this)
         var oldNormX = this.player.normX;
-        setTimeout(chkLogout, 1200000000, this.fbUser.uid, this.player, oldNormX ); 
+        setTimeout(chkLogout, 120000, this.fbUser.uid, this.player, oldNormX ); 
 
 
 
@@ -169,7 +169,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
                 this.otherPlayers.set(String(key), otherPlayer);
                 const chkLogout = this.checkForLogout.bind(this)
                 var oldPosX = otherPlayer.posX;
-		            setTimeout(chkLogout, 1200000000, key, otherPlayer, oldPosX );  //if other player doesn't move in 2 minutes, log them out (set active to false and push)
+		            setTimeout(chkLogout, 120000, key, otherPlayer, oldPosX );  //if other player doesn't move in 2 minutes, log them out (set active to false and push)
               }
               
             }
@@ -229,7 +229,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
               this.otherPlayers.set(String(key), otherPlayer);
               const chkLogout = this.checkForLogout.bind(this)
                 var oldPosX = otherPlayer.posX;
-		            setTimeout(chkLogout, 1200000000, key, otherPlayer, oldPosX ); 
+		            setTimeout(chkLogout, 120000, key, otherPlayer, oldPosX ); 
             }
 
             if(obj[key].message == "doop"){
@@ -301,7 +301,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
       events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
       const chkLogout = this.checkForPlayerLogout.bind(this)
       var oldNormX = this.player.normX;
-      setTimeout(chkLogout, 1200000000, this.fbUser.uid, this.player, oldNormX); 
+      setTimeout(chkLogout, 120000, this.fbUser.uid, this.player, oldNormX); 
     }
 
     savePlayerInventoryDB(){
