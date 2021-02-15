@@ -118,7 +118,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
         this.player.color = this.playerDat.color
         this.player.type = this.playerDat.type
         this.player.active = true
-        this.player.sprites = this.spriteMap.get(this.player.color)
+        this.player.sprites = this.spriteMap.get("Red")
         this.player.isPlayer = true
         this.player.scene = this.playerDat.scene
         debugger;
@@ -145,7 +145,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
             var otherPlyerNormX = charData[key].x;
             var otherPlayerNormY = charData[key].y;
             var translatedXY = Utils.translateCoordinates(this.gameScreen, false, otherPlyerNormX, otherPlayerNormY);
-            var otherPlayer = new GameObject(this.spriteMap.get(charData[key].color), 2, 500)
+            var otherPlayer = new GameObject(this.spriteMap.get("Red"), 2, 150)
             otherPlayer.posX = translatedXY.transX;
             otherPlayer.posY = translatedXY.transY;
             otherPlayer.oldX = translatedXY.transX;
@@ -158,13 +158,14 @@ import GameObjectLoader from "./GameObjectLoader.js"
             otherPlayer.scene = charData[key].scene
             otherPlayer.active = charData[key].active;
             otherPlayer.color = charData[key].color;
-            otherPlayer.sprites = this.spriteMap.get(otherPlayer.color);
+            otherPlayer.sprites = this.spriteMap.get("Red");
             otherPlayer.charID = key;
             otherPlayer.isMoving = false;
             
             
               if(!this.otherPlayers.has(String(key))){
                 this.gameObjects.push(otherPlayer);
+                if(otherPlayer.scene == this.player.scene) this.localGameObjects.push(otherPlayer)
                 this.otherPlayers.set(String(key), otherPlayer);
                 const chkLogout = this.checkForLogout.bind(this)
                 var oldPosX = otherPlayer.posX;
@@ -207,7 +208,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
               var otherPlyerNormX = obj[key].x;
               var otherPlayerNormY = obj[key].y;
               var translatedXY = Utils.translateCoordinates(this.gameScreen, false, otherPlyerNormX, otherPlayerNormY);
-              var otherPlayer = new GameObject(this.spriteMap.get(obj[key].color), 2, 500)
+              var otherPlayer = new GameObject(this.spriteMap.get("Red"), 2, 500)
               otherPlayer.posX = translatedXY.transX;
               otherPlayer.posY = translatedXY.transY;
               otherPlayer.oldX = translatedXY.transX;
@@ -222,8 +223,9 @@ import GameObjectLoader from "./GameObjectLoader.js"
               otherPlayer.charID = key;
               otherPlayer.isMoving = false;
               otherPlayer.isOtherPlayer = true;
-              otherPlayer.sprites = this.spriteMap.get(otherPlayer.color);
+              otherPlayer.sprites = this.spriteMap.get("Red");
               this.gameObjects.push(otherPlayer);
+              if(otherPlayer.scene == this.player.scene) this.localGameObjects.push(otherPlayer)
               this.otherPlayers.set(String(key), otherPlayer);
               const chkLogout = this.checkForLogout.bind(this)
                 var oldPosX = otherPlayer.posX;
@@ -247,7 +249,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
             var transXY = Utils.translateCoordinates(this.gameScreen, false, obj[key].x, obj[key].y);
 
             if(!otherPlyer.isMoving){
-              if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY) {
+              if(transXY.transX != otherPlyer.posX && transXY.transY != otherPlyer.posY && otherPlyer.scene == obj[key].scene) {
                 debugger;
                 otherPlyer.isMoving = true;
                 otherPlyer.isRunning = true;
@@ -262,7 +264,22 @@ import GameObjectLoader from "./GameObjectLoader.js"
             }
 
             if(obj[key].scene != otherPlyer.scene){
+              debugger
                 otherPlyer.scene = obj[key].scene
+                if(otherPlyer.scene != this.player.scene){
+                  otherPlyer.invisible = true
+                }else{
+                  otherPlyer.invisible = false
+                  GameObjectLoader.LoadLocalObjects(this.player.scene, this.localGameObjects, this.gameObjects)
+                }
+                otherPlyer.isMoving = false
+                  transXY = Utils.translateCoordinates(this.gameScreen, false, obj[key].x, obj[key].y)
+                  otherPlyer.posX = transXY.transX
+                  otherPlyer.posY = transXY.transY
+                  otherPlyer.oldX = otherPlyer.posX
+                  otherPlyer.oldY = otherPlyer.posY
+                  otherPlyer.normX = obj[key].x 
+                  otherPlyer.normY = obj[key].y
             }
 
             

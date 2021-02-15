@@ -565,7 +565,7 @@ class Engine{
 					this.player.normY = 0.21
 					console.log("saving loc in cafe")
 					console.log(this.player.normX, this.player.normY)
-					this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
+					//this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
 					GameObjectLoader.LoadLocalObjects(1, this.localGameObjects, this.gameObjects)
 					return 1
 				}else{
@@ -592,7 +592,7 @@ class Engine{
 					this.player.destY = this.player.posY
 					this.player.normX = 0.618
 					this.player.normY = 0
-					this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
+					//this.db.savePlayerLocationDB(this.player.normX, this.player.normY)
 					GameObjectLoader.LoadLocalObjects(0, this.localGameObjects, this.gameObjects)
 					return 0
 				}else{

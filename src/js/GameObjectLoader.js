@@ -415,7 +415,15 @@ export default class GameObjectLoader{
 
     static LoadLocalObjects(scene, localGameObjects, gameObjects){
         localGameObjects.splice(0, localGameObjects.length)
-        gameObjects.forEach(obj => {if(obj.scene == scene || obj.isPlayer || obj.scene == -9)localGameObjects.push(obj)});
+        gameObjects.forEach(obj => {
+            if(obj.scene == scene || obj.isPlayer || obj.scene == -9){
+                if(obj.scene != -9){
+                    obj.invisible = false
+                }
+                localGameObjects.push(obj)
+            }
+        
+        });
     }
 
 

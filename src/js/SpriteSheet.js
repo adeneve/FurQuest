@@ -126,7 +126,7 @@ export default class SpriteSheet {
             context.font = "15px Comic Sans MS";
             context.fillStyle = "#000000";
             if(gameObj.isOtherPlayer){
-                context.fillText(gameObj.name, x , y - this.height/2 + 160)
+                context.fillText(gameObj.name, x - 5 , y + this.height/2 - 10)
             }else{
                 context.font = "15px Comic Sans MS";
                 context.fillStyle = "#55F1D5";
