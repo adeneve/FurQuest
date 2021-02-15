@@ -229,6 +229,21 @@ function update(time){
             dialogBox.sprites.draw(dialogBox.nextFrame, gameCanvas.getContext('2d'), dialogBox.posX, dialogBox.posY, dialogBox.message, dialogBox)
             engine.drawDialog()
         }
+
+
+        if(gameObjects.filter(obj => obj.name == "InventoryBox")[0].invisible == false){
+           var inv = gameObjects.filter(obj => obj.name == "InventoryBox")[0]
+           inv.sprites.draw(inv.nextFrame, gameCanvas.getContext('2d'), inv.posX, inv.posY, inv.message, inv)
+        }
+
+        if(gameObjects.filter(obj => obj.name == "coin")[0].invisible == false){
+            context.font = "10px Comic Sans MS";
+            context.fillStyle = "#47F05B";
+            var coins = player.inventory.filter(obj => obj.name == "coin")[0];
+            gameCanvas.getContext('2d').fillText(coins.qty, 1000, 515)
+            var coinsObj = gameObjects.filter(obj => obj.name == "coin")[0]
+            coinsObj.sprites.draw(coinsObj.nextFrame, gameCanvas.getContext('2d'), coinsObj.posX, coinsObj.posY, coinsObj.message, coinsObj)
+        }
         
     }
     )

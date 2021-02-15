@@ -113,6 +113,7 @@ import GameObjectLoader from "./GameObjectLoader.js"
         this.player.normX = this.playerDat.x 
         this.player.normY = this.playerDat.y
         this.player.message = this.playerDat.message
+        if(this.playerDat.Inventory != undefined) this.player.inventory = this.playerDat.Inventory
         this.player.name = this.playerDat.name
         this.player.color = this.playerDat.color
         this.player.type = this.playerDat.type
@@ -282,6 +283,15 @@ import GameObjectLoader from "./GameObjectLoader.js"
       const chkLogout = this.checkForPlayerLogout.bind(this)
       var oldNormX = this.player.normX;
       setTimeout(chkLogout, 1200000000, this.fbUser.uid, this.player, oldNormX); 
+    }
+
+    savePlayerInventoryDB(){
+      console.log("saving location...");
+      var charDataObj = {
+      "Inventory" : this.player.inventory,
+      }
+      const events = this.dbRef.child('characters');
+      events.child(this.fbUser.uid).update(charDataObj).catch( e => console.log(e.message))
     }
 
     saveMessage(msg){

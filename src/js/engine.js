@@ -48,7 +48,7 @@ class Engine{
 		console.log("xNorm: " + normX + ", yNorm: " + normY)
 		var clickedNPC = null
 		this.NPCs.forEach( NPC => {
-			if(NPC.interactable){ 
+			if(NPC.interactable && !NPC.invisible){ 
 				var diffX = Math.abs(NPC.normX - normX)
                 var diffY = Math.abs(NPC.normY - normY)
                 if(diffX < .03 && diffY < .1){
@@ -68,14 +68,60 @@ class Engine{
 				if(interactionStep > 0) {this.player.interacting = false; return;}
 				if(this.inventoryOpen == false){
 					this.localGameObjects.filter(obj => obj.name == "InventoryBox")[0].invisible = false
+					if(this.player.inventory.filter(obj => obj.name == "coin").length == 1){
+						this.localGameObjects.filter(obj => obj.name == "coin")[0].invisible = false
+					}
 					this.inventoryOpen = true
 				}else{
 					this.localGameObjects.filter(obj => obj.name == "InventoryBox")[0].invisible = true
+					this.localGameObjects.filter(obj => obj.name == "coin")[0].invisible = true
 					this.inventoryOpen = false
 				}
 
 				this.player.interacting = false
 				
+				break;
+			
+			case "phoneIcon":
+				this.player.interacting = false 
+				break;
+
+			case "accountIcon":
+				this.player.interacting = false
+				break;
+
+			case "coin":
+				this.dialogBox.active = true
+				this.dialogBox.name = "coin"
+				switch(interactionStep){
+					case 1 :
+						this.dialogBox.dialogMsg = ["Drop your coins?", "YES                                          NO"]
+						break;
+					case 2 :
+						if(normx < -.19 && normy < -.59) {
+							this.dialogBox.dialogMsg = ["Are you sure?", "YES                                          NO"]
+						}else{
+							this.player.interacting = false
+							this.dialogBox.active = false
+						}
+						break;
+					case 3 :
+						if(normx < -.19 && normy < -.59) {
+							var index = 0
+							this.player.inventory.every(obj => {
+								if(obj.name == "coin") return false;
+								index += 1
+								return true
+
+							})
+							this.player.inventory.splice(index, index+1)
+							this.localGameObjects.filter(obj => obj.name == "coin")[0].invisible = true
+							this.db.savePlayerInventoryDB()
+						}
+						this.player.interacting = false
+						this.dialogBox.active = false
+						break;
+				} 
 				break;
 
 			case "Mysterious Stranger":
@@ -89,7 +135,7 @@ class Engine{
 						this.dialogBox.dialogMsg = ["Welcome to town, theres not much to do yet," , "but stay tuned because I hear big Drewski is coming to town"]
 						break;
 					case 3 :
-						this.dialogBox.dialogMsg = ["See you around!"]
+						this.dialogBox.dialogMsg = ["Have you checked out the blender at the cafe? I installed it myself!", "I even programmed a game you can play while you wait for your smoothie!", "Anyways, see you around!"]
 						break;
 				} 
 
@@ -436,7 +482,10 @@ class Engine{
 		this.player.scene = 1
 		GameObjectLoader.LoadLocalObjects(1, this.localGameObjects, this.gameObjects)
 		this.dialogBox.active = true
-		this.dialogBox.dialogMsg = [`Score : ${this.player.miniGameScore}`, `the blender popped out ${(this.player.miniGameScore / 10) + 3} coins!`]
+		var coins = (this.player.miniGameScore / 10) + 3
+		this.dialogBox.dialogMsg = [`Score : ${this.player.miniGameScore}`, `the blender popped out ${coins} coins!`]
+		Utils.AddCoins(this.player, coins);
+		this.db.savePlayerInventoryDB()
 		this.player.inMiniGame = false 
 		this.player.invisible = false
 		this.player.miniGameVal = 0

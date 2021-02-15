@@ -69,6 +69,7 @@ export default class GameObject{
         this.miniGameScore = 0
         this.doScale = false
         this.scale = 1
+        this.inventory = []
     }
 
     getNextSprite(){

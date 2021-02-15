@@ -203,7 +203,7 @@ export default class GameObjectLoader{
             var phoneIcon = new GameObject(phoneIconSprites, 1, 20);
             phoneIcon.sprites = phoneIconSprites
             phoneIcon.active = true
-            phoneIcon.name = "phoneIon"
+            phoneIcon.name = "phoneIcon"
             var transXY = Utils.translateCoordinates(gameCanvas, false, 0.82, -.93)
             phoneIcon.posX = transXY.transX
             phoneIcon.posY = transXY.transY
@@ -234,6 +234,26 @@ export default class GameObjectLoader{
             InventoryBox.doScale = true
             InventoryBox.scale = 8
             gameObjects.push(InventoryBox)
+
+            var coinSprites = new SpriteSheet(image, 64, 64)
+            coinSprites.define("default", 1, 5);
+            coinSprites.define("idle1", 1, 5);
+            coinSprites.define("activeDefault", 1, 5, 6);
+            coinSprites.define("active1", 1, 5, 6);
+            var coin = new GameObject(coinSprites, 1, 20);
+            coin.sprites = coinSprites
+            coin.active = true
+            coin.name = "coin"
+            var transXY = Utils.translateCoordinates(gameCanvas, false, 0.681, -0.51)
+            coin.posX = transXY.transX
+            coin.posY = transXY.transY
+            coin.normX = .681
+            coin.normY = -.51
+            coin.scene = -9
+            coin.interactable = true
+            coin.invisible = true
+            gameObjects.push(coin)
+            interactableNPCs.push(coin)
 
 
             

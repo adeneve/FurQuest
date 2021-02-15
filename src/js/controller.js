@@ -34,6 +34,7 @@ class Controller{
 				var sceneChange = engine.checkForSceneChange(player.scene, normalized_x, normalized_y)
 				if(this.GameObjInteraction == null && sceneChange == player.scene){
 					if(player.scene == 0 && normalized_y > .06 && (normalized_x < .566 || normalized_x > .675)) return;
+					if(normalized_x > .638 && normalized_y < -.84) return;
 					Utils.calcMovement(e.clientX -gameScreen.left, e.clientY - gameScreen.top, player)
 					engine.prepMovePlayer(normalized_x, normalized_y)
 				}

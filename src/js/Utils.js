@@ -44,4 +44,14 @@ export default class Utils{
         return {transX, transY}
       }
 
+	static AddCoins(player, coinAmnt){
+		var hasCoin = player.inventory.filter(obj => obj.name == "coin").length
+		if(!hasCoin){
+			debugger;
+			player.inventory.push({"name": "coin", "qty": coinAmnt})
+		}else{
+			player.inventory.filter(obj => obj.name == "coin")[0].qty += coinAmnt
+		}
+	}
+
 }
